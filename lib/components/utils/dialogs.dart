@@ -10,13 +10,17 @@ import 'package:enterprise/components/utils/dio_exceptions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:icons_plus/icons_plus.dart';
 
 SharedPrefs sharedPrefs = SharedPrefs();
 //
-Future<void> errorDialog({BuildContext? context, required onError}) {
+Future<void> errorDialog({
+  BuildContext? context,
+  required onError,
+}) async {
   if (onError != null) {
     if (onError.response != null &&
-        onError.response!.data!['message'] == "Unauthenticated.") {
+        onError.response!.data?['message'] == "Unauthenticated.") {
       return customDialog(
         context: context,
         title: ErrorMsg.txtError.tr,
@@ -34,13 +38,20 @@ Future<void> errorDialog({BuildContext? context, required onError}) {
     } else {
       String errorMessage = DioExceptions.fromDioError(onError).toString();
 
+      if (errorMessage == "Unauthorized") {
+        sharedPrefs.remove(KeyShared.keyToken);
+        context!.go(PageName.login);
+        return; // Don't show dialog
+      }
+
       switch (errorMessage) {
         case "Errors":
           errorMessage = ErrorMsg.txtError.tr;
           break;
         default:
-          errorMessage = errorMessage;
+          logger.e(errorMessage);
       }
+
       return customDialog(
         context: context,
         title: ErrorMsg.txtError.tr,
@@ -49,20 +60,12 @@ Future<void> errorDialog({BuildContext? context, required onError}) {
         txtConfirm: Strings.txtOkay.tr,
         showCancelButton: false,
         confirmAction: () {
-          logger.d(errorMessage);
-          if (errorMessage == "Unauthorized") {
-            // final token = sharedPrefs.getStringNow(KeyShared.keyToken);
-
-            sharedPrefs.remove(KeyShared.keyToken);
-
-            context!.go(PageName.splashRoute);
-          } else {
-            context!.pop();
-          }
+          context!.pop();
         },
       );
     }
   } else {
+    // Unknown error fallback
     return customDialog(
       context: context,
       title: ErrorMsg.txtError.tr,
@@ -76,6 +79,7 @@ Future<void> errorDialog({BuildContext? context, required onError}) {
     );
   }
 }
+
 
 Future<dynamic> customDialog({
   BuildContext? context,
@@ -104,12 +108,12 @@ Future<dynamic> customDialog({
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: iconBackgroundColor ?? kPrimaryColor,
+                color: iconBackgroundColor ?? kO,
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                Icons.info,
-                color: iconColor ?? Colors.white,
+                BoxIcons.bx_error_circle,
+                color: iconColor ?? Color(0xFFFFA232),
                 size: SizeConfig.imageSizeMultiplier * 13,
               ),
             ),
@@ -126,10 +130,9 @@ Future<dynamic> customDialog({
             vertical: SizeConfig.widthMultiplier * 2),
         content: Text(
           content!,
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge!
-              .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              fontSize: SizeConfig.textMultiplier * 1.9,
+              color: Color(0xFF474747)),
           textAlign: TextAlign.center,
         ),
         insetPadding: const EdgeInsets.symmetric(horizontal: 15),
@@ -162,17 +165,16 @@ Future<dynamic> customDialog({
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: buttonColor ?? kPrimaryColor,
-                    borderRadius: BorderRadius.circular(10),
+                    color: buttonColor ?? Color(0xFFFDC604),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: TextButton(
                     onPressed: confirmAction,
                     child: Text(
                       txtConfirm!,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontSize: SizeConfig.textMultiplier * 1.9,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),

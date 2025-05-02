@@ -50,7 +50,7 @@ void main() async {
     requestBadgePermission: true,
     requestSoundPermission: true,
   );
-  final InitializationSettings initializationSettings = InitializationSettings(
+  const InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     iOS: initializationSettingsIOS,
   );
@@ -114,9 +114,12 @@ void main() async {
       );
     }
   });
-  // Log FCM Token
-  String? token = await FirebaseMessaging.instance.getToken();
-  logger.d('FCM Token: $token');
+
+ 
+ 
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  logger.d('FCM Token: $fcmToken');
+
   FirebaseAnalytics.instance.logAppOpen();
   await SharedPrefs().init();
   runApp(const ProviderScope(child: App()));

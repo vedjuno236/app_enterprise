@@ -23,19 +23,16 @@ class SplashScreen extends ConsumerStatefulWidget {
 
 class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
-
-
   @override
   void initState() {
     super.initState();
-
-
     checkStatusAuth();
   }
 
   Future<void> checkStatusAuth() async {
-    await Future.delayed(const Duration(seconds: 2)); 
-    checkExpiredToken();
+      Future.delayed(Duration.zero, () {
+      directionScreenFunction();
+    });
   }
 
   SharedPrefs sharedPrefs = SharedPrefs();
@@ -50,24 +47,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     }
   }
 
-  Future<void> checkExpiredToken() async {
-    EnterpriseAPIService()
-        .callUserInfos(token: sharedPrefs.getStringNow(KeyShared.keyToken))
-        .then((value) {
-      ref.watch(stateUserProvider).setUserModel(value: value);
-      context.go(PageName.navigatorBarScreenRoute);
-    }).catchError((onError) {
-      String errorMessage = DioExceptions.fromDioError(onError).toString();
 
-      if (errorMessage == "Unauthorized") {
-        context.go(PageName.login);
-      }
-    });
-  }
 
   @override
   void dispose() {
- 
     super.dispose();
   }
 
