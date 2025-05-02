@@ -1,4 +1,4 @@
-# Project Make for new junior Mobile Developer
+# 
 <<<<<<< HEAD
 Step :
 
