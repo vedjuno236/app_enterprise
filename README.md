@@ -1,9 +1,7 @@
 # Project Make for new junior Mobile Developer
 <<<<<<< HEAD
 Step :
-1. git clone https://github.com/somsack14/enterprise_app.git
-2. cd enterprise_app
-3. flutter run
+
 
 ## Getting Started
 This project is a starting Company.
