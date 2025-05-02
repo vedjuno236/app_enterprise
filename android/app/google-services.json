@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "970386284028",
+    "project_id": "enterprise-df25e",
+    "storage_bucket": "enterprise-df25e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970386284028:android:4b1593066e8b20d3106679",
+        "android_client_info": {
+          "package_name": "com.ncc.enterprise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCwVA7p5UTkSlgfPFGRb2Rb__VvStrlaY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
