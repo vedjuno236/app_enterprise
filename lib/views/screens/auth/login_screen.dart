@@ -13,6 +13,8 @@ import 'package:enterprise/components/utils/dialogs.dart';
 import 'package:enterprise/components/utils/dio_exceptions.dart';
 import 'package:enterprise/views/screens/auth/translate.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_login.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,6 +48,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       isLoading = true;
     });
     // final deviceToken = OneSignal.User.pushSubscription.id;
+    final deviceToken = await FirebaseMessaging.instance.getToken();
+
+    logger.d('deviceToken CMF :$deviceToken');
+
     try {
       final response = await EnterpriseAPIService().loginAPI(
         phone: '20${phoneController.text}',
@@ -61,6 +67,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
           logger.d(role);
         }
+        // ignore: use_build_context_synchronously
         context.go(PageName.navigatorBarScreenRoute);
       } else {
         // _showAlertDialog(context, response['error']);
@@ -136,7 +143,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       .animate()
                       .fadeIn(duration: 900.ms, delay: 300.ms)
                       .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
-                 const  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
@@ -256,7 +263,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Strings.txtPassword.tr,
                         style: Theme.of(context).textTheme.titleMedium,
                       ).animate().fadeIn(duration: 900.ms, delay: 300.ms).move(
-                          begin: Offset(-16, 0), curve: Curves.easeOutQuad),
+                          begin: const Offset(-16, 0),
+                          curve: Curves.easeOutQuad),
                       SizedBox(height: SizeConfig.heightMultiplier * 1),
                       TextFormField(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -377,9 +385,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ),
             child: Center(
               child: isLoading
-                  ? const CupertinoActivityIndicator(
-                      color: kTextWhiteColor,
-                      radius: 20,
+                  // ? const CupertinoActivityIndicator(
+                  //     color: kTextWhiteColor,
+                  //     radius: 20,
+                  //   )
+                  ? const LoadingPlatformV2(
+                      size: 20,
                     )
                   : Text(
                       Strings.txtNext.tr,

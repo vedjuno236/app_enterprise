@@ -32,7 +32,6 @@ class _PieChartWidgetState extends ConsumerState<PieChartWidget> {
         userID: userProvider.getUserModel!.data!.id ?? 0,
       );
       ref.read(stateLeaveProvider).setLeaveTypeModels(value: value);
-      logger.d(value);
     } catch (onError) {
       errorDialog(context: context, onError: onError);
     } finally {
@@ -59,7 +58,8 @@ class _PieChartWidgetState extends ConsumerState<PieChartWidget> {
           height: 10,
         ),
         Text(
-          '$totalUsedDays ${Strings.txtdays.tr}',
+          '${(totalUsedDays != null) ? (totalUsedDays! % 1 == 0 ? totalUsedDays!.toInt().toString() : totalUsedDays!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
+              .tr,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
               fontSize: SizeConfig.textMultiplier * 2,
               fontWeight: FontWeight.bold),
@@ -111,7 +111,7 @@ class _PieChartWidgetState extends ConsumerState<PieChartWidget> {
                           });
                         },
                       ),
-                      sectionsSpace: 2,
+                      sectionsSpace: 3,
                       centerSpaceRadius: 50,
                       sections: leaveType.getLeaveTypeModel!.data!
                           .asMap()
@@ -142,11 +142,14 @@ class _PieChartWidgetState extends ConsumerState<PieChartWidget> {
                               .copyWith(
                                   color: kTextWhiteColor,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: SizeConfig.textMultiplier * 0.9),
+                                  fontSize: SizeConfig.textMultiplier * 1),
                         );
                       }).toList(),
                     ),
                   ),
+               
+               
+               
                 ),
               ),
             ],

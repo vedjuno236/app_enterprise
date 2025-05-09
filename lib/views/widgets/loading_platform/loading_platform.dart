@@ -56,36 +56,40 @@ class LoadingPlatform extends StatelessWidget {
   }
 }
 
-class ImageLoadingPlatform extends StatelessWidget {
+class LoadingPlatformV1 extends StatelessWidget {
   final Color? color;
 
-  const ImageLoadingPlatform({Key? key, this.color}) : super(key: key);
+
+  const LoadingPlatformV1({
+    Key? key,
+    this.color,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // return Center(
-    //   child: SpinKitFadingCircle(
-    //     color: Theme.of(context).colorScheme.primary,
-    //   ),
-    // );
-    return SpinKitChasingDots(color: color ?? Colors.white);
+    return SpinKitChasingDots(
+      color: color ?? Colors.white,
+      size: 40,
+    );
   }
 }
 
-class ImageLoadingPlatformNoPadding extends StatelessWidget {
+class LoadingPlatformV2 extends StatelessWidget {
   final Color? color;
+  final double? size;
+  
 
-  const ImageLoadingPlatformNoPadding({Key? key, this.color}) : super(key: key);
+  const LoadingPlatformV2({
+    super.key,
+    this.color,
+     this.size,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SpinKitFadingCircle(
-      color: Theme.of(context).colorScheme.primary,
+    return SpinKitChasingDots(
+      color: color ?? Colors.white,
+      size: size ??40,
     );
-    // if (Platform.isIOS) {
-    //   return Center(child: CupertinoActivityIndicator());
-    // } else {
-    //   return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor)));
-    // }
   }
 }

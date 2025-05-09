@@ -12,6 +12,7 @@ import 'package:enterprise/views/screens/analytic/analytic_screen.dart';
 import 'package:enterprise/views/screens/home/home_screen.dart';
 import 'package:enterprise/views/screens/news/news_screen.dart';
 import 'package:enterprise/views/screens/profile_screen/profile_screen.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -80,10 +81,10 @@ class HomeScreenPage extends ConsumerWidget {
             BottomNavigationBarItem(
               label: 'Profile'.tr,
               icon: _buildNetworkImage(
-               ref.watch(stateUserProvider).getUserModel?.data?.profile ?? '',
+                ref.watch(stateUserProvider).getUserModel?.data?.profile ?? '',
               ),
               activeIcon: _buildActiveNetworkImage(
-               ref.watch(stateUserProvider).getUserModel?.data?.profile ?? '',
+                ref.watch(stateUserProvider).getUserModel?.data?.profile ?? '',
               ),
             ),
           ],
@@ -130,17 +131,16 @@ class HomeScreenPage extends ConsumerWidget {
                 height: SizeConfig.imageSizeMultiplier * 7,
                 width: SizeConfig.imageSizeMultiplier * 7,
                 fit: BoxFit.cover,
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(strokeWidth: 2),
+                placeholder: (context, url) => const LoadingPlatformV1(),
                 errorWidget: (context, url, error) => Image.asset(
-                 'assets/icons/profile.png', // Add this asset path
+                  'assets/icons/profile.png', // Add this asset path
                   height: SizeConfig.imageSizeMultiplier * 7,
                   width: SizeConfig.imageSizeMultiplier * 7,
                   fit: BoxFit.cover,
                 ),
               )
             : Image.asset(
-               'assets/icons/profile.png', // Add this asset path
+                'assets/icons/profile.png', // Add this asset path
                 height: SizeConfig.imageSizeMultiplier * 7,
                 width: SizeConfig.imageSizeMultiplier * 7,
                 fit: BoxFit.cover,
@@ -162,10 +162,9 @@ class HomeScreenPage extends ConsumerWidget {
                   height: SizeConfig.imageSizeMultiplier * 6,
                   width: SizeConfig.imageSizeMultiplier * 6,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) =>
-                      const CircularProgressIndicator(strokeWidth: 2),
+                  placeholder: (context, url) => const LoadingPlatformV1(),
                   errorWidget: (context, url, error) => Image.asset(
-                   'assets/icons/profile.png',
+                    'assets/icons/profile.png',
                     height: SizeConfig.imageSizeMultiplier * 6,
                     width: SizeConfig.imageSizeMultiplier * 6,
                     fit: BoxFit.cover,

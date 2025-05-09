@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/poviders/home_provider/home_provider.dart';
 import 'package:enterprise/components/utils/dialogs.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -89,211 +90,184 @@ class _FunctionWidgetState extends ConsumerState<FunctionWidget> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: menuProvider.getMenuModel == null
-            ? GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.zero,
-                itemCount: 3, // Show 6 shimmer placeholders
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount,
-                  mainAxisSpacing: 5,
-                  childAspectRatio: 1,
-                  crossAxisSpacing: 10,
-                ),
-                itemBuilder: (context, index) => Shimmer.fromColors(
-                  baseColor: kGreyColor1,
-                  highlightColor: kGary,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: SizeConfig.heightMultiplier * 4,
-                        backgroundColor: kGreyColor1,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        height: SizeConfig.heightMultiplier * 1,
-                        width: SizeConfig.widthMultiplier * 10,
-                        decoration: BoxDecoration(
-                          color: kTextWhiteColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            : Column(
-                children: [
-                  Expanded(
-                    child: PageView.builder(
-                      controller: _pageController,
-                      onPageChanged: (index) {
-                        ref.read(stateHomeProvider).pageIndex = index;
-                        debugPrint("==> $index");
-                      },
-                      itemCount: totalPages,
-                      itemBuilder: (context, pageIndex) {
-                        final startIndex = pageIndex * itemsPerPage;
-                        final endIndex = (pageIndex + 1) * itemsPerPage;
+        // child: menuProvider.getMenuModel == null
+        //     ? Shimmer.fromColors(
+        //         baseColor: kGreyColor1,
+        //         highlightColor: kGary,
+        //         child: Container(
+        //           height: containerHeight,
+        //           width: double.infinity,
+        //           padding: const EdgeInsets.only(bottom: 2),
+        //           decoration: const BoxDecoration(
+        //             color: kTextWhiteColor,
+        //             boxShadow: [
+        //               BoxShadow(
+        //                 color: kTextWhiteColor,
+        //                 blurRadius: 1.0,
+        //                 spreadRadius: 1.0,
+        //               ),
+        //             ],
+        //             borderRadius: BorderRadius.all(Radius.circular(20)),
+        //           ),
+        //         ),
+        //       )
+        //     : Column(
+        child: Column(
+          children: [
+            Expanded(
+              child: PageView.builder(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  ref.read(stateHomeProvider).pageIndex = index;
+                  debugPrint("==> $index");
+                },
+                itemCount: totalPages,
+                itemBuilder: (context, pageIndex) {
+                  final startIndex = pageIndex * itemsPerPage;
+                  final endIndex = (pageIndex + 1) * itemsPerPage;
 
-                        final items = filterMenuList.sublist(
-                          startIndex,
-                          endIndex > filterMenuList.length
-                              ? filterMenuList.length
-                              : endIndex,
-                        );
+                  final items = filterMenuList.sublist(
+                    startIndex,
+                    endIndex > filterMenuList.length
+                        ? filterMenuList.length
+                        : endIndex,
+                  );
 
-                        return GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          itemCount: items.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: crossAxisCount,
-                            mainAxisSpacing: 8.5,
-                            childAspectRatio: 1,
-                            crossAxisSpacing: 25,
-                          ),
-                          itemBuilder: (context, index) {
-                            final item = items[index];
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    itemCount: items.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      mainAxisSpacing: 8.5,
+                      childAspectRatio: 1,
+                      crossAxisSpacing: 25,
+                    ),
+                    itemBuilder: (context, index) {
+                      final item = items[index];
 
-                    
+                      var datatxt =
+                          getItemColor(items[index].keyWord.toString());
+                      String txt = datatxt['txt'];
 
-                            var datatxt =
-                                getItemColor(items[index].keyWord.toString());
-                            String txt = datatxt['txt'];
-
-                            return GestureDetector(
-                              onTap: () {
-                                onTapPage(context, item.keyWord!);
-                              },
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  if (menuProvider.getMenuModel == null ||
-                                      menuProvider.getMenuModel!.data == null)
-                                    Shimmer.fromColors(
-                                      baseColor: kGreyColor1,
-                                      highlightColor: kGary,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          CircleAvatar(
-                                            radius:
-                                                SizeConfig.heightMultiplier * 4,
-                                            child: const ClipOval(),
-                                          ),
-                                          Column(
-                                            children: [
-                                              Container(
-                                                height: SizeConfig
-                                                        .heightMultiplier *
-                                                    1,
-                                                width:
-                                                    SizeConfig.widthMultiplier *
-                                                        10,
-                                                margin: const EdgeInsets.only(
-                                                  top: 10,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: kTextWhiteColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  else
+                      return GestureDetector(
+                        onTap: () {
+                          onTapPage(context, item.keyWord!);
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            if (menuProvider.getMenuModel == null ||
+                                menuProvider.getMenuModel!.data == null)
+                              Shimmer.fromColors(
+                                baseColor: kGreyColor1,
+                                highlightColor: kGary,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: SizeConfig.heightMultiplier * 4,
+                                    ),
                                     Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
                                       children: [
-                                        Stack(
-                                          clipBehavior: Clip.none,
-                                          children: [
-                                            CircleAvatar(
-                                              radius: SizeConfig
-                                                      .imageSizeMultiplier *
-                                                  8,
-                                              backgroundColor: kGary,
-                                              child: SizedBox(
-                                                width:
-                                                    SizeConfig.widthMultiplier *
-                                                        7,
-                                                child: CachedNetworkImage(
-                                                  imageUrl: item.icon!,
-                                                  fit: BoxFit.contain,
-                                                  placeholder: (context, url) =>
-                                                      const CupertinoActivityIndicator(),
-                                                  errorWidget: (context, url,
-                                                          error) =>
-                                                      const Icon(Icons.error),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                            height:
-                                                SizeConfig.heightMultiplier *
-                                                    1),
-                                        Text(
-                                          // item.menuName!,
-                                          txt,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(),
+                                        Container(
+                                          height:
+                                              SizeConfig.heightMultiplier * 1,
+                                          width:
+                                              SizeConfig.widthMultiplier * 10,
+                                          margin: const EdgeInsets.only(
+                                            top: 10,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: kTextWhiteColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
                                         ),
                                       ],
                                     ),
+                                  ],
+                                ),
+                              )
+                            else
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Stack(
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      CircleAvatar(
+                                        radius:
+                                            SizeConfig.imageSizeMultiplier * 8,
+                                        backgroundColor: kGary,
+                                        child: SizedBox(
+                                          width: SizeConfig.widthMultiplier * 7,
+                                          child: CachedNetworkImage(
+                                            imageUrl: item.icon!,
+                                            fit: BoxFit.contain,
+                                            placeholder: (context, url) =>
+                                                const LoadingPlatformV1(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                      height: SizeConfig.heightMultiplier * 1),
+                                  Text(
+                                    // item.menuName!,
+                                    txt,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(),
+                                  ),
                                 ],
                               ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      totalPages,
-                      (index) => GestureDetector(
-                        onTap: () {
-                          _pageController.animateToPage(
-                            index,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        },
-                        child: AnimatedContainer(
-                          margin: const EdgeInsets.symmetric(horizontal: 7),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: currentPage == index
-                                ? kYellowFirstColor
-                                : const Color(0xFFEDEFF7),
-                          ),
-                          height: 8,
-                          width: currentPage == index ? 20 : 7,
-                          duration: const Duration(milliseconds: 300),
+                          ],
                         ),
-                      ),
-                    ),
-                  ),
-                ],
+                      );
+                    },
+                  );
+                },
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                totalPages,
+                (index) => GestureDetector(
+                  onTap: () {
+                    _pageController.animateToPage(
+                      index,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  child: AnimatedContainer(
+                    margin: const EdgeInsets.symmetric(horizontal: 7),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: currentPage == index
+                          ? kYellowFirstColor
+                          : const Color(0xFFEDEFF7),
+                    ),
+                    height: 8,
+                    width: currentPage == index ? 20 : 7,
+                    duration: const Duration(milliseconds: 300),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

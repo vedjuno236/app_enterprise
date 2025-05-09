@@ -32,7 +32,6 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
     setState(() {
       isLoading = true;
     });
-
     EnterpriseAPIService()
         .callNotification(
       token: sharedPrefs.getStringNow(KeyShared.keyToken),
@@ -43,26 +42,23 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
       ref.watch(stateNotifitionProvider).setNotificationModel(value: value);
       logger.d(value);
     }).catchError((onError) {
-      errorDialog(
-        context: context,
-        onError: onError,
-      );
+      // errorDialog(
+      //   context: context,
+      //   onError: onError,
+      // );
     }).whenComplete(() => setState(() {
               isLoading = false;
             }));
   }
-
   @override
   void initState() {
     super.initState();
     fetchNotificationApi();
   }
-
   @override
   Widget build(BuildContext context) {
     final notiProvider = ref.watch(stateNotifitionProvider);
     final notificationData = notiProvider.getNotificationModel?.data ?? [];
-
     return Container(
       width: double.infinity,
       height: SizeConfig.heightMultiplier * 20,

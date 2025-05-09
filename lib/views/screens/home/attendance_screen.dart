@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:enterprise/components/constants/image_path.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
@@ -16,9 +17,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 import 'package:widgets_easier/widgets_easier.dart';
 import '../../../components/constants/colors.dart';
 import '../../../components/constants/key_shared.dart';
@@ -204,6 +204,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
 
     // getPolyPoints();
     // setCustomMarkerIcon();
+
     _getCurrentLocation();
   }
 
@@ -224,80 +225,80 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
     final userProvider = ref.watch(stateUserProvider);
 
     // if (isConnected) {
-      try {
-        attendanceProvider.isLoading = true;
-        final response = await EnterpriseAPIService().saveAttendanceData(
-          type: "REMOTE",
-          userID: userProvider.getUserModel!.data!.id ?? 0,
-          longitude: _currentPosition!.latitude,
-          latitude: _currentPosition!.longitude,
-          imagePath: _imageFile!.path,
-          title: description.text,
-          createdAt: DateTime.now().toIso8601String(),
-        );
-        if (response != null) {
-          var data = response['data'];
-          String clockInTime = data?['date'] ?? '';
-          String typeClock = data?['type_clock'] ?? '';
-          bool isLate = data?['status_late'] ?? false;
+    try {
+      attendanceProvider.isLoading = true;
+      final response = await EnterpriseAPIService().saveAttendanceData(
+        type: "REMOTE",
+        userID: userProvider.getUserModel!.data!.id ?? 0,
+        longitude: _currentPosition!.latitude,
+        latitude: _currentPosition!.longitude,
+        imagePath: _imageFile!.path,
+        title: description.text,
+        createdAt: DateTime.now().toIso8601String(),
+      );
+      if (response != null) {
+        var data = response['data'];
+        String clockInTime = data?['date'] ?? '';
+        String typeClock = data?['type_clock'] ?? '';
+        bool isLate = data?['status_late'] ?? false;
 
-          context.push(
-            PageName.attendanceSuccess,
-            extra: {
-              'clockInTime': clockInTime,
-              'typeClock': typeClock,
-              'isLate': isLate,
-            },
-          );
-          if (response['data']['type_clock'] == 'IN') {
-            ref.watch(stateHomeProvider.notifier).setClockInTrue();
-          } else {
-            ref.watch(stateHomeProvider.notifier).setClockInFalse();
-          }
+        context.pushReplacement(
+          PageName.attendanceSuccess,
+          extra: {
+            'clockInTime': clockInTime,
+            'typeClock': typeClock,
+            'isLate': isLate,
+          },
+        );
+        if (response['data']['type_clock'] == 'IN') {
+          ref.watch(stateHomeProvider.notifier).setClockInTrue();
         } else {
-          logger.e("Clock-in failed: Response is null.");
+          ref.watch(stateHomeProvider.notifier).setClockInFalse();
         }
-      } on DioException catch (e) {
-        if (context.mounted) {
-          // await _saveToSQLite(
-          //   userId: sharedPrefs.getStringNow(KeyShared.keyUserId),
-          //   type: "REMOTE",
-          //   latitude: _currentPosition!.latitude,
-          //   longitude: _currentPosition!.longitude,
-          //   imagePath: attendanceProvider.selectedImage!.path,
-          //   title: description.text,
-          // ).whenComplete(() => alertSuccessDialog(context));
-          // ignore: use_build_context_synchronously
-          errorDialog(context: context, onError: e);
-        }
-        attendanceProvider.isLoading = false;
-      } catch (e) {
-        if (context.mounted) {
-          // await _saveToSQLite(
-          //   userId: sharedPrefs.getStringNow(KeyShared.keyUserId),
-          //   type: "REMOTE",
-          //   latitude: _currentPosition!.latitude,
-          //   longitude: _currentPosition!.longitude,
-          //   imagePath: attendanceProvider.selectedImage!.path,
-          //   title: description.text,
-          // ).whenComplete(() => alertSuccessDialog(context));
-          // ignore: use_build_context_synchronously
-          errorDialog(context: context, onError: e);
-        }
+      } else {
+        logger.e("Clock-in failed: Response is null.");
       }
-    // } else {
-      // await _saveToSQLite(
-      //   userId: sharedPrefs.getStringNow(KeyShared.keyUserId),
-      //   type: "REMOTE",
-      //   latitude: _currentPosition!.latitude,
-      //   longitude: _currentPosition!.longitude,
-      //   imagePath: attendanceProvider.selectedImage!.path,
-      //   title: description.text,
-      // ).whenComplete(() => alertSuccessDialog(context));
+    } on DioException catch (e) {
+      if (context.mounted) {
+        // await _saveToSQLite(
+        //   userId: sharedPrefs.getStringNow(KeyShared.keyUserId),
+        //   type: "REMOTE",
+        //   latitude: _currentPosition!.latitude,
+        //   longitude: _currentPosition!.longitude,
+        //   imagePath: attendanceProvider.selectedImage!.path,
+        //   title: description.text,
+        // ).whenComplete(() => alertSuccessDialog(context));
+        // ignore: use_build_context_synchronously
+        errorDialog(context: context, onError: e);
+      }
+      attendanceProvider.isLoading = false;
+    } catch (e) {
+      if (context.mounted) {
+        // await _saveToSQLite(
+        //   userId: sharedPrefs.getStringNow(KeyShared.keyUserId),
+        //   type: "REMOTE",
+        //   latitude: _currentPosition!.latitude,
+        //   longitude: _currentPosition!.longitude,
+        //   imagePath: attendanceProvider.selectedImage!.path,
+        //   title: description.text,
+        // ).whenComplete(() => alertSuccessDialog(context));
+        // ignore: use_build_context_synchronously
+        errorDialog(context: context, onError: e);
+      }
     }
-  
+    // } else {
+    // await _saveToSQLite(
+    //   userId: sharedPrefs.getStringNow(KeyShared.keyUserId),
+    //   type: "REMOTE",
+    //   latitude: _currentPosition!.latitude,
+    //   longitude: _currentPosition!.longitude,
+    //   imagePath: attendanceProvider.selectedImage!.path,
+    //   title: description.text,
+    // ).whenComplete(() => alertSuccessDialog(context));
+  }
 
   AppState state = AppState.free;
+
   @override
   Widget build(BuildContext context) {
     final attendanceProvider = ref.watch(stateAttendanceProvider);
@@ -401,7 +402,6 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                           ),
                           mapType: currentMapType!,
                           markers: {
-                        
                             Marker(
                                 markerId: const MarkerId('Yes'),
                                 position: LatLng(_latitude!.toDouble(),
@@ -582,7 +582,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                                         bottomSheetPushContainer(
                                           context: context,
                                           constantsSize: 1,
-                                          child: buttonChooseImage(context),
+                                          child: buttonChooseImage(context),  
                                         );
                                       },
                                       child: Container(

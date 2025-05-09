@@ -63,9 +63,9 @@ class LocalizationService extends Translations {
 
   static Locale? _getLocaleFromLanguage({String? langCode}) {
     var deviceLangs = Get.deviceLocale!.languageCode;
-    // var lang = langCode ?? deviceLangs;
+    // var lang = langCode ?? deviceLangs;                                                         
     var lang = langCode;
-    logger.d(lang);
+    // logger.d(lang);
     for (int i = 0; i < langCodes.length; i++) {
       if (lang == langCodes[i]) {
         return locales[i];

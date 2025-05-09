@@ -3,7 +3,7 @@ class ErrorMsg {
 
   static const String txtNoInternet = "No Internet Connection";
   static const String txtPleaseCheck =
-      "Please check your internet connection and try again.";
+      "Please check your internet connection and try again";
   static const String txtError = "Error";
 
   /// Dio Exception Type

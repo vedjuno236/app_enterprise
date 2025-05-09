@@ -1,9 +1,8 @@
-import 'package:enterprise/components/constants/colors.dart';
+
 import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/helpers/dark_mode_preference.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:enterprise/components/languages/localization_service.dart';
-import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/router/router.dart';
 import 'package:enterprise/components/styles/dark_theme_style.dart';
@@ -13,9 +12,10 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -117,8 +117,8 @@ void main() async {
 
  
  
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  logger.d('FCM Token: $fcmToken');
+  // final fcmToken = await FirebaseMessaging.instance.getToken();
+  // logger.d('FCM Token: $fcmToken');
 
   FirebaseAnalytics.instance.logAppOpen();
   await SharedPrefs().init();

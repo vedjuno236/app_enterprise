@@ -2,12 +2,11 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
-import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
 import 'package:enterprise/components/utils/date_format_utils.dart';
 import 'package:enterprise/components/utils/dialogs.dart';
-import 'package:enterprise/components/utils/dio_exceptions.dart';
 import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,6 @@ import '../../../components/poviders/leave_provider/leave_history_provider/leave
 import '../../../components/styles/size_config.dart';
 import '../../widgets/appbar/appbar_widget.dart';
 import '../../widgets/date_month_year/shared/month_picker.dart';
-import '../../widgets/date_month_year/shared/year_picker.dart';
 
 class LeaveHistoryScreen extends ConsumerStatefulWidget {
   const LeaveHistoryScreen({super.key});
@@ -205,16 +203,14 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: GestureDetector(
-              onTap: () {
-                // Implement action (e.g., show menu)
-              },
+              onTap: () {},
               child: const Icon(IonIcons.ellipsis_vertical, color: kBack),
             ),
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
             Container(
@@ -351,7 +347,8 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
             Expanded(
               child: dataAPI.getallLeaveHistoryModel == null
                   ? Center(child: _buildShimmerItem())
-                  : dataAPI.getallLeaveHistoryModel!.data!.isEmpty
+                  : dataAPI.getallLeaveHistoryModel!.data! == null ||
+                          dataAPI.getallLeaveHistoryModel!.data!.isEmpty
                       ? Center(child: Image.asset(ImagePath.imgIconCreateAcc))
                       : SmartRefresher(
                           enablePullDown: true,
@@ -368,7 +365,9 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                               if (mode == LoadStatus.idle) {
                                 body = Text(Strings.txtPull.tr);
                               } else if (mode == LoadStatus.loading) {
-                                body = const CupertinoActivityIndicator();
+                                body = const LoadingPlatformV1(
+                                  color: kYellowColor,
+                                );
                               } else if (mode == LoadStatus.failed) {
                                 body = Text(Strings.txtLoadFailed.tr);
                               } else if (mode == LoadStatus.canLoading) {
@@ -435,7 +434,7 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                                               child: CachedNetworkImage(
                                                 imageUrl: data.logo ?? '',
                                                 placeholder: (context, url) =>
-                                                    const CircularProgressIndicator(),
+                                                    LoadingPlatformV1(),
                                                 errorWidget:
                                                     (context, url, error) =>
                                                         const Icon(Icons.error),
@@ -529,7 +528,7 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(height: 10),
+                                        const SizedBox(height: 5),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -584,37 +583,83 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                                                     padding:
                                                         const EdgeInsets.only(
                                                             left: 8.0),
-                                                    child: CircleAvatar(
-                                                      radius: 16,
-                                                      backgroundColor:
-                                                          kTextWhiteColor,
-                                                      child: Stack(
-                                                        children: [
-                                                          CircleAvatar(
-                                                            radius: 14,
-                                                            backgroundImage:
-                                                                NetworkImage(
-                                                              hasValidProfile
-                                                                  ? profileUrl
-                                                                  : 'https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg',
-                                                            ),
-                                                          ),
-                                                          if (txtStatus ==
-                                                              Strings
-                                                                  .txtRejected
-                                                                  .tr)
-                                                            Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Colors
-                                                                    .red
-                                                                    .withOpacity(
-                                                                        0.3),
-                                                                shape: BoxShape
-                                                                    .circle,
+                                                    child: Align(
+                                                      widthFactor: 0.5,
+                                                      child: CircleAvatar(
+                                                        radius: SizeConfig
+                                                                .imageSizeMultiplier *
+                                                            5,
+                                                        backgroundColor:
+                                                            kTextWhiteColor,
+                                                        child: Stack(
+                                                          children: [
+                                                            CircleAvatar(
+                                                              radius: SizeConfig
+                                                                      .imageSizeMultiplier *
+                                                                  4.3,
+                                                              backgroundImage:
+                                                                  NetworkImage(
+                                                                hasValidProfile
+                                                                    ? profileUrl
+                                                                    : 'https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg',
                                                               ),
                                                             ),
-                                                        ],
+                                                            // ClipOval(
+                                                            //   child:
+                                                            //       CachedNetworkImage(
+                                                            //     imageUrl: hasValidProfile
+                                                            //         ? profileUrl
+                                                            //         : 'https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg',
+                                                            //     placeholder:
+                                                            //         (context,
+                                                            //                 url) =>
+                                                            //             SizedBox(
+                                                            //       width: SizeConfig
+                                                            //               .imageSizeMultiplier *
+                                                            //           12,
+                                                            //       height: SizeConfig
+                                                            //               .imageSizeMultiplier *
+                                                            //           12,
+                                                            //       child: const Center(
+                                                            //           child:
+                                                            //               LoadingPlatformV1()),
+                                                            //     ),
+                                                            //     errorWidget: (context,
+                                                            //             url,
+                                                            //             error) =>
+                                                            //         const Icon(Icons
+                                                            //             .error),
+                                                            //     width: SizeConfig
+                                                            //             .imageSizeMultiplier *
+                                                            //         12,
+                                                            //     height: SizeConfig
+                                                            //             .imageSizeMultiplier *
+                                                            //         12,
+                                                            //     fit: BoxFit
+                                                            //         .cover,
+                                                            //   ),
+                                                            // ),
+
+                                                            if (txtStatus ==
+                                                                Strings
+                                                                    .txtRejected
+                                                                    .tr)
+                                                              Positioned.fill(
+                                                                child:
+                                                                    Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: Colors
+                                                                        .red
+                                                                        .withOpacity(
+                                                                            0.5),
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   );

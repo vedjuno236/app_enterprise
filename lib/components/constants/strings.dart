@@ -349,4 +349,10 @@ class Strings {
   static const String txtNextWeek = "Next Week";
   static const String txtAfterNextWeek = "After Next Week";
   static const String txtNextMonth = "Next Month";
+
+  //profile
+   static const String txtLivesIn = "Lives In";
+static const String txtDep = "Department";
+  static const String txtSartWork = "Sart Working";
+
 }

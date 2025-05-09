@@ -1,22 +1,22 @@
 import 'dart:async';
 
 import 'package:enterprise/components/constants/key_shared.dart';
-import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/poviders/location_provider/location_provider.dart';
 import 'package:enterprise/components/router/router.dart';
 import 'package:enterprise/components/utils/dialogs.dart';
 import 'package:enterprise/components/utils/dio_exceptions.dart';
-import 'package:enterprise/views/screens/home/home_HR/home_hr_screen.dart';
 import 'package:enterprise/views/screens/home/widgets/box_checkIn_widgets.dart';
 import 'package:enterprise/views/screens/home/widgets/coming_events_widget.dart';
 import 'package:enterprise/views/screens/home/widgets/function_widget.dart';
 import 'package:enterprise/views/screens/home/widgets/headerProfile_widget.dart';
 import 'package:enterprise/views/screens/home/widgets/team_highligts_widget.dart';
+
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -41,7 +41,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   SharedPrefs sharedPrefs = SharedPrefs();
   bool isLoadinUser = false;
   bool isLoadinLocation = false;
-
+  bool cancelled = false;
   bool showClockIn = false;
 
   Future fetchUserApi() async {
@@ -78,19 +78,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         }));
   }
 
-  void checkToken() async {
-    final token = sharedPrefs.getStringNow(KeyShared.keyToken);
-    if (token != null && token.isNotEmpty) {
-      // Make sure we're not in a build cycle
-      if (mounted) {
-        context.go(PageName.navigatorBarScreenRoute);
+  Future<void> checkExpiredToken() async {
+    EnterpriseAPIService()
+        .callUserInfos(token: sharedPrefs.getStringNow(KeyShared.keyToken))
+        .then((value) {
+      ref.watch(stateUserProvider).setUserModel(value: value);
+      if (value != null) {
+        ref.read(stateUserProvider).setUserModel(value: value);
+        ref.read(stateUserProvider).setAccessToken(value['Token'] ?? '');
       }
-    } else {
-      if (mounted) {
-        context.go(PageName.login);
+    }).catchError((onError) async {
+      String errorMessage = DioExceptions.fromDioError(onError).toString();
+      if (errorMessage == "Unauthorized") {
+        Fluttertoast.showToast(
+            msg: 'ເຂົ້າສູ່ລະບົບໃໝ່ອີກຄັ້ງ',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 2,
+            backgroundColor: kYellowColor,
+            textColor: kBack87,
+            fontSize: 16.0,
+            fontAsset: 'NotoSansLao');
+        // Timer(const Duration(microseconds: 1000), () {
+        context.push(PageName.login);
+        // });
       }
-    }
+    });
   }
+
+
+  
 
   @override
   void initState() {
@@ -121,32 +138,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
-  Future<void> checkExpiredToken() async {
-    EnterpriseAPIService()
-        .callUserInfos(token: sharedPrefs.getStringNow(KeyShared.keyToken))
-        .then((value) {
-      ref.watch(stateUserProvider).setUserModel(value: value);
-      if (mounted) {
-        context.go(PageName.navigatorBarScreenRoute);
-      }
-    }).catchError((onError) async {
-      String errorMessage = DioExceptions.fromDioError(onError).toString();
-
-      if (errorMessage == "Unauthorized") {
-        // showCustomToast(
-        //   title: "ກະລຸນາ",
-        //   message: "ເຂົ້າສູ່ລະບົບໃໝ່ອີກຄັ້ງ!~.",
-        //   backgroundColor: kYellowColor,
-        //   onCloseEvent: () {
-        //     if (mounted) {
-        //       context.push(PageName.login);
-        //     }
-        //   },
-        // );
-      }
-    });
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -156,8 +147,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final userProvider = ref.watch(stateUserProvider);
     final roleName = userProvider.getUserModel?.data?.role?.name;
-
- 
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -194,53 +183,58 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           Shimmer.fromColors(
                             baseColor: kGreyColor1,
                             highlightColor: kGary,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: SizeConfig.heightMultiplier * 4,
-                                      child: const ClipOval(),
-                                    ),
-                                    Column(
-                                      children: [
-                                        Container(
-                                          width:
-                                              SizeConfig.widthMultiplier * 20,
-                                          margin: const EdgeInsets.only(
-                                              top: 10, right: 20),
-                                          padding: const EdgeInsets.all(8.0),
-                                          decoration: BoxDecoration(
-                                            color: kTextWhiteColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: SizeConfig.heightMultiplier * 4,
+                                        child: const ClipOval(),
+                                      ),
+                                      Column(
+                                        children: [
+                                          Container(
+                                            width:
+                                                SizeConfig.widthMultiplier * 20,
+                                            margin: const EdgeInsets.only(
+                                                top: 10, right: 20),
+                                            padding: const EdgeInsets.all(8.0),
+                                            decoration: BoxDecoration(
+                                              color: kTextWhiteColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
                                           ),
-                                        ),
-                                        Container(
-                                          width:
-                                              SizeConfig.widthMultiplier * 20,
-                                          margin: const EdgeInsets.only(
-                                              top: 10, right: 20),
-                                          padding: const EdgeInsets.all(8.0),
-                                          decoration: BoxDecoration(
-                                            color: kTextWhiteColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                          Container(
+                                            width:
+                                                SizeConfig.widthMultiplier * 20,
+                                            margin: const EdgeInsets.only(
+                                                top: 10, right: 20),
+                                            padding: const EdgeInsets.all(8.0),
+                                            decoration: BoxDecoration(
+                                              color: kTextWhiteColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: SizeConfig.widthMultiplier * 2,
-                                ),
-                                CircleAvatar(
-                                  radius: SizeConfig.heightMultiplier * 2,
-                                  child: const ClipOval(),
-                                ),
-                              ],
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: SizeConfig.widthMultiplier * 2,
+                                  ),
+                                  CircleAvatar(
+                                    radius: SizeConfig.heightMultiplier * 2,
+                                    child: const ClipOval(),
+                                  ),
+                                ],
+                              ),
                             ),
                           )
                         else
@@ -257,7 +251,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               .animate()
                               .fadeIn(duration: 1000.ms, delay: 300.ms)
                               .move(
-                                  begin: Offset(-16, 0),
+                                  begin: const Offset(-16, 0),
                                   curve: Curves.easeOutQuad),
                         const SizedBox(
                           height: 10,
@@ -266,7 +260,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             .animate()
                             .fadeIn(duration: 1000.ms, delay: 300.ms)
                             .move(
-                                begin: Offset(-16, 0),
+                                begin: const Offset(-16, 0),
                                 curve: Curves.easeOutQuad),
                         if (roleName != "CEO")
                           GestureDetector(
@@ -320,7 +314,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   fontSize: SizeConfig.textMultiplier * 2),
                         ),
                         SizedBox(height: SizeConfig.heightMultiplier * 2),
-                        const FunctionWidget(),
+                        const FunctionWidget()
+                            .animate()
+                            .fadeIn(duration: 1000.ms, delay: 300.ms)
+                            .move(
+                                begin: const Offset(-16, 0),
+                                curve: Curves.easeOutQuad),
                         SizedBox(height: SizeConfig.heightMultiplier * 2),
                         if (roleName != "EMPLOYEE") ...[
                           Text(

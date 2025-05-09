@@ -1,12 +1,8 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/styles/size_config.dart';
-import 'package:enterprise/components/utils/dialogs.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -61,7 +57,6 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
         )
         .then((value) {
           ref.read(stateLeaveProvider).setLeaveTypeModels(value: value);
-          logger.d(value);
         })
         .catchError((onError) {})
         .whenComplete(() {
@@ -119,7 +114,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
   @override
   void initState() {
     super.initState();
-    logger.d(perPage);
+
     // ref.read(stateAnalyticProvider.notifier).resetPage();
   }
 
@@ -520,7 +515,6 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                                               bool isLate =
                                                   attendanceItem.statusLate ==
                                                       false;
-                                              logger.d(isLate);
 
                                               return Column(
                                                 mainAxisAlignment:
@@ -749,19 +743,17 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                           PageName.AmlsLeaveScreens,
                           extra: data,
                         );
-
-                        logger.d(data.id);
                       },
                       child: ListTile(
                         leading: CircleAvatar(
                           radius: SizeConfig.imageSizeMultiplier * 4,
+                          // ignore: deprecated_member_use
                           backgroundColor: color.withOpacity(0.1),
                           child: CachedNetworkImage(
                             imageUrl: data.logo!,
                             progressIndicatorBuilder:
                                 (context, url, downloadProgress) =>
-                                    CircularProgressIndicator(
-                                        value: downloadProgress.progress),
+                                    const LoadingPlatformV1(),
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error),
                             color: color,
@@ -774,7 +766,8 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                               .textTheme
                               .bodyMedium!
                               .copyWith(
-                                  fontSize: SizeConfig.textMultiplier * 1.6),
+                                  fontSize: SizeConfig.textMultiplier * 1.6,
+                                  fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(
                           '${(data.total != null) ? (data.total! % 1 == 0 ? data.total!.toInt().toString() : data.total!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'

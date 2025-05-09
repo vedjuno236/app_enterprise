@@ -9,6 +9,7 @@ import 'package:enterprise/components/services/api_service/enterprise_service.da
 import 'package:enterprise/components/utils/date_format_utils.dart';
 import 'package:enterprise/components/utils/dialogs.dart';
 import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -64,13 +65,9 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
   late String nextMonthStartStr;
   late String nextMonthEndStr;
   late List<Map<String, String>> categories;
-
   String EndDate = '';
   String StartDate = '';
-
   Future fetchNotificationApi({required startDate, required endDate}) async {
-    // ຍ້ອນຫລັງ 10 ວັນ
-
     setState(() {
       isLoading = true;
       StartDate = startDate;
@@ -217,7 +214,7 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
           ],
         ),
         body: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(10.0),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,7 +227,7 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                       children: List.generate(categories.length, (index) {
                         final item = categories[index];
                         return Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: InkWell(
                             onTap: () {
                               ref
@@ -292,8 +289,9 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                                       if (mode == LoadStatus.idle) {
                                         body = const Text(Strings.txtPull);
                                       } else if (mode == LoadStatus.loading) {
-                                        body =
-                                            const CupertinoActivityIndicator();
+                                        body = const LoadingPlatformV1(
+                                          color: kYellowColor,
+                                        );
                                       } else if (mode == LoadStatus.failed) {
                                         body =
                                             const Text(Strings.txtLoadFailed);
@@ -362,12 +360,10 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                                                               imageUrl:
                                                                   data.logo ??
                                                                       '',
-                                                              progressIndicatorBuilder: (context,
-                                                                      url,
-                                                                      downloadProgress) =>
-                                                                  CircularProgressIndicator(
-                                                                      value: downloadProgress
-                                                                          .progress),
+                                                              progressIndicatorBuilder:
+                                                                  (context, url,
+                                                                          downloadProgress) =>
+                                                                      LoadingPlatformV1(),
                                                               errorWidget: (context,
                                                                       url,
                                                                       error) =>
@@ -422,10 +418,30 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                                                                   backgroundColor:
                                                                       kGary,
                                                                   radius: 27,
-                                                                  backgroundImage:
-                                                                      NetworkImage(data
-                                                                          .profile
-                                                                          .toString()),
+                                                                  child:
+                                                                      CachedNetworkImage(
+                                                                    imageUrl: data
+                                                                        .profile
+                                                                        .toString(),
+                                                                    placeholder:
+                                                                        (context,
+                                                                                url) =>
+                                                                            const LoadingPlatformV1(),
+                                                                    errorWidget: (context,
+                                                                            url,
+                                                                            error) =>
+                                                                        const Icon(
+                                                                            Icons.error),
+                                                                    imageBuilder:
+                                                                        (context,
+                                                                                imageProvider) =>
+                                                                            CircleAvatar(
+                                                                      backgroundImage:
+                                                                          imageProvider,
+                                                                      radius:
+                                                                          27,
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                               const SizedBox(

@@ -9,6 +9,7 @@ import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/views/screens/news/news_details_Screen.dart';
 import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
 import 'package:enterprise/views/widgets/bottom_sheet_push/bottom_sheet_push.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -431,7 +432,9 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                                 if (mode == LoadStatus.idle) {
                                   body = const Text(Strings.txtPull);
                                 } else if (mode == LoadStatus.loading) {
-                                  body = const CupertinoActivityIndicator();
+                                  body = const LoadingPlatformV1(
+                                    color: kYellowColor,
+                                  );
                                 } else if (mode == LoadStatus.failed) {
                                   body = const Text(Strings.txtLoadFailed);
                                 } else if (mode == LoadStatus.canLoading) {
@@ -501,8 +504,8 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                                                       .toString(),
                                                   placeholder: (context, url) =>
                                                       const Center(
-                                                          child:
-                                                              CupertinoActivityIndicator()),
+                                                    child: LoadingPlatformV1(),
+                                                  ),
                                                   errorWidget: (context, url,
                                                           error) =>
                                                       const Icon(Icons.error),
@@ -639,7 +642,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
               style: Theme.of(context)
                   .textTheme
                   .titleLarge!
-                  .copyWith(fontSize: SizeConfig.textMultiplier * 1.5),
+                  .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
             ),
             const SizedBox(
               height: 15,
@@ -662,7 +665,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
               style: Theme.of(context)
                   .textTheme
                   .titleLarge!
-                  .copyWith(fontSize: SizeConfig.textMultiplier * 1.5),
+                  .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
             ),
             const SizedBox(
               height: 15,
@@ -681,11 +684,13 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
             const SizedBox(
               height: 10,
             ),
-            Text('ລີ້ງຂ່າວ'.tr,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontSize: 15)),
+            Text(
+              'ລີ້ງຂ່າວ'.tr,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
+            ),
             const SizedBox(
               height: 10,
             ),
@@ -702,11 +707,13 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
             const SizedBox(
               height: 10,
             ),
-            Text('ເລືອກປະເພດຂ່າວ'.tr,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontSize: 15)),
+            Text(
+              'ເລືອກປະເພດຂ່າວ'.tr,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
+            ),
             const SizedBox(
               height: 10,
             ),
@@ -730,7 +737,13 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                   ),
                 ),
               ),
-              hint: const Text('ເລືອກປະເພດຂ່າວສານ'),
+              hint: Text(
+                'ເລືອກປະເພດຂ່າວສານ',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
+              ),
               dropdownColor: kTextWhiteColor,
               value: ref.watch(stateNewsProvider).dropdown,
               onChanged: (int? newValue) {

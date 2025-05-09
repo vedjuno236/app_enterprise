@@ -20,6 +20,15 @@ class UsersProvider with ChangeNotifier {
     _userModel = UserModel.fromJson(value);
     notifyListeners();
   }
+
+  String? _accessToken;
+
+  String? get accessToken => _accessToken;
+
+  void setAccessToken(String? string, {token}) async {
+    _accessToken = token.toString();
+    notifyListeners();
+  }
 }
 
 final stateUserProvider = ChangeNotifierProvider<UsersProvider>((ref) {

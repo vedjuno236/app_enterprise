@@ -2,10 +2,12 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/poviders/bottom_bar_provider/bottom_bar_provider.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:widgets_easier/widgets_easier.dart';
 import '../../../../components/constants/colors.dart';
 import '../../../../components/constants/image_path.dart';
@@ -75,8 +77,7 @@ class _HeaderProfileState extends ConsumerState<HeaderProfile> {
                                     fit: BoxFit.cover,
                                     key: ValueKey(Random().nextInt(1000000)),
                                     placeholder: (context, url) =>
-                                        const CircularProgressIndicator(
-                                            strokeWidth: 2),
+                                        const LoadingPlatformV1(),
                                     errorWidget: (context, url, error) => Icon(
                                         Icons.person,
                                         size:
@@ -90,8 +91,7 @@ class _HeaderProfileState extends ConsumerState<HeaderProfile> {
                                     fit: BoxFit.cover,
                                     key: ValueKey(Random().nextInt(1000000)),
                                     placeholder: (context, url) =>
-                                        const CircularProgressIndicator(
-                                            strokeWidth: 2),
+                                        const LoadingPlatformV1(),
                                     errorWidget: (context, url, error) => Icon(
                                         Icons.person,
                                         size:

@@ -488,7 +488,7 @@ final isDataEmpty = analyticState.getAttendanceModel?.data?.items?.isEmpty ?? tr
                                       final String timeStr =
                                           formatDate(record.createdAt);
 
-                                      final isLate = record.statusLate == false;
+                                      final isLate = record.statusLate == true;
                                       logger.d(isLate);
 
                                       return Padding(

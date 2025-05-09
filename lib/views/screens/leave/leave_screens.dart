@@ -10,6 +10,7 @@ import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
 import 'package:enterprise/views/widgets/app_dialog/alerts_dialog.dart';
 import 'package:enterprise/views/widgets/custom_date_range_picker/custom_date_range_picker.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_login.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -271,7 +272,49 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF6F7FA),
-      appBar: widgetAppBar(),
+      appBar: AppBar(
+        elevation: 0,
+        flexibleSpace: const AppbarWidget(),
+        title: AnimatedTextAppBarWidget(
+          text: Strings.txtLeave.tr,
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              context.push(PageName.leaveHistoryScreen);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const CircleAvatar(
+                    backgroundColor: kTextWhiteColor,
+                    radius: 16,
+                    child: Icon(
+                      IonIcons.time,
+                      color: kBack,
+                    ),
+                  ),
+                  // Add some spacing
+                  Expanded(
+                    child: Text(
+                      Strings.txtHistory.tr,
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontSize: SizeConfig.textMultiplier *
+                              1.5), // Reduce font size if necessary
+                    ),
+                  ),
+                ],
+              ),
+            )
+                .animate()
+                .slideY(duration: 900.ms, curve: Curves.easeOutCubic)
+                .fadeIn(),
+          ),
+        ],
+      ),
       body: CustomProgressHUD(
         key: UniqueKey(),
         inAsyncCall: isLoading,
@@ -526,7 +569,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                                             progressIndicatorBuilder:
                                                                 (context, url,
                                                                         downloadProgress) =>
-                                                                    const CupertinoActivityIndicator(),
+                                                                    const LoadingPlatformV2(),
                                                             errorWidget: (context,
                                                                     url,
                                                                     error) =>
@@ -1389,9 +1432,6 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                               ),
                             ],
                           ),
-                      
-                      
-                      
                         ],
                       ),
                     SizedBox(height: SizeConfig.heightMultiplier * 2),
@@ -1656,56 +1696,6 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
         state = AppState.picked;
       });
     }
-  }
-
-  AppBar widgetAppBar() {
-    return AppBar(
-      elevation: 0,
-      flexibleSpace: const AppbarWidget(),
-      title: AnimatedTextAppBarWidget(
-        text: Strings.txtLeave.tr,
-        style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
-      ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  context.push(PageName.leaveHistoryScreen);
-                },
-                child:  CircleAvatar(
-                  backgroundColor: kTextWhiteColor,
-                  radius: 16,
-                  // child: Icon(
-                  //   Ionicons.time_outline,
-                  //   color: kBack,
-                  // ),
-                   child:  Icon(
-                    IonIcons.time,
-                    color: kBack,
-                  ),
-                ),
-              ),
-              // Add some spacing
-              Expanded(
-                child: Text(
-                  Strings.txtHistory.tr,
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: SizeConfig.textMultiplier *
-                          1.5), // Reduce font size if necessary
-                ),
-              ),
-            ],
-          ),
-        )
-            .animate()
-            .slideY(duration: 900.ms, curve: Curves.easeOutCubic)
-            .fadeIn(),
-      ],
-    );
   }
 
   Map<String, dynamic> getItemColor(String keyword) {

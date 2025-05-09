@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math' as math;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/colors.dart';
 import 'package:enterprise/components/constants/image_path.dart';
 import 'package:enterprise/components/languages/localization_service.dart';
-import 'package:enterprise/components/models/user_model/user_model.dart';
 import 'package:enterprise/components/poviders/bottom_bar_provider/bottom_bar_provider.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/router/router.dart';
@@ -24,6 +22,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import '../../../components/constants/key_shared.dart';
 import '../../../components/constants/strings.dart';
 import '../../../components/helpers/shared_prefs.dart';
@@ -61,7 +60,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         .callUserInfos(token: sharedPrefs.getStringNow(KeyShared.keyToken))
         .then((value) {
       ref.watch(stateUserProvider).setUserModel(value: value);
-      logger.d(value);
     }).catchError((onError) {
       errorDialog(
         context: context,
@@ -102,6 +100,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       }
     });
   }
+
   Future<void> updateProfile(File croppedFile) async {
     setState(() => isLoadingInfo = true);
     try {
@@ -113,14 +112,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           .callUserInfos(token: sharedPrefs.getStringNow(KeyShared.keyToken));
       ref.read(stateUserProvider.notifier).setUserModel(value: userInfo);
       Fluttertoast.showToast(
-        msg: 'ສໍາເລັດຮູບພາບສໍາເລັດ',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+          msg: 'ແກ້ໄຂຮູບພາບສໍາເລັດ',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0,
+          fontAsset: 'NotoSansLao');
     } catch (onError) {
       if (onError.runtimeType.toString() == 'DioError') {
         errorDialog(context: context, onError: onError);
@@ -323,7 +322,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         physics: const ClampingScrollPhysics(),
         child: Builder(builder: (context) {
           final user = userProvider.getUserModel;
-
           if (user == null) {
             return Center(
               child: _buildLoadingNull(),
@@ -364,7 +362,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                 SizeConfig.textMultiplier * 3,
                                             color: Color(0xFF19295C)),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 10,
                                   ),
                                   Text(
@@ -397,13 +395,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               ),
                               SizedBox(height: SizeConfig.heightMultiplier * 1),
                               Text(
-                                userData!.positionName.toString(),
+                                userData.positionName.toString(),
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleLarge!
                                     .copyWith(
                                         fontSize: SizeConfig.textMultiplier * 2,
-                                        color: Color(0xFF99A1BE)),
+                                        color: const Color(0xFF99A1BE)),
                               )
                                   .animate()
                                   .slideY(
@@ -419,7 +417,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     height: SizeConfig.heightMultiplier * 5,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                      color: Color(0xFFFBD346),
+                                      color: const Color(0xFFFBD346),
                                       // color: submitButtonColor,
                                       borderRadius: BorderRadius.circular(50),
                                     ),
@@ -646,8 +644,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                           .textMultiplier *
                                                       1.9,
                                                   color:
+                                                      // ignore: deprecated_member_use
                                                       kBack.withOpacity(0.8)),
-                                          text: 'Lives In ',
+                                          text: '${Strings.txtLivesIn.tr} ',
                                           children: [
                                             TextSpan(
                                               text: userData.village.toString(),
@@ -686,7 +685,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                       1.9,
                                                   color:
                                                       kBack.withOpacity(0.8)),
-                                          text: 'Department ',
+                                          text: '${Strings.txtDep.tr} ',
                                           children: [
                                             TextSpan(
                                               text: userData.departmentName
@@ -726,7 +725,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                       1.9,
                                                   color:
                                                       kBack.withOpacity(0.8)),
-                                          text: 'Sart working ',
+                                          text: '${Strings.txtSartWork.tr} ',
                                           children: [
                                             TextSpan(
                                               text: DateFormatUtil.formatA(
@@ -886,17 +885,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      const LanguageSwitcher(),
-                      Switch.adaptive(
-                        value: darkTheme.darkTheme,
-                        onChanged: (value) {
-                          darkTheme.darkTheme = value;
-                        },
-                      ),
-                    ],
+                  const Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 13),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        LanguageSwitcher(),
+                        // Switch.adaptive(
+                        //   value: darkTheme.darkTheme,
+                        //   onChanged: (value) {
+                        //     darkTheme.darkTheme = value;
+                        //   },
+                        // ),
+                      ],
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -915,8 +917,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             sharedPrefs.remove(KeyShared.keyRole);
 
                             context.go(PageName.login);
-                            logger
-                                .d(sharedPrefs.getBoolNow(KeyShared.keyToken));
                           }
                         },
                         style: OutlinedButton.styleFrom(

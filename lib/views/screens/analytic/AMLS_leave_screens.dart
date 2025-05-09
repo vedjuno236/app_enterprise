@@ -13,6 +13,7 @@ import 'package:enterprise/components/utils/dialogs.dart';
 import 'package:enterprise/components/utils/dio_exceptions.dart';
 import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
 import 'package:enterprise/views/widgets/appbar/appbar_widget.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
 import 'package:enterprise/views/widgets/text_input/custom_text_filed.dart';
 import 'package:flutter/cupertino.dart';
@@ -159,8 +160,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                               imageUrl: widget.data.logo.toString(),
                               progressIndicatorBuilder:
                                   (context, url, downloadProgress) =>
-                                      CircularProgressIndicator(
-                                          value: downloadProgress.progress),
+                                      LoadingPlatformV1(),
                               errorWidget: (context, url, error) =>
                                   const Icon(Icons.error),
                               color: getItemColor(
@@ -334,7 +334,9 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                 if (mode == LoadStatus.idle) {
                                   body = const Text(Strings.txtPull);
                                 } else if (mode == LoadStatus.loading) {
-                                  body = const CupertinoActivityIndicator();
+                                  body = const LoadingPlatformV1(
+                                    color: kYellowColor,
+                                  );
                                 } else if (mode == LoadStatus.failed) {
                                   body = const Text(Strings.txtLoadFailed);
                                 } else if (mode == LoadStatus.canLoading) {
@@ -527,7 +529,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                                   ),
                                                 ),
                                               ),
-                                              const SizedBox(height: 10),
+                                              const SizedBox(height: 5),
                                               Expanded(
                                                 child: Row(
                                                   mainAxisAlignment:
@@ -600,7 +602,9 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                                           return Align(
                                                             widthFactor: 0.5,
                                                             child: CircleAvatar(
-                                                              radius: 23,
+                                                              radius: SizeConfig
+                                                                      .imageSizeMultiplier *
+                                                                  5,
                                                               backgroundColor:
                                                                   kTextWhiteColor,
                                                               child: Stack(
@@ -608,7 +612,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                                                   hasValidProfile
                                                                       ? CircleAvatar(
                                                                           radius:
-                                                                              20,
+                                                                              SizeConfig.imageSizeMultiplier * 4.3,
                                                                           backgroundImage:
                                                                               NetworkImage(profileUrl),
                                                                         )
@@ -677,9 +681,9 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
         backgroundColor: Colors.transparent,
         builder: (BuildContext context) {
           return DraggableScrollableSheet(
-              initialChildSize: 0.5,
+              initialChildSize: 0.6,
               minChildSize: 0.3,
-              maxChildSize: 0.5,
+              maxChildSize: 0.6,
               builder: (context, scrollController) {
                 // var dataStatus =
                 //     getItemColorAndIcon(leaveData.keyWord.toString());
@@ -833,6 +837,9 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                   ],
                                 )
                               : const SizedBox.shrink(),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Container(
                             decoration: BoxDecoration(
                                 color: kTextWhiteColor,

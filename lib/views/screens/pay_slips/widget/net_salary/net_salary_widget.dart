@@ -27,6 +27,10 @@ class _NetSalaryWidgetState extends ConsumerState<NetSalaryWidget> {
       BuildContext context, bool isMonthPicker, WidgetRef ref) {
     final String currentLocale = Get.locale?.toString() ?? 'lo';
     final dateProvider = ref.read(stateAnalyticProvider);
+
+    DateTime now = DateTime.now();
+    DateTime maxDate = DateTime(now.year, now.month + 1, 0);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -57,7 +61,7 @@ class _NetSalaryWidgetState extends ConsumerState<NetSalaryWidget> {
                     disabledCellsTextStyle: Theme.of(context)
                         .textTheme
                         .labelMedium!
-                        .copyWith(color: kGary),
+                        .copyWith(color: kTextGrey),
                     currentDateTextStyle: Theme.of(context)
                         .textTheme
                         .labelMedium!
@@ -70,7 +74,7 @@ class _NetSalaryWidgetState extends ConsumerState<NetSalaryWidget> {
                     slidersColor: kBack,
                     centerLeadingDate: true,
                     minDate: DateTime(2000),
-                    maxDate: DateTime(2100),
+                    maxDate: maxDate,
                     initialDate: dateProvider.selectedMonth ?? DateTime.now(),
                     onDateSelected: (month) {
                       ref.read(stateAnalyticProvider.notifier).selectedMonth =
@@ -207,7 +211,7 @@ class _NetSalaryWidgetState extends ConsumerState<NetSalaryWidget> {
           SizedBox(
             height: SizeConfig.heightMultiplier * 1,
           ),
-          Text(isVisible ? "*****" : "14.000.000",
+          Text(isVisible ? "*******" : "14.000.000",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: SizeConfig.textMultiplier * 2.7,

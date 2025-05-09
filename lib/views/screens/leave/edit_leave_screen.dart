@@ -144,7 +144,7 @@ class _EditLeaveScreenState extends ConsumerState<EditLeaveScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Expanded(
@@ -158,7 +158,7 @@ class _EditLeaveScreenState extends ConsumerState<EditLeaveScreen> {
                               fontSize: SizeConfig.textMultiplier * 1.9,
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           InkWell(
                             onTap: () {
                               // showPickerDialog(context, true, ref).then((_) {
@@ -200,7 +200,7 @@ class _EditLeaveScreenState extends ConsumerState<EditLeaveScreen> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Column(
@@ -453,7 +453,7 @@ class _EditLeaveScreenState extends ConsumerState<EditLeaveScreen> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(
                           Strings.txtPlace,
                           style: GoogleFonts.notoSansLao(
@@ -461,7 +461,7 @@ class _EditLeaveScreenState extends ConsumerState<EditLeaveScreen> {
                             fontSize: SizeConfig.textMultiplier * 1.9,
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         CustomTextField(
                           hintText: Strings.txtPLeaseEnter,
                           enabledBorder: OutlineInputBorder(
@@ -478,7 +478,7 @@ class _EditLeaveScreenState extends ConsumerState<EditLeaveScreen> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(
                           Strings.txtPhone,
                           style: GoogleFonts.notoSansLao(
@@ -505,7 +505,7 @@ class _EditLeaveScreenState extends ConsumerState<EditLeaveScreen> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(
                           Strings.txtSolution,
                           style: GoogleFonts.notoSansLao(
@@ -532,7 +532,7 @@ class _EditLeaveScreenState extends ConsumerState<EditLeaveScreen> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(Strings.txtUploadImage,
                             style: GoogleFonts.notoSansLao(
                               textStyle: Theme.of(context).textTheme.titleLarge,

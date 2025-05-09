@@ -114,11 +114,24 @@ const Map<String, String> lo = {
   "No Internet Connection": "ບໍ່ມີການເຊື່ອມຕໍ່ອິນເຕີເນັດ",
   "Please check your internet connection and try again":
       "ການເຊຶ່ອມຕໍຜຶດພາດ ,ກະລຸນາກວດສອບອິນເຕີເນັດ",
+  "Request to API server was cancelled":
+      "ການຮ້ອງຂໍຕໍ່ເຄື່ອງແມ່ຂ່າຍ API ໄດ້ຖືກຍົກເລີກ",
+  "Connection timeout with API server": "ໝົດເວລາການເຊື່ອມຕໍ່ກັບເຊີບເວີ API",
+  "Receive timeout in connection with API server":
+      "ໝົດເວລາໃນການເຊື່ອມຕໍ່ກັບເຊີບເວີ API",
+  "Connection to server failed, Please check your internet connection":
+      "ການເຊື່ອມຕໍ່ກັບເຊີບເວີລົ້ມເຫລວ, ກະລຸນາກວດສອບການເຊື່ອມຕໍ່ອິນເຕີເນັດຂອງທ່ານ",
+  "Send timeout in connection with API server":
+      "ສົ່ງໝົດເວລາໃນການເຊື່ອມຕໍ່ກັບເຊີບເວີ API",
+  "Error": 'ຂໍອະໄພ!',
+  "ບໍ່ໄດ້ຮັບອະນຸຍາດ": 'ບໍ່ໄດ້ຮັບອະນຸຍາດ',
+  "Internal server error": "ເຊີບເວີພາຍໃນຜິດພາດ",
+  "Oops something went wrong": "ຂໍອະໄພ, ມີບາງຢ່າງຜິດພາດເກີດຂຶ້ນ",
   "Edit Profile": "Edit Profile",
   "Please enter Password": "ກະລຸນາປ້ອນລະຫັດຜ່ານ",
   "Please enter PhoneNumber": "ກະລານາປ້ອນເບີໂທ",
   "Error occurred": "ເກີດຂໍ້ຜິດພາດ",
-  "Error": 'ຂໍອະໄພ!',
+
   "Leave Duration": "ໄລຍະເວລາການລາ",
   "Select date": "ເລືອກວັນທີ",
   "Assign temporary work to": "ມອບວຽກຊົ່ວຄາວໃຫ້",
@@ -140,11 +153,7 @@ const Map<String, String> lo = {
   "UploadImage": "ອັບໂຫລດຮູບພາບ",
   "Image": "ຮູບພາບ",
   "Requests": "ຮ້ອງຂໍລາຍລະອຽດ",
-  "Connection to server failed, Please check your internet connection":
-      "ການເຊື່ອມຕໍ່ກັບເຊີບເວີລົ້ມເຫລວ, ກະລຸນາກວດສອບການເຊື່ອມຕໍ່ອິນເຕີເນັດຂອງທ່ານ",
-  "Send timeout in connection with API server":
-      "ສົ່ງໝົດເວລາໃນການເຊື່ອມຕໍ່ກັບເຊີບເວີ API",
-  "Connection timeout with API server": "ໝົດເວລາການເຊື່ອມຕໍ່ກັບເຊີບເວີ API",
+
   "Loading": "ກໍາລັງສົ່ງ....",
   "Available": "ວັນລາພັກທັງໝົດ",
   "Leave Used": "ວັນທີລາພັກ",
@@ -168,5 +177,10 @@ const Map<String, String> lo = {
   ///
   "Location Permissions Denied": "ການອະນຸຍາດສະຖານທີ່ຖືກປະຕິເສດ",
   "Location permissions are permanently denied. Please enable them in app settings":
-      "ການອະນຸຍາດສະຖານທີ່ຖືກປະຕິເສດຢ່າງຖາວອນ. ກະລຸນາເປີດໃຊ້ພວກມັນໃນການຕັ້ງຄ່າແອັບ"
+      "ການອະນຸຍາດສະຖານທີ່ຖືກປະຕິເສດຢ່າງຖາວອນ. ກະລຸນາເປີດໃຊ້ພວກມັນໃນການຕັ້ງຄ່າແອັບ",
+
+  ///profile
+  "Lives In": " ອາໄສຢູ່",
+  "Department": " ພະແນກ",
+  "Sart Working": " ວັນທີເລີ່ມວຽກ"
 };

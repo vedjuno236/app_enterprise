@@ -59,12 +59,13 @@ class _GrossIncomeWidgetState extends ConsumerState<GrossIncomeWidget> {
                 fontSize: SizeConfig.textMultiplier * 3),
           ),
           SizedBox(
-            height: SizeConfig.heightMultiplier * 3,
+            height: SizeConfig.heightMultiplier * 2,
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.4,
+            width: MediaQuery.of(context).size.width * 0.8,
             height: MediaQuery.of(context).size.height * 0.2,
             child: SfCircularChart(
+              borderWidth: 5,
               margin: EdgeInsets.zero,
               series: <CircularSeries>[
                 DoughnutSeries<ChartData, String>(

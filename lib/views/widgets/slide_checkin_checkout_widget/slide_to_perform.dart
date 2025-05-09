@@ -62,7 +62,7 @@ class _SlideCheckState extends ConsumerState<SlideCheck> {
             borderRadius: BorderRadius.circular(100),
           ),
           child: state.isPerformingAction
-              ? const CupertinoActivityIndicator(color: Colors.transparent)
+              ? const CupertinoActivityIndicator(color: Colors.white)
               : Icon(isClockIn ? Icons.chevron_left : Icons.chevron_right,
                   color: kTextWhiteColor),
         );

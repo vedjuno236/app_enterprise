@@ -5,6 +5,7 @@ import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/poviders/analytic_provider/analytic_provider.dart';
 import 'package:enterprise/components/poviders/leave_provider/leave_provider.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -60,7 +61,7 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
     return Scaffold(
       appBar: buildAppBar(context),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
             leaveType.getLeaveTypeModel!.data == null
@@ -122,11 +123,9 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
                                       backgroundColor: color.withOpacity(0.1),
                                       child: CachedNetworkImage(
                                         imageUrl: leave.logo!,
-                                        progressIndicatorBuilder: (context, url,
-                                                downloadProgress) =>
-                                            CircularProgressIndicator(
-                                                value:
-                                                    downloadProgress.progress),
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                LoadingPlatformV2(),
                                         errorWidget: (context, url, error) =>
                                             const Icon(Icons.error),
                                         color: color,

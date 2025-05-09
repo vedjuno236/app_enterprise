@@ -16,6 +16,7 @@ import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
 import 'package:enterprise/views/widgets/app_dialog/alerts_dialog.dart';
 import 'package:enterprise/views/widgets/appbar/appbar_widget.dart';
 import 'package:enterprise/views/widgets/date_month_year/shared/month_picker.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -267,7 +268,7 @@ class _NotifitionsNewScreensState
           ],
         ),
         body: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -313,7 +314,9 @@ class _NotifitionsNewScreensState
                                     if (mode == LoadStatus.idle) {
                                       body = const Text(Strings.txtPull);
                                     } else if (mode == LoadStatus.loading) {
-                                      body = const CupertinoActivityIndicator();
+                                      body = const LoadingPlatformV1(
+                                        color: kYellowColor,
+                                      );
                                     } else if (mode == LoadStatus.failed) {
                                       body = const Text(Strings.txtLoadFailed);
                                     } else if (mode == LoadStatus.canLoading) {
@@ -348,7 +351,7 @@ class _NotifitionsNewScreensState
                                       return Container(
                                         margin: const EdgeInsets.symmetric(
                                             vertical: 8),
-                                        padding: const EdgeInsets.all(12),
+                                        padding: const EdgeInsets.all(10),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(16),
@@ -359,18 +362,56 @@ class _NotifitionsNewScreensState
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Stack(
                                                   clipBehavior: Clip.none,
                                                   children: [
-                                                    CircleAvatar(
-                                                      radius: SizeConfig
-                                                              .imageSizeMultiplier *
-                                                          9.5,
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                              data.profile ??
-                                                                  ''),
+                                                    // CircleAvatar(
+                                                    //   radius: SizeConfig
+                                                    //           .imageSizeMultiplier *
+                                                    //       9.5,
+                                                    //   backgroundImage:
+                                                    //       NetworkImage(
+                                                    //           data.profile ??
+                                                    //               ''),
+                                                    // ),
+                                                    ClipOval(
+                                                      child: CachedNetworkImage(
+                                                        imageUrl: data.profile !=
+                                                                    null &&
+                                                                data.profile!
+                                                                    .isNotEmpty
+                                                            ? data.profile
+                                                                .toString()
+                                                            : '',
+                                                        placeholder:
+                                                            (context, url) =>
+                                                                SizedBox(
+                                                          width: SizeConfig
+                                                                  .imageSizeMultiplier *
+                                                              12,
+                                                          height: SizeConfig
+                                                                  .imageSizeMultiplier *
+                                                              12,
+                                                          child: const Center(
+                                                              child:
+                                                                  LoadingPlatformV1()),
+                                                        ),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            const Icon(
+                                                                Icons.error),
+                                                        width: SizeConfig
+                                                                .imageSizeMultiplier *
+                                                            12,
+                                                        height: SizeConfig
+                                                                .imageSizeMultiplier *
+                                                            12,
+                                                        fit: BoxFit.cover,
+                                                      ),
                                                     ),
                                                     Positioned(
                                                       right: -6,
@@ -384,12 +425,10 @@ class _NotifitionsNewScreensState
                                                             CachedNetworkImage(
                                                           imageUrl:
                                                               data.logo ?? '',
-                                                          progressIndicatorBuilder: (context,
-                                                                  url,
-                                                                  downloadProgress) =>
-                                                              CircularProgressIndicator(
-                                                                  value: downloadProgress
-                                                                      .progress),
+                                                          progressIndicatorBuilder:
+                                                              (context, url,
+                                                                      downloadProgress) =>
+                                                                  const LoadingPlatformV1(),
                                                           errorWidget: (context,
                                                                   url, error) =>
                                                               const Icon(
@@ -443,237 +482,233 @@ class _NotifitionsNewScreensState
                                                 ),
                                               ],
                                             ),
-                                            Expanded(
-                                              child: Column(
-                                                children: [
-                                                  if (data.status == 'REJECTED')
-                                                    SizedBox(
-                                                      height: SizeConfig
-                                                              .widthMultiplier *
-                                                          8.5,
-                                                      child: OutlinedButton(
-                                                        onPressed: () async {
-                                                          widgetBottomSheetREJECTEDandAPPROVED(
-                                                              context, data);
-                                                        },
-                                                        style: OutlinedButton
-                                                            .styleFrom(
-                                                          side: const BorderSide(
-                                                              color: Color(
-                                                                  0xFFF28C84)),
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        50),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                if (data.status == 'REJECTED')
+                                                  SizedBox(
+                                                    height: SizeConfig
+                                                            .widthMultiplier *
+                                                        8.5,
+                                                    child: OutlinedButton(
+                                                      onPressed: () async {
+                                                        widgetBottomSheetREJECTEDandAPPROVED(
+                                                            context, data);
+                                                      },
+                                                      style: OutlinedButton
+                                                          .styleFrom(
+                                                        side: const BorderSide(
+                                                            color: Color(
+                                                                0xFFF28C84)),
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(50),
+                                                        ),
+                                                        backgroundColor:
+                                                            const Color(
+                                                                0xFFF28C84),
+                                                        padding:
+                                                            EdgeInsets.zero,
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          const Icon(
+                                                            Bootstrap
+                                                                .check_circle_fill,
+                                                            color: Colors.white,
+                                                            size: 15,
                                                           ),
-                                                          backgroundColor:
-                                                              const Color(
-                                                                  0xFFF28C84),
-                                                          padding:
-                                                              EdgeInsets.zero,
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            const Icon(
-                                                              Bootstrap
-                                                                  .check_circle_fill,
-                                                              color:
-                                                                  Colors.white,
-                                                              size: 15,
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 2,
-                                                            ),
-                                                            Text(
-                                                              Strings
-                                                                  .txtReject.tr,
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .titleMedium
-                                                                  ?.copyWith(
-                                                                    fontSize:
-                                                                        SizeConfig.textMultiplier *
-                                                                            1.5,
-                                                                    color:
-                                                                        kTextWhiteColor,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  if (data.status ==
-                                                      'PENDING') ...[
-                                                    SizedBox(
-                                                      width: SizeConfig
-                                                              .widthMultiplier *
-                                                          25,
-                                                      height: SizeConfig
-                                                              .widthMultiplier *
-                                                          8.5,
-                                                      child: OutlinedButton(
-                                                        onPressed: () async {
-                                                          widgetBottomSheetFormHR(
-                                                              context, data);
-                                                        },
-                                                        style: OutlinedButton
-                                                            .styleFrom(
-                                                                side: const BorderSide(
-                                                                    color:
-                                                                        kYellowColor),
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              50),
-                                                                ),
-                                                                backgroundColor:
-                                                                    kYellowColor,
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .zero),
-                                                        child: Text(
-                                                          Strings.txtApprov.tr,
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .titleMedium
-                                                                  ?.copyWith(
-                                                                    fontSize:
-                                                                        SizeConfig.textMultiplier *
-                                                                            1.5,
-                                                                    color: const Color(
-                                                                        0xFF37474F),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 10),
-                                                    SizedBox(
-                                                      width: SizeConfig
-                                                              .widthMultiplier *
-                                                          25,
-                                                      height: SizeConfig
-                                                              .widthMultiplier *
-                                                          8.5,
-                                                      child: OutlinedButton(
-                                                        onPressed: () async {
-                                                          widgetBottomSheetFormHR(
-                                                              context, data);
-                                                        },
-                                                        style: OutlinedButton
-                                                            .styleFrom(
-                                                                side: const BorderSide(
-                                                                    color:
-                                                                        kGreyBGColor),
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              50),
-                                                                ),
-                                                                backgroundColor:
-                                                                    kGary,
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .zero),
-                                                        child: Text(
-                                                          Strings.txtReject.tr,
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .titleMedium
-                                                                  ?.copyWith(
-                                                                    fontSize:
-                                                                        SizeConfig.textMultiplier *
-                                                                            1.5,
-                                                                    color: const Color(
-                                                                        0xFF99A1BE),
-                                                                  ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                  if (data.status == 'APPROVED')
-                                                    SizedBox(
-                                                      width: SizeConfig
-                                                              .widthMultiplier *
-                                                          25,
-                                                      height: SizeConfig
-                                                              .widthMultiplier *
-                                                          8.5,
-                                                      child: OutlinedButton(
-                                                        onPressed: () async {
-                                                          widgetBottomSheetREJECTEDandAPPROVED(
-                                                              context, data);
-                                                        },
-                                                        style: OutlinedButton
-                                                            .styleFrom(
-                                                                side: const BorderSide(
-                                                                    color: Color(
-                                                                        0xFF23A26D)),
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              50),
-                                                                ),
-                                                                backgroundColor:
-                                                                    const Color(
-                                                                        0xFF23A26D),
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .zero),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            const Icon(
-                                                              Bootstrap
-                                                                  .check_circle_fill,
-                                                              color:
-                                                                  Colors.white,
-                                                              size: 15,
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 2,
-                                                            ),
-                                                            Text(
-                                                              Strings
-                                                                  .txtApprov.tr,
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .titleMedium
-                                                                  ?.copyWith(
+                                                          const SizedBox(
+                                                            width: 2,
+                                                          ),
+                                                          Text(
+                                                            Strings
+                                                                .txtReject.tr,
+                                                            style:
+                                                                Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .titleMedium
+                                                                    ?.copyWith(
                                                                       fontSize:
                                                                           SizeConfig.textMultiplier *
                                                                               1.5,
                                                                       color:
-                                                                          kTextWhiteColor),
-                                                            ),
-                                                          ],
-                                                        ),
+                                                                          kTextWhiteColor,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    ),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
+                                                  ),
+                                                if (data.status ==
+                                                    'PENDING') ...[
+                                                  SizedBox(
+                                                    width: SizeConfig
+                                                            .widthMultiplier *
+                                                        25,
+                                                    height: SizeConfig
+                                                            .widthMultiplier *
+                                                        8.5,
+                                                    child: OutlinedButton(
+                                                      onPressed: () async {
+                                                        widgetBottomSheetFormHR(
+                                                            context, data);
+                                                      },
+                                                      style: OutlinedButton
+                                                          .styleFrom(
+                                                              side: const BorderSide(
+                                                                  color:
+                                                                      kYellowColor),
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            50),
+                                                              ),
+                                                              backgroundColor:
+                                                                  kYellowColor,
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .zero),
+                                                      child: Text(
+                                                        Strings.txtApprov.tr,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleMedium
+                                                            ?.copyWith(
+                                                              fontSize: SizeConfig
+                                                                      .textMultiplier *
+                                                                  1.5,
+                                                              color: const Color(
+                                                                  0xFF37474F),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  SizedBox(
+                                                    width: SizeConfig
+                                                            .widthMultiplier *
+                                                        25,
+                                                    height: SizeConfig
+                                                            .widthMultiplier *
+                                                        8.5,
+                                                    child: OutlinedButton(
+                                                      onPressed: () async {
+                                                        widgetBottomSheetFormHR(
+                                                            context, data);
+                                                      },
+                                                      style: OutlinedButton
+                                                          .styleFrom(
+                                                              side: const BorderSide(
+                                                                  color:
+                                                                      kGreyBGColor),
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            50),
+                                                              ),
+                                                              backgroundColor:
+                                                                  kGary,
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .zero),
+                                                      child: Text(
+                                                        Strings.txtReject.tr,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleMedium
+                                                            ?.copyWith(
+                                                              fontSize: SizeConfig
+                                                                      .textMultiplier *
+                                                                  1.5,
+                                                              color: const Color(
+                                                                  0xFF99A1BE),
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ],
-                                              ),
+                                                if (data.status == 'APPROVED')
+                                                  SizedBox(
+                                                    width: SizeConfig
+                                                            .widthMultiplier *
+                                                        25,
+                                                    height: SizeConfig
+                                                            .widthMultiplier *
+                                                        8.5,
+                                                    child: OutlinedButton(
+                                                      onPressed: () async {
+                                                        widgetBottomSheetREJECTEDandAPPROVED(
+                                                            context, data);
+                                                      },
+                                                      style: OutlinedButton
+                                                          .styleFrom(
+                                                              side: const BorderSide(
+                                                                  color: Color(
+                                                                      0xFF23A26D)),
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            50),
+                                                              ),
+                                                              backgroundColor:
+                                                                  const Color(
+                                                                      0xFF23A26D),
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .zero),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          const Icon(
+                                                            Bootstrap
+                                                                .check_circle_fill,
+                                                            color: Colors.white,
+                                                            size: 15,
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 2,
+                                                          ),
+                                                          Text(
+                                                            Strings
+                                                                .txtApprov.tr,
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .titleMedium
+                                                                ?.copyWith(
+                                                                    fontSize:
+                                                                        SizeConfig.textMultiplier *
+                                                                            1.5,
+                                                                    color:
+                                                                        kTextWhiteColor),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                              ],
                                             )
                                           ],
                                         ),
@@ -736,7 +771,9 @@ class _NotifitionsNewScreensState
                                     if (mode == LoadStatus.idle) {
                                       body = const Text(Strings.txtPull);
                                     } else if (mode == LoadStatus.loading) {
-                                      body = const CupertinoActivityIndicator();
+                                      body = const LoadingPlatformV1(
+                                        color: kYellowColor,
+                                      );
                                     } else if (mode == LoadStatus.failed) {
                                       body = const Text(Strings.txtLoadFailed);
                                     } else if (mode == LoadStatus.canLoading) {
@@ -784,34 +821,75 @@ class _NotifitionsNewScreensState
                                         children: [
                                           Row(
                                             children: [
-                                              Column(
-                                                children:
-                                                    (data.approvedBy != null
-                                                            ? data.approvedBy!
-                                                            : [])
-                                                        .map((user) {
-                                                  return Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 4.0,
-                                                        vertical: 5),
-                                                    child: CircleAvatar(
-                                                      radius: SizeConfig
-                                                              .imageSizeMultiplier *
-                                                          6,
-                                                      backgroundImage: (user
-                                                                      .profile !=
-                                                                  null &&
-                                                              user.profile!
-                                                                  .isNotEmpty)
-                                                          ? NetworkImage(user
-                                                              .profile
-                                                              .toString())
-                                                          : const NetworkImage(
-                                                              'https://static.vecteezy.com/system/resources/previews/012/621/570/large_2x/dwarf-dachshund-in-a-striped-dog-jumpsuit-and-a-red-cap-is-sunbathing-on-a-sandy-beach-dog-traveler-blogger-travelblogger-dog-enjoys-a-walk-in-the-fresh-air-outdoors-high-quality-photo.jpg'),
-                                                    ),
-                                                  );
-                                                }).toList(),
+                                              SizedBox(
+                                                width: SizeConfig
+                                                        .imageSizeMultiplier *
+                                                    15,
+                                                child: Column(
+                                                  children:
+                                                      (data.approvedBy ?? [])
+                                                          .map((user) {
+                                                    final imageUrl =
+                                                        user.profile != null &&
+                                                                user.profile!
+                                                                    .isNotEmpty
+                                                            ? user.profile
+                                                                .toString()
+                                                            : null;
+
+                                                    return Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 4.0,
+                                                          vertical: 5),
+                                                      child: SizedBox(
+                                                        width: SizeConfig
+                                                                .imageSizeMultiplier *
+                                                            12,
+                                                        height: SizeConfig
+                                                                .imageSizeMultiplier *
+                                                            12,
+                                                        child: ClipOval(
+                                                          child: imageUrl !=
+                                                                  null
+                                                              ? CachedNetworkImage(
+                                                                  imageUrl:
+                                                                      imageUrl,
+                                                                  placeholder: (context,
+                                                                          url) =>
+                                                                      const Center(
+                                                                    child:
+                                                                        LoadingPlatformV1(),
+                                                                  ),
+                                                                  errorWidget: (context,
+                                                                          url,
+                                                                          error) =>
+                                                                      const Icon(
+                                                                          Icons
+                                                                              .error,
+                                                                          color:
+                                                                              Colors.grey),
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                )
+                                                              : ClipOval(
+                                                                  child:
+                                                                      Container(
+                                                                    color: Colors
+                                                                            .grey[
+                                                                        300],
+                                                                    child: const Icon(
+                                                                        Icons
+                                                                            .person,
+                                                                        color: Colors
+                                                                            .white),
+                                                                  ),
+                                                                ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                ),
                                               ),
                                               const SizedBox(width: 5),
                                               Column(
@@ -1055,9 +1133,8 @@ class _NotifitionsNewScreensState
                                 width: 100,
                                 height: 100,
                                 fit: BoxFit.cover,
-                                placeholder: (context, url) => const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
+                                placeholder: (context, url) =>
+                                    const Center(child: LoadingPlatformV1()),
                                 errorWidget: (context, url, error) =>
                                     const Icon(Icons.error),
                               ),
@@ -1171,9 +1248,7 @@ class _NotifitionsNewScreensState
                                           imageUrl: leaveData.logo!,
                                           progressIndicatorBuilder: (context,
                                                   url, downloadProgress) =>
-                                              CircularProgressIndicator(
-                                                  value: downloadProgress
-                                                      .progress),
+                                              LoadingPlatformV1(),
                                           errorWidget: (context, url, error) =>
                                               const Icon(Icons.error),
                                           color: colorStatus,
@@ -1414,6 +1489,12 @@ class _NotifitionsNewScreensState
                                       borderRadius: BorderRadius.circular(15),
                                       child: CachedNetworkImage(
                                         imageUrl: leaveData.document,
+                                        placeholder: (context, url) =>
+                                            LoadingPlatformV1(),
+                                        errorWidget: (context, url, error) {
+                                          // Add logging for errors
+                                          return const Icon(Icons.error);
+                                        },
                                       ),
                                     ),
                                   ),
@@ -2212,15 +2293,48 @@ class _NotifitionsNewScreensState
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
+                                      // CircleAvatar(
+                                      //   radius: 60,
+                                      //   backgroundColor: kTextWhiteColor,
+                                      //   child: CircleAvatar(
+                                      //     radius: 55,
+                                      //     backgroundImage:
+                                      //         NetworkImage(profileUrl),
+                                      //   ),
+                                      // ),
+
                                       CircleAvatar(
                                         radius: 60,
                                         backgroundColor: kTextWhiteColor,
                                         child: CircleAvatar(
                                           radius: 55,
-                                          backgroundImage:
-                                              NetworkImage(profileUrl),
+                                          backgroundColor: Colors.grey[
+                                              200], // optional fallback color
+                                          child: ClipOval(
+                                            child: Image.network(
+                                              profileUrl,
+                                              width: 110,
+                                              height: 110,
+                                              fit: BoxFit.cover,
+                                              loadingBuilder: (context, child,
+                                                  loadingProgress) {
+                                                if (loadingProgress == null)
+                                                  return child;
+                                                return const Center(
+                                                  child: LoadingPlatformV1(),
+                                                );
+                                              },
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                return const Icon(Icons.error,
+                                                    size: 40,
+                                                    color: Colors.red);
+                                              },
+                                            ),
+                                          ),
                                         ),
                                       ),
+
                                       const SizedBox(height: 5),
                                       Row(
                                         children: [
@@ -2331,9 +2445,7 @@ class _NotifitionsNewScreensState
                                           imageUrl: leaveData.logo!,
                                           progressIndicatorBuilder: (context,
                                                   url, downloadProgress) =>
-                                              CircularProgressIndicator(
-                                                  value: downloadProgress
-                                                      .progress),
+                                              LoadingPlatformV1(),
                                           errorWidget: (context, url, error) =>
                                               const Icon(Icons.error),
                                           color: colorS,
@@ -2508,6 +2620,15 @@ class _NotifitionsNewScreensState
                                       borderRadius: BorderRadius.circular(15),
                                       child: CachedNetworkImage(
                                         imageUrl: leaveData.document,
+                                        placeholder: (context, url) =>
+                                            const Center(
+                                                child: LoadingPlatformV1()),
+                                        errorWidget: (context, url, error) =>
+                                            const Center(
+                                          child: Icon(Icons.error,
+                                              color: Colors.red),
+                                        ),
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),

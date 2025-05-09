@@ -48,7 +48,7 @@ class _RequestOtScreensState extends ConsumerState<RequestOtScreens> {
   DateTime? endDate;
   DateTime? startTime;
   DateTime? endTime;
-    bool _checkTime = false;
+  bool _checkTime = false;
   @override
   void initState() {
     super.initState();
@@ -57,8 +57,6 @@ class _RequestOtScreensState extends ConsumerState<RequestOtScreens> {
 
   @override
   Widget build(BuildContext context) {
-   
-
     final OTTypeProvider = ref.watch(stateLeaveProvider);
 
     final otProvider = ref.watch(stateRequestOTProvider);
@@ -486,645 +484,557 @@ class _RequestOtScreensState extends ConsumerState<RequestOtScreens> {
                     .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
                 SizedBox(height: SizeConfig.heightMultiplier * 3),
                 Text(Strings.txtSelectTimeOT.tr,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontSize: 15)),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(fontSize: 15))
+                    .animate()
+                    .fadeIn(duration: 500.ms, delay: 500.ms)
+                    .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
                 SizedBox(height: SizeConfig.heightMultiplier * 2),
-                  Row(
-                            children: [
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    if (Platform.isAndroid) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    const Center(
-                                                      child: Text(
-                                                        'ເລືອກເວລາເລີ່ມຕົ້ນ',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                    ),
-                                                    IconButton(
-                                                        onPressed: () {
-                                                          context.pop();
-                                                        },
-                                                        icon: const Icon(
-                                                            Icons.close))
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: SizeConfig
-                                                          .heightMultiplier *
-                                                      30,
-                                                  child: Localizations.override(
-                                                    context: context,
-                                                    locale: const Locale('en'),
-                                                    child: CupertinoTheme(
-                                                      data: CupertinoTheme.of(
-                                                          context),
-                                                      child:
-                                                          CupertinoDatePicker(
-                                                        initialDateTime:
-                                                            startTime,
-                                                        use24hFormat: true,
-                                                        mode:
-                                                            CupertinoDatePickerMode
-                                                                .time,
-                                                        onDateTimeChanged:
-                                                            (DateTime newTime) {
-                                                          startTime = newTime;
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    SizedBox(
-                                                      width: SizeConfig
-                                                              .widthMultiplier *
-                                                          50,
-                                                      child: OutlinedButton(
-                                                        onPressed: () {
-                                                          setState(() {
-                                                            _checkTime = true;
-
-                                                            if (startDate !=
-                                                                    null &&
-                                                                startTime !=
-                                                                    null) {
-                                                              startDate = DateTime(
-                                                                  startDate!
-                                                                      .year,
-                                                                  startDate!
-                                                                      .month,
-                                                                  startDate!
-                                                                      .day,
-                                                                  startTime!
-                                                                      .hour,
-                                                                  startTime!
-                                                                      .minute,
-                                                                  startTime!
-                                                                      .second);
-                                                            } else {
-                                                              DateTime
-                                                                  currentTime =
-                                                                  DateTime
-                                                                      .now();
-                                                              startDate =
-                                                                  DateTime(
-                                                                startDate!.year,
-                                                                startDate!
-                                                                    .month,
-                                                                startDate!.day,
-                                                                currentTime
-                                                                    .hour,
-                                                                currentTime
-                                                                    .minute,
-                                                                currentTime
-                                                                    .second,
-                                                              );
-                                                            }
-
-                                                            final formattedDate =
-                                                                DateFormat(
-                                                                        'yyyy-MM-dd HH:mm:ss')
-                                                                    .format(
-                                                                        startDate!);
-                                                            final formattedTime =
-                                                                DateFormat(
-                                                                        'HH:mm')
-                                                                    .format(
-                                                                        startDate!);
-                                                            requestOTNotifier
-                                                                    .startTimeController
-                                                                    .text =
-                                                                formattedTime;
-                                                            logger.d(
-                                                                formattedDate);
-                                                          });
-
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        style: OutlinedButton
-                                                            .styleFrom(
-                                                                side: const BorderSide(
-                                                                    color:
-                                                                        kYellowColor),
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              50),
-                                                                ),
-                                                                backgroundColor:
-                                                                    kYellowColor),
-                                                        child: Text(
-                                                          Strings.txtConfirm.tr,
-                                                          style: Theme.of(
-                                                                  context)
-                                                              .textTheme
-                                                              .titleSmall!
-                                                              .copyWith(
-                                                                  fontSize:
-                                                                      SizeConfig
-                                                                              .textMultiplier *
-                                                                          2,
-                                                                  color:
-                                                                      kTextWhiteColor),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
+                Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (Platform.isAndroid) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Center(
+                                            child: Text(
+                                              'ເລືອກເວລາເລີ່ມຕົ້ນ',
+                                              textAlign: TextAlign.center,
                                             ),
-                                          );
-                                        },
-                                      );
-                                    } else if (Platform.isIOS) {
-                                      showCupertinoModalPopup(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return CupertinoActionSheet(
-                                            actions: [
-                                              SizedBox(
-                                                height: SizeConfig
-                                                        .heightMultiplier *
-                                                    20,
-                                                child: Localizations.override(
-                                                  context: context,
-                                                  locale: const Locale('en'),
-                                                  child: CupertinoDatePicker(
-                                                    initialDateTime: startTime,
-                                                    use24hFormat: true,
-                                                    mode:
-                                                        CupertinoDatePickerMode
-                                                            .time,
-                                                    onDateTimeChanged:
-                                                        (DateTime newTime) {
-                                                      startTime = newTime;
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                              CupertinoActionSheetAction(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    _checkTime = true;
+                                          ),
+                                          IconButton(
+                                              onPressed: () {
+                                                context.pop();
+                                              },
+                                              icon: const Icon(Icons.close))
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            SizeConfig.heightMultiplier * 30,
+                                        child: Localizations.override(
+                                          context: context,
+                                          locale: const Locale('en'),
+                                          child: CupertinoTheme(
+                                            data: CupertinoTheme.of(context),
+                                            child: CupertinoDatePicker(
+                                              initialDateTime: startTime,
+                                              use24hFormat: true,
+                                              mode:
+                                                  CupertinoDatePickerMode.time,
+                                              onDateTimeChanged:
+                                                  (DateTime newTime) {
+                                                startTime = newTime;
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            width:
+                                                SizeConfig.widthMultiplier * 50,
+                                            child: OutlinedButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  _checkTime = true;
 
-                                                    if (startDate != null &&
-                                                        startTime != null) {
-                                                      startDate = DateTime(
-                                                          startDate!.year,
-                                                          startDate!.month,
-                                                          startDate!.day,
-                                                          startTime!.hour,
-                                                          startTime!.minute,
-                                                          startTime!.second);
-                                                    } else {
-                                                      DateTime currentTime =
-                                                          DateTime.now();
-                                                      startDate = DateTime(
+                                                  if (startDate != null &&
+                                                      startTime != null) {
+                                                    startDate = DateTime(
                                                         startDate!.year,
                                                         startDate!.month,
                                                         startDate!.day,
-                                                        currentTime.hour,
-                                                        currentTime.minute,
-                                                        currentTime.second,
-                                                      );
-                                                    }
-
-                                                    final formattedDate =
-                                                        DateFormat(
-                                                                'yyyy-MM-dd HH:mm:ss')
-                                                            .format(startDate!);
-                                                    final formattedTime =
-                                                        DateFormat('HH:mm')
-                                                            .format(startDate!);
-                                                    requestOTNotifier
-                                                        .startTimeController
-                                                        .text = formattedTime;
-                                                    logger.d(formattedDate);
-                                                  });
-
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text(
-                                                  Strings.txtConfirm,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleMedium!
-                                                      .copyWith(
-                                                          fontSize: SizeConfig
-                                                                  .textMultiplier *
-                                                              2,
-                                                          color: kBlueColor),
-                                                ),
-                                              ),
-                                            ],
-                                            cancelButton:
-                                                CupertinoActionSheetAction(
-                                              isDestructiveAction: true,
-                                              onPressed: () {
-                                                setState(() {
-                                                  startTime = null;
-                                                });
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(
-                                                Strings.txtCancel,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleMedium!
-                                                    .copyWith(
-                                                        fontSize: SizeConfig
-                                                                .textMultiplier *
-                                                            2,
-                                                        color: kRedColor),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    }
-                                  },
-                                  child: AbsorbPointer(
-                                    child: CustomTextField(
-                                      hintText: startTime != null
-                                          ? '${DateFormat(
-                                              "HH:mm",
-                                            ).format(startTime!)} '
-                                          : Strings.txtStrTime.tr,
-                                      suffixIcon: Image.asset(ImagePath.iconIn),
-                                      validator: (value) => null,
-                                      hintStyle: startTime != null
-                                          ? Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .copyWith(
-                                                  color: Color(0xFF37474F))
-                                          : Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .copyWith(color: kGreyColor2),
-                                      controller:
-                                          requestOTNotifier.startTimeController,
-                                    ),
-                                  )
-                                      .animate()
-                                      .fadeIn(duration: 500.ms, delay: 500.ms)
-                                      .move(
-                                          begin: Offset(-16, 0),
-                                          curve: Curves.easeOutQuad),
-                                ),
-                              ),
-                              SizedBox(width: SizeConfig.widthMultiplier * 4),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    if (Platform.isAndroid) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    const Center(
-                                                      child: Text(
-                                                        'ເລືອກເວລາສີ້ນສຸດ',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                    ),
-                                                    IconButton(
-                                                        onPressed: () {
-                                                          context.pop();
-                                                        },
-                                                        icon: const Icon(
-                                                            Icons.close))
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: SizeConfig
-                                                          .heightMultiplier *
-                                                      30,
-                                                  child: Localizations.override(
-                                                    context: context,
-                                                    locale: const Locale('en'),
-                                                    child: CupertinoTheme(
-                                                      data: CupertinoTheme.of(
-                                                          context),
-                                                      child:
-                                                          CupertinoDatePicker(
-                                                        minimumDate: startTime,
-                                                        initialDateTime:
-                                                            startTime ??
-                                                                endTime,
-                                                        use24hFormat: true,
-                                                        mode:
-                                                            CupertinoDatePickerMode
-                                                                .time,
-                                                        onDateTimeChanged:
-                                                            (DateTime newTime) {
-                                                          endTime = newTime;
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    SizedBox(
-                                                      width: SizeConfig
-                                                              .widthMultiplier *
-                                                          50,
-                                                      child: OutlinedButton(
-                                                        onPressed: () {
-                                                          if (!_checkTime) {
-                                                            Fluttertoast.showToast(
-                                                                msg: Strings
-                                                                    .txtSelectLeaveStart
-                                                                    .tr,
-                                                                toastLength: Toast
-                                                                    .LENGTH_SHORT,
-                                                                gravity:
-                                                                    ToastGravity
-                                                                        .CENTER,
-                                                                timeInSecForIosWeb:
-                                                                    1,
-                                                                backgroundColor:
-                                                                    kYellowColor,
-                                                                textColor:
-                                                                    Colors
-                                                                        .white,
-                                                                fontSize: 20.0);
-                                                            context.pop();
-                                                            return;
-                                                          }
-
-                                                          if (endDate != null &&
-                                                              endTime != null) {
-                                                            endDate = DateTime(
-                                                                endDate!.year,
-                                                                endDate!.month,
-                                                                endDate!.day,
-                                                                endTime!.hour,
-                                                                endTime!.minute,
-                                                                endTime!
-                                                                    .second);
-                                                          } else {
-                                                            DateTime
-                                                                currentTime =
-                                                                DateTime.now();
-                                                            endDate = DateTime(
-                                                              endDate!.year,
-                                                              endDate!.month,
-                                                              endDate!.day,
-                                                              currentTime.hour,
-                                                              currentTime
-                                                                  .minute,
-                                                              currentTime
-                                                                  .second,
-                                                            );
-                                                          }
-                                                          final formattedDate =
-                                                              DateFormat(
-                                                                      'yyyy-MM-dd HH:mm:ss')
-                                                                  .format(
-                                                                      startDate!);
-                                                          final formattedTime =
-                                                              DateFormat(
-                                                                      'HH:mm')
-                                                                  .format(
-                                                                      startDate!);
-                                                          requestOTNotifier
-                                                              .endTimeController
-                                                              .text = formattedTime;
-                                                          logger
-                                                              .d(formattedDate);
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        style: OutlinedButton
-                                                            .styleFrom(
-                                                                side: const BorderSide(
-                                                                    color:
-                                                                        kYellowColor),
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              50),
-                                                                ),
-                                                                backgroundColor:
-                                                                    kYellowColor),
-                                                        child: Text(
-                                                          Strings.txtConfirm.tr,
-                                                          style: Theme.of(
-                                                                  context)
-                                                              .textTheme
-                                                              .titleSmall!
-                                                              .copyWith(
-                                                                  fontSize:
-                                                                      SizeConfig
-                                                                              .textMultiplier *
-                                                                          2,
-                                                                  color:
-                                                                      kTextWhiteColor),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    } else {
-                                      showCupertinoModalPopup(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return CupertinoActionSheet(
-                                            actions: [
-                                              SizedBox(
-                                                height: SizeConfig
-                                                        .heightMultiplier *
-                                                    20,
-                                                child: Localizations.override(
-                                                  context: context,
-                                                  locale: const Locale('en'),
-                                                  child: CupertinoDatePicker(
-                                                    minimumDate: startTime,
-                                                    initialDateTime: endTime ??
-                                                        DateTime.now(),
-                                                    use24hFormat: true,
-                                                    mode:
-                                                        CupertinoDatePickerMode
-                                                            .time,
-                                                    onDateTimeChanged:
-                                                        (DateTime newTime) {
-                                                      endTime = newTime;
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                              CupertinoActionSheetAction(
-                                                onPressed: () {
-                                                  if (!_checkTime) {
-                                                    Fluttertoast.showToast(
-                                                        msg: Strings
-                                                            .txtSelectLeaveStart
-                                                            .tr,
-                                                        toastLength:
-                                                            Toast.LENGTH_SHORT,
-                                                        gravity:
-                                                            ToastGravity.CENTER,
-                                                        timeInSecForIosWeb: 1,
-                                                        backgroundColor:
-                                                            kYellowColor,
-                                                        textColor: Colors.white,
-                                                        fontSize: 20.0);
-                                                    context.pop();
-                                                    return;
-                                                  }
-
-                                                  if (endDate != null &&
-                                                      endTime != null) {
-                                                    endDate = DateTime(
-                                                        endDate!.year,
-                                                        endDate!.month,
-                                                        endDate!.day,
-                                                        endTime!.hour,
-                                                        endTime!.minute,
-                                                        endTime!.second);
+                                                        startTime!.hour,
+                                                        startTime!.minute,
+                                                        startTime!.second);
                                                   } else {
                                                     DateTime currentTime =
                                                         DateTime.now();
-                                                    endDate = DateTime(
-                                                      endDate!.year,
-                                                      endDate!.month,
-                                                      endDate!.day,
+                                                    startDate = DateTime(
+                                                      startDate!.year,
+                                                      startDate!.month,
+                                                      startDate!.day,
                                                       currentTime.hour,
                                                       currentTime.minute,
                                                       currentTime.second,
                                                     );
                                                   }
+
                                                   final formattedDate = DateFormat(
                                                           'yyyy-MM-dd HH:mm:ss')
-                                                      .format(endDate!);
+                                                      .format(startDate!);
                                                   final formattedTime =
                                                       DateFormat('HH:mm')
-                                                          .format(endDate!);
+                                                          .format(startDate!);
                                                   requestOTNotifier
-                                                      .endTimeController
+                                                      .startTimeController
                                                       .text = formattedTime;
                                                   logger.d(formattedDate);
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text(
-                                                  Strings.txtConfirm,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleMedium!
-                                                      .copyWith(
-                                                          fontSize: SizeConfig
-                                                                  .textMultiplier *
-                                                              2,
-                                                          color: kBlueColor),
-                                                ),
-                                              ),
-                                            ],
-                                            cancelButton:
-                                                CupertinoActionSheetAction(
-                                              isDestructiveAction: true,
-                                              onPressed: () {
+                                                });
+
                                                 Navigator.pop(context);
                                               },
+                                              style: OutlinedButton.styleFrom(
+                                                  side: const BorderSide(
+                                                      color: kYellowColor),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50),
+                                                  ),
+                                                  backgroundColor:
+                                                      kYellowColor),
                                               child: Text(
-                                                Strings.txtCancel,
+                                                Strings.txtConfirm.tr,
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .titleMedium!
+                                                    .titleSmall!
                                                     .copyWith(
                                                         fontSize: SizeConfig
                                                                 .textMultiplier *
                                                             2,
-                                                        color: kRedColor),
+                                                        color: kTextWhiteColor),
                                               ),
                                             ),
-                                          );
-                                        },
-                                      );
-                                    }
-                                  },
-                                  child: AbsorbPointer(
-                                    child: CustomTextField(
-                                      hintText: endTime != null
-                                          ? '${DateFormat(
-                                              "HH:mm:ss",
-                                            ).format(endTime!)} '
-                                          : Strings.txtEndTime.tr,
-                                      suffixIcon: Image.asset(ImagePath.iconIn),
-                                      validator: (value) => null,
-                                      hintStyle: endTime != null
-                                          ? Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .copyWith(
-                                                  color: Color(0xFF37474F))
-                                          : Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .copyWith(color: kGreyColor2),
-                                      controller:
-                                          requestOTNotifier.endTimeController,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          } else if (Platform.isIOS) {
+                            showCupertinoModalPopup(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return CupertinoActionSheet(
+                                  actions: [
+                                    SizedBox(
+                                      height: SizeConfig.heightMultiplier * 20,
+                                      child: Localizations.override(
+                                        context: context,
+                                        locale: const Locale('en'),
+                                        child: CupertinoDatePicker(
+                                          initialDateTime: startTime,
+                                          use24hFormat: true,
+                                          mode: CupertinoDatePickerMode.time,
+                                          onDateTimeChanged:
+                                              (DateTime newTime) {
+                                            startTime = newTime;
+                                          },
+                                        ),
+                                      ),
                                     ),
-                                  )
-                                      .animate()
-                                      .fadeIn(duration: 500.ms, delay: 500.ms)
-                                      .move(
-                                          begin: Offset(-16, 0),
-                                          curve: Curves.easeOutQuad),
-                                ),
-                              ),
-                            ],
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        setState(() {
+                                          _checkTime = true;
+
+                                          if (startDate != null &&
+                                              startTime != null) {
+                                            startDate = DateTime(
+                                                startDate!.year,
+                                                startDate!.month,
+                                                startDate!.day,
+                                                startTime!.hour,
+                                                startTime!.minute,
+                                                startTime!.second);
+                                          } else {
+                                            DateTime currentTime =
+                                                DateTime.now();
+                                            startDate = DateTime(
+                                              startDate!.year,
+                                              startDate!.month,
+                                              startDate!.day,
+                                              currentTime.hour,
+                                              currentTime.minute,
+                                              currentTime.second,
+                                            );
+                                          }
+
+                                          final formattedDate =
+                                              DateFormat('yyyy-MM-dd HH:mm:ss')
+                                                  .format(startDate!);
+                                          final formattedTime =
+                                              DateFormat('HH:mm')
+                                                  .format(startDate!);
+                                          requestOTNotifier.startTimeController
+                                              .text = formattedTime;
+                                          logger.d(formattedDate);
+                                        });
+
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        Strings.txtConfirm,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium!
+                                            .copyWith(
+                                                fontSize:
+                                                    SizeConfig.textMultiplier *
+                                                        2,
+                                                color: kBlueColor),
+                                      ),
+                                    ),
+                                  ],
+                                  cancelButton: CupertinoActionSheetAction(
+                                    isDestructiveAction: true,
+                                    onPressed: () {
+                                      setState(() {
+                                        startTime = null;
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      Strings.txtCancel,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                              fontSize:
+                                                  SizeConfig.textMultiplier * 2,
+                                              color: kRedColor),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        },
+                        child: AbsorbPointer(
+                          child: CustomTextField(
+                            hintText: startTime != null
+                                ? '${DateFormat(
+                                    "HH:mm",
+                                  ).format(startTime!)} '
+                                : Strings.txtStrTime.tr,
+                            suffixIcon: Image.asset(ImagePath.iconIn),
+                            validator: (value) => null,
+                            hintStyle: startTime != null
+                                ? Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(color: Color(0xFF37474F))
+                                : Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(color: kGreyColor2),
+                            controller: requestOTNotifier.startTimeController,
                           ),
-                      
-                      
-                      
+                        )
+                            .animate()
+                            .fadeIn(duration: 500.ms, delay: 500.ms)
+                            .move(
+                                begin: Offset(-16, 0),
+                                curve: Curves.easeOutQuad),
+                      ),
+                    ),
+                    SizedBox(width: SizeConfig.widthMultiplier * 4),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (Platform.isAndroid) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Center(
+                                            child: Text(
+                                              'ເລືອກເວລາສີ້ນສຸດ',
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          IconButton(
+                                              onPressed: () {
+                                                context.pop();
+                                              },
+                                              icon: const Icon(Icons.close))
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            SizeConfig.heightMultiplier * 30,
+                                        child: Localizations.override(
+                                          context: context,
+                                          locale: const Locale('en'),
+                                          child: CupertinoTheme(
+                                            data: CupertinoTheme.of(context),
+                                            child: CupertinoDatePicker(
+                                              minimumDate: startTime,
+                                              initialDateTime:
+                                                  startTime ?? endTime,
+                                              use24hFormat: true,
+                                              mode:
+                                                  CupertinoDatePickerMode.time,
+                                              onDateTimeChanged:
+                                                  (DateTime newTime) {
+                                                endTime = newTime;
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            width:
+                                                SizeConfig.widthMultiplier * 50,
+                                            child: OutlinedButton(
+                                              onPressed: () {
+                                                if (!_checkTime) {
+                                                  Fluttertoast.showToast(
+                                                      msg: Strings
+                                                          .txtSelectLeaveStart
+                                                          .tr,
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.CENTER,
+                                                      timeInSecForIosWeb: 1,
+                                                      backgroundColor:
+                                                          kYellowColor,
+                                                      textColor: Colors.white,
+                                                      fontSize: 20.0);
+                                                  context.pop();
+                                                  return;
+                                                }
+
+                                                if (endDate != null &&
+                                                    endTime != null) {
+                                                  endDate = DateTime(
+                                                      endDate!.year,
+                                                      endDate!.month,
+                                                      endDate!.day,
+                                                      endTime!.hour,
+                                                      endTime!.minute,
+                                                      endTime!.second);
+                                                } else {
+                                                  DateTime currentTime =
+                                                      DateTime.now();
+                                                  endDate = DateTime(
+                                                    endDate!.year,
+                                                    endDate!.month,
+                                                    endDate!.day,
+                                                    currentTime.hour,
+                                                    currentTime.minute,
+                                                    currentTime.second,
+                                                  );
+                                                }
+                                                final formattedDate = DateFormat(
+                                                        'yyyy-MM-dd HH:mm:ss')
+                                                    .format(startDate!);
+                                                final formattedTime =
+                                                    DateFormat('HH:mm')
+                                                        .format(startDate!);
+                                                requestOTNotifier
+                                                    .endTimeController
+                                                    .text = formattedTime;
+                                                logger.d(formattedDate);
+                                                Navigator.pop(context);
+                                              },
+                                              style: OutlinedButton.styleFrom(
+                                                  side: const BorderSide(
+                                                      color: kYellowColor),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50),
+                                                  ),
+                                                  backgroundColor:
+                                                      kYellowColor),
+                                              child: Text(
+                                                Strings.txtConfirm.tr,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall!
+                                                    .copyWith(
+                                                        fontSize: SizeConfig
+                                                                .textMultiplier *
+                                                            2,
+                                                        color: kTextWhiteColor),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          } else {
+                            showCupertinoModalPopup(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return CupertinoActionSheet(
+                                  actions: [
+                                    SizedBox(
+                                      height: SizeConfig.heightMultiplier * 20,
+                                      child: Localizations.override(
+                                        context: context,
+                                        locale: const Locale('en'),
+                                        child: CupertinoDatePicker(
+                                          minimumDate: startTime,
+                                          initialDateTime:
+                                              endTime ?? DateTime.now(),
+                                          use24hFormat: true,
+                                          mode: CupertinoDatePickerMode.time,
+                                          onDateTimeChanged:
+                                              (DateTime newTime) {
+                                            endTime = newTime;
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        if (!_checkTime) {
+                                          Fluttertoast.showToast(
+                                              msg: Strings
+                                                  .txtSelectLeaveStart.tr,
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.CENTER,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor: kYellowColor,
+                                              textColor: Colors.white,
+                                              fontSize: 20.0);
+                                          context.pop();
+                                          return;
+                                        }
+
+                                        if (endDate != null &&
+                                            endTime != null) {
+                                          endDate = DateTime(
+                                              endDate!.year,
+                                              endDate!.month,
+                                              endDate!.day,
+                                              endTime!.hour,
+                                              endTime!.minute,
+                                              endTime!.second);
+                                        } else {
+                                          DateTime currentTime = DateTime.now();
+                                          endDate = DateTime(
+                                            endDate!.year,
+                                            endDate!.month,
+                                            endDate!.day,
+                                            currentTime.hour,
+                                            currentTime.minute,
+                                            currentTime.second,
+                                          );
+                                        }
+                                        final formattedDate =
+                                            DateFormat('yyyy-MM-dd HH:mm:ss')
+                                                .format(endDate!);
+                                        final formattedTime =
+                                            DateFormat('HH:mm')
+                                                .format(endDate!);
+                                        requestOTNotifier.endTimeController
+                                            .text = formattedTime;
+                                        logger.d(formattedDate);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        Strings.txtConfirm,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium!
+                                            .copyWith(
+                                                fontSize:
+                                                    SizeConfig.textMultiplier *
+                                                        2,
+                                                color: kBlueColor),
+                                      ),
+                                    ),
+                                  ],
+                                  cancelButton: CupertinoActionSheetAction(
+                                    isDestructiveAction: true,
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      Strings.txtCancel,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                              fontSize:
+                                                  SizeConfig.textMultiplier * 2,
+                                              color: kRedColor),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        },
+                        child: AbsorbPointer(
+                          child: CustomTextField(
+                            hintText: endTime != null
+                                ? '${DateFormat(
+                                    "HH:mm:ss",
+                                  ).format(endTime!)} '
+                                : Strings.txtEndTime.tr,
+                            suffixIcon: Image.asset(ImagePath.iconIn),
+                            validator: (value) => null,
+                            hintStyle: endTime != null
+                                ? Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(color: Color(0xFF37474F))
+                                : Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(color: kGreyColor2),
+                            controller: requestOTNotifier.endTimeController,
+                          ),
+                        )
+                            .animate()
+                            .fadeIn(duration: 500.ms, delay: 500.ms)
+                            .move(
+                                begin: Offset(-16, 0),
+                                curve: Curves.easeOutQuad),
+                      ),
+                    ),
+                  ],
+                ),
+
                 SizedBox(height: SizeConfig.heightMultiplier * 3),
                 Text(Strings.txtReasonOT.tr,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontSize: 15)),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(fontSize: 15))
+                    .animate()
+                    .fadeIn(duration: 500.ms, delay: 500.ms)
+                    .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
                 SizedBox(height: SizeConfig.heightMultiplier * 2),
                 CustomTextField(
                   controller: requestOTNotifier.noteController,

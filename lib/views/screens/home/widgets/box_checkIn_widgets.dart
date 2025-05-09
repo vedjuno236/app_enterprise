@@ -683,6 +683,8 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:rive/rive.dart';
+import 'package:rive_animated_icon/rive_animated_icon.dart';
 
 import '../../../../components/constants/image_path.dart';
 import '../../../../components/constants/strings.dart';
@@ -710,10 +712,35 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
   late Position locationPosition;
   bool isValidLocation = false;
 
+  /// rives
+  Artboard? _riveArtboard;
+  SMIInput<double>? _levelInput;
+  StateMachineController? controller;
+  Future<void> preload() async {
+    try {
+      final file = await RiveFile.asset('assets/rives/weather.riv');
+      final artboard = file.mainArtboard;
+
+      final animationController = SimpleAnimation('Animation 1');
+      artboard.addController(animationController);
+      animationController.isActive = true;
+
+      if (mounted) {
+        setState(() => _riveArtboard = artboard);
+      }
+    } catch (e) {
+      print("Failed to load Rive file: $e");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     // _checkLocationPermission();
+    // preload();
+    // _determinePosition();
+    // _getLocation();
+    preload();
     _determinePosition();
     _getLocation();
   }
@@ -934,14 +961,8 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
   }
 
   Future<void> clockInOutService() async {
-    // final userProvider = ref.read(stateUserProvider);
-    // final userId = userProvider.getUserModel?.data?.id;
     int userID = int.parse(SharedPrefs().getStringNow(KeyShared.keyUserId));
 
-    // if (userId == null) {
-    //   logger.e("User ID is null");
-    //   return;
-    // }
     try {
       final keyword = isValidLocation ? "OFFICE" : "REMOTE";
       String? imagePath;
@@ -1032,15 +1053,25 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
           children: [
             Row(
               children: [
-                SvgPicture.asset(
-                  _getImagePath(),
-                  height: SizeConfig.imageSizeMultiplier * 10,
-                  width: SizeConfig.imageSizeMultiplier * 10,
-                )
-                    .animate()
-                    .slideY(duration: 1000.ms, curve: Curves.easeOutCubic)
-                    .fadeIn(),
-                SizedBox(width: SizeConfig.widthMultiplier * 4),
+                if (_riveArtboard != null)
+                  SizedBox(
+                    height: SizeConfig.imageSizeMultiplier * 10,
+                    width: SizeConfig.imageSizeMultiplier * 20,
+                    child: Rive(
+                      artboard: _riveArtboard!,
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+
+                // SvgPicture.asset(
+                //   _getImagePath(),
+                //   height: SizeConfig.imageSizeMultiplier * 10,
+                //   width: SizeConfig.imageSizeMultiplier * 10,
+                // )
+                // .animate()
+                // .slideY(duration: 1000.ms, curve: Curves.easeOutCubic)
+                // .fadeIn(),
+                // SizedBox(width: SizeConfig.widthMultiplier * 2),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
