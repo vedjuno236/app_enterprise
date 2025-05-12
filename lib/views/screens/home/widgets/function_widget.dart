@@ -1,9 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/poviders/home_provider/home_provider.dart';
-import 'package:enterprise/components/utils/dialogs.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -275,15 +273,29 @@ class _FunctionWidgetState extends ConsumerState<FunctionWidget> {
   Map<String, dynamic> getItemColor(String keywrd) {
     switch (keywrd) {
       case "APPLYLEAVE":
-        return {'color': Color(0xFF3085FE), 'txt': Strings.txtApplyeave.tr};
+        return {
+          'color': const Color(0xFF3085FE),
+          'txt': Strings.txtApplyeave.tr
+        };
       case "POLICY":
-        return {'color': Color(0xFFF45B69), 'txt': Strings.txtPolicy.tr};
+        return {'color': const Color(0xFFF45B69), 'txt': Strings.txtPolicy.tr};
       case "PAYSLIPS":
-        return {'color': Color(0xFFF59E0B), 'txt': Strings.txtPayslips.tr};
+        return {
+          'color': const Color(0xFFF59E0B),
+          'txt': Strings.txtPayslips.tr
+        };
       case "CALENDAR":
-        return {'color': Color(0xFF23A26D), 'txt': Strings.txtCalendar.tr};
+        return {
+          'color': const Color(0xFF23A26D),
+          'txt': Strings.txtCalendar.tr
+        };
       case "REQUEST OT":
-        return {'color': Color(0xFF23A26D), 'txt': Strings.txtRequestOt.tr};
+        return {
+          'color': const Color(0xFF23A26D),
+          'txt': Strings.txtRequestOt.tr
+        };
+      case "EVENT":
+        return {'color': const Color(0xFF23A26D), 'txt': Strings.txtEvent.tr};
       default:
         return {
           'color': Colors.blueAccent,
@@ -326,7 +338,7 @@ class _FunctionWidgetState extends ConsumerState<FunctionWidget> {
         GoRouter.of(context).push(PageName.marketPlace);
         break;
 
-      case 'EVENTS':
+      case 'EVENT':
         GoRouter.of(context).push(PageName.eventsScreens);
         break;
       default:

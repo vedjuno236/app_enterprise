@@ -412,7 +412,6 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 9, horizontal: 5),
                                 child: Container(
-                                  height: SizeConfig.heightMultiplier * 25,
                                   decoration: BoxDecoration(
                                     color: kTextWhiteColor,
                                     borderRadius: BorderRadius.circular(20.0),

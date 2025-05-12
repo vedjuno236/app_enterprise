@@ -737,88 +737,11 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
   void initState() {
     super.initState();
     // _checkLocationPermission();
-    // preload();
-    // _determinePosition();
-    // _getLocation();
+
     preload();
     _determinePosition();
     _getLocation();
   }
-
-  // Future<bool> _requestLocationPermission(BuildContext context) async {
-  //   bool serviceEnabled;
-  //   LocationPermission permission;
-
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: Text('Location service is disabled.')));
-  //     return false;
-  //   }
-
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       return false;
-  //     }
-  //   }
-  //   if (permission == LocationPermission.deniedForever) {
-  //     if (Platform.isIOS) {
-  //       showCupertinoDialog(
-  //         context: context,
-  //         builder: (context) => AlertIOSDialog(
-  //           title: Text(
-  //             Strings.txtLocationPermissions.tr,
-  //             style: Theme.of(context)
-  //                 .textTheme
-  //                 .titleLarge!
-  //                 .copyWith(fontSize: SizeConfig.textMultiplier * 2),
-  //           ),
-  //           content: Text(
-  //             Strings.txtLocationPermissionssettings.tr,
-  //             style: Theme.of(context)
-  //                 .textTheme
-  //                 .bodySmall!
-  //                 .copyWith(fontSize: SizeConfig.textMultiplier * 2),
-  //           ),
-  //           onPressed: () {
-  //             openAppSettings();
-  //             Navigator.pop(context);
-  //           },
-  //         ),
-  //       );
-  //     } else {
-  //       showDialog(
-  //         context: context,
-  //         builder: (context) => AlertCustomDialog(
-  //           title: Text(
-  //             Strings.txtLocationPermissions.tr,
-  //             style: Theme.of(context)
-  //                 .textTheme
-  //                 .titleLarge!
-  //                 .copyWith(fontSize: SizeConfig.textMultiplier * 2),
-  //           ),
-  //           content: Text(
-  //             Strings.txtLocationPermissionssettings.tr,
-  //             style: Theme.of(context)
-  //                 .textTheme
-  //                 .bodySmall!
-  //                 .copyWith(fontSize: SizeConfig.textMultiplier * 2),
-  //           ),
-  //           onTapOK: () {
-  //             openAppSettings();
-  //             Navigator.pop(context);
-  //           },
-  //         ),
-  //       );
-  //     }
-  //     return false;
-  //   }
-  //   await _getLocation();
-
-  //   return true;
-  // }
 
   Future<bool> _requestLocationPermission(BuildContext context) async {
     bool serviceEnabled;
@@ -826,8 +749,8 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Location service is disabled.')));
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(content: Text('Location service is disabled.')));
       return false;
     }
 
@@ -835,19 +758,56 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Location permission is denied.')));
         return false;
       }
     }
-
     if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location permission is permanently denied. Please enable it in settings.')));
-      openAppSettings();
+      if (Platform.isIOS) {
+        showCupertinoDialog(
+          context: context,
+          builder: (context) => AlertIOSDialog(
+            title: Text(
+              Strings.txtLocationPermissions.tr,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+            ),
+            content: Text(
+              Strings.txtLocationPermissionssettings.tr,
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(),
+            ),
+            onPressed: () {
+              openAppSettings();
+              Navigator.pop(context);
+            },
+          ),
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => AlertCustomDialog(
+            title: Text(
+              Strings.txtLocationPermissions.tr,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(),
+            ),
+            content: Text(
+              Strings.txtLocationPermissionssettings.tr,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(),
+            ),
+            onTapOK: () {
+              openAppSettings();
+              Navigator.pop(context);
+            },
+          ),
+        );
+      }
       return false;
     }
+    await _getLocation();
 
     return true;
   }
@@ -1117,10 +1077,10 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
                         context.push(PageName.attendanceScreens);
                       }
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Location permission is required.')),
-                      );
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //   const SnackBar(
+                      //       content: Text('Location permission is required.')),
+                      // );
                     }
                   }),
             ).animate().scaleXY(

@@ -419,21 +419,27 @@ class _NotifitionsNewScreensState
                                                       child: CircleAvatar(
                                                         radius: SizeConfig
                                                                 .heightMultiplier *
-                                                            1.8,
+                                                            1.4,
                                                         backgroundColor: color,
-                                                        child:
-                                                            CachedNetworkImage(
-                                                          imageUrl:
-                                                              data.logo ?? '',
-                                                          progressIndicatorBuilder:
-                                                              (context, url,
-                                                                      downloadProgress) =>
-                                                                  const LoadingPlatformV1(),
-                                                          errorWidget: (context,
-                                                                  url, error) =>
-                                                              const Icon(
-                                                                  Icons.error),
-                                                          color: Colors.white,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4.0),
+                                                          child:
+                                                              CachedNetworkImage(
+                                                            imageUrl:
+                                                                data.logo ?? '',
+                                                            progressIndicatorBuilder:
+                                                                (context, url,
+                                                                        downloadProgress) =>
+                                                                    const LoadingPlatformV1(),
+                                                            errorWidget: (context,
+                                                                    url,
+                                                                    error) =>
+                                                                const Icon(Icons
+                                                                    .error),
+                                                            color: Colors.white,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
@@ -1968,16 +1974,20 @@ class _NotifitionsNewScreensState
                                             SizeConfig.heightMultiplier * 1.6,
                                         backgroundColor:
                                             colorStatus.withOpacity(0.1),
-                                        child: CachedNetworkImage(
-                                          imageUrl: leaveData.logo!,
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              CircularProgressIndicator(
-                                                  value: downloadProgress
-                                                      .progress),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
-                                          color: colorStatus,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: CachedNetworkImage(
+                                            imageUrl: leaveData.logo!,
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
+                                            color: colorStatus,
+                                          ),
                                         ),
                                       ),
                                       const SizedBox(
@@ -2220,7 +2230,13 @@ class _NotifitionsNewScreensState
                                     ),
                                   ),
                                 )
-                              : const SizedBox.shrink()
+                              : Center(
+                                  child: Text(
+                                    'ບໍ່ມີຮູບພາບ',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                )
                         ]),
                   ),
                 );
@@ -2293,16 +2309,6 @@ class _NotifitionsNewScreensState
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      // CircleAvatar(
-                                      //   radius: 60,
-                                      //   backgroundColor: kTextWhiteColor,
-                                      //   child: CircleAvatar(
-                                      //     radius: 55,
-                                      //     backgroundImage:
-                                      //         NetworkImage(profileUrl),
-                                      //   ),
-                                      // ),
-
                                       CircleAvatar(
                                         radius: 60,
                                         backgroundColor: kTextWhiteColor,
@@ -2334,7 +2340,6 @@ class _NotifitionsNewScreensState
                                           ),
                                         ),
                                       ),
-
                                       const SizedBox(height: 5),
                                       Row(
                                         children: [

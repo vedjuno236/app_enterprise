@@ -1,8 +1,8 @@
-
 import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/helpers/dark_mode_preference.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:enterprise/components/languages/localization_service.dart';
+import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/router/router.dart';
 import 'package:enterprise/components/styles/dark_theme_style.dart';
@@ -12,6 +12,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -28,122 +29,183 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 // Global NavigatorState key that's accessible throughout the app
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+// final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
+
+// // Create a top-level variable to store notification payload
+// String? initialNotificationPayload;
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   // Check if Firebase is already initialized
+
+//   if (message.notification != null) {
+//     flutterLocalNotificationsPlugin.show(
+//       message.notification!.hashCode,
+//       message.notification!.title,
+//       message.notification!.body,
+//       const NotificationDetails(
+//         android: AndroidNotificationDetails(
+//           'high_importance_channel',
+//           'High Importance Notifications',
+//           importance: Importance.high,
+//           priority: Priority.high,
+//         ),
+//       ),
+//       payload: message.data['type'],
+//     );
+//   }
+// }
+
+/// Create a [AndroidNotificationChannel] for heads up notifications
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  importance: Importance.high,
+);
+
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
+FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-// Create a top-level variable to store notification payload
-String? initialNotificationPayload;
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+
+  debugPrint('Handling a background message ${message.messageId}');
+  if (message.notification != null) {
+    if (kDebugMode) {
+      print(message.notification!.title);
+    }
+    if (kDebugMode) {
+      print(message.notification!.body);
+    }
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Initialize local notifications with iOS settings
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  const DarwinInitializationSettings initializationSettingsIOS =
-      DarwinInitializationSettings(
-    requestAlertPermission: true,
-    requestBadgePermission: true,
-    requestSoundPermission: true,
-  );
-  const InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsIOS,
-  );
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-    onDidReceiveNotificationResponse:
-        (NotificationResponse notificationResponse) async {
-      initialNotificationPayload = notificationResponse.payload;
+  // // Initialize local notifications with iOS settings
+  // const AndroidInitializationSettings initializationSettingsAndroid =
+  //     AndroidInitializationSettings('@mipmap/ic_launcher');
+  // const DarwinInitializationSettings initializationSettingsIOS =
+  //     DarwinInitializationSettings(
+  //   requestAlertPermission: true,
+  //   requestBadgePermission: true,
+  //   requestSoundPermission: true,
+  // );
+  // const InitializationSettings initializationSettings = InitializationSettings(
+  //   android: initializationSettingsAndroid,
+  //   iOS: initializationSettingsIOS,
+  // );
+  // await flutterLocalNotificationsPlugin.initialize(
+  //   initializationSettings,
+  //   onDidReceiveNotificationResponse:
+  //       (NotificationResponse notificationResponse) async {
+  //     initialNotificationPayload = notificationResponse.payload;
 
-      Future.delayed(const Duration(milliseconds: 100), () {
-        router.goNamed(PageName.applyLeavesScreenRoute);
-      });
-    },
-  );
+  //     Future.delayed(const Duration(milliseconds: 100), () {
+  //       router.goNamed(PageName.applyLeavesScreenRoute);
+  //     });
+  //   },
+  // );
 
-  // Create notification channel
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel',
-    'High Importance Notifications',
-    importance: Importance.high,
-    playSound: true,
-    sound: RawResourceAndroidNotificationSound('notification_sound'),
-    enableVibration: true,
-  );
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
+  // // Create notification channel
+  // const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  //   'high_importance_channel',
+  //   'High Importance Notifications',
+  //   importance: Importance.high,
+  //   playSound: true,
+  //   sound: RawResourceAndroidNotificationSound('notification_sound'),
+  //   enableVibration: true,
+  // );
+  // await flutterLocalNotificationsPlugin
+  //     .resolvePlatformSpecificImplementation<
+  //         AndroidFlutterLocalNotificationsPlugin>()
+  //     ?.createNotificationChannel(channel);
 
-  await FirebaseMessaging.instance.requestPermission(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
+  // await FirebaseMessaging.instance.requestPermission(
+  //   alert: true,
+  //   badge: true,
+  //   sound: true,
+  // );
 
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
+  // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+  //   alert: true,
+  //   badge: true,
+  //   sound: true,
+  // );
 
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //   RemoteNotification? notification = message.notification;
+  //   AndroidNotification? android = message.notification?.android;
+  //   if (notification != null && android != null) {
+  //     flutterLocalNotificationsPlugin.show(
+  //       notification.hashCode,
+  //       notification.title,
+  //       notification.body,
+  //       NotificationDetails(
+  //         android: AndroidNotificationDetails(
+  //           channel.id,
+  //           channel.name,
+  //           importance: Importance.high,
+  //           priority: Priority.high,
+  //           showWhen: true,
+  //         ),
+  //       ),
+  //       payload: message.data['type'],
+  //     );
+  //   }
+  // });
+
+  AndroidNotificationChannel? channel;
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+  } else {
+    await Firebase.initializeApp();
+
+    //set for Log analytics screen view
+    FirebaseAnalytics.instance.logAppOpen();
+  }
+
+  if (kDebugMode) {
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  } else {
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  }
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
-    if (notification != null && android != null) {
-      flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            channel.id,
-            channel.name,
-            importance: Importance.high,
-            priority: Priority.high,
-            showWhen: true,
-          ),
-        ),
-        payload: message.data['type'],
-      );
-    }
-  });
+  if (!kIsWeb) {
+    channel = const AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      importance: Importance.high,
+    );
 
- 
- 
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+  }
+
   // final fcmToken = await FirebaseMessaging.instance.getToken();
   // logger.d('FCM Token: $fcmToken');
 
   FirebaseAnalytics.instance.logAppOpen();
   await SharedPrefs().init();
   runApp(const ProviderScope(child: App()));
-}
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // Check if Firebase is already initialized
-
-  if (message.notification != null) {
-    flutterLocalNotificationsPlugin.show(
-      message.notification!.hashCode,
-      message.notification!.title,
-      message.notification!.body,
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'high_importance_channel',
-          'High Importance Notifications',
-          importance: Importance.high,
-          priority: Priority.high,
-        ),
-      ),
-      payload: message.data['type'],
-    );
-  }
 }
 
 class App extends ConsumerStatefulWidget {

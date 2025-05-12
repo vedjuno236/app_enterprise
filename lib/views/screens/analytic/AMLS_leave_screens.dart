@@ -840,198 +840,211 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                           const SizedBox(
                             height: 10,
                           ),
-                          Container(
-                            decoration: BoxDecoration(
+                          if (leaveData.approvedBy != null &&
+                              leaveData.approvedBy!.isNotEmpty) ...[
+                            Container(
+                              decoration: BoxDecoration(
                                 color: kTextWhiteColor,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                children: [
-                                  if (leaveData.approvedBy != null &&
-                                      leaveData.approvedBy!.isNotEmpty) ...[
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ...leaveData.approvedBy!
-                                            .map((approver) {
-                                          if (approver.status != "APPROVED" &&
-                                              approver.status != "REJECTED") {
-                                            return const SizedBox.shrink();
-                                          }
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ...leaveData.approvedBy!.map((approver) {
+                                      // Determine status text and color
+                                      final statusText =
+                                          approver.status == "APPROVED"
+                                              ? Strings.txtApproved.tr
+                                              : approver.status == "REJECTED"
+                                                  ? Strings.txtRejected.tr
+                                                  : Strings.txtWaiting.tr;
 
-                                          final statusText =
-                                              approver.status == "APPROVED"
-                                                  ? Strings.txtApproved.tr
-                                                  : Strings.txtRejected.tr;
+                                      final statusColor = approver.status ==
+                                              "APPROVED"
+                                          ? Colors.green
+                                          : approver.status == "REJECTED"
+                                              ? Colors.red
+                                              : Colors
+                                                  .orange; // Color for PENDING
 
-                                          final updatedAt =
-                                              leaveData.updatedAt != null
-                                                  ? DateFormatUtil.formatddMMy(
-                                                      DateTime.parse(leaveData
-                                                          .updatedAt
-                                                          .toString()))
-                                                  : 'N/A';
+                                      final updatedAt = leaveData.updatedAt !=
+                                              null
+                                          ? DateFormatUtil.formatddMMy(
+                                              DateTime.parse(leaveData.updatedAt
+                                                  .toString()))
+                                          : 'N/A';
 
-                                          return Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 8.0),
-                                            child: Column(
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 8.0),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
+                                                // Status Indicator
                                                 Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
                                                   children: [
-                                                    // Status Indicator
-                                                    Row(
-                                                      children: [
-                                                        CircleAvatar(
-                                                          radius: SizeConfig
-                                                                  .heightMultiplier *
-                                                              1.2,
-                                                          backgroundColor:
-                                                              approver.status ==
-                                                                      "APPROVED"
-                                                                  ? Colors.green
-                                                                  : Colors.red,
-                                                          child: Icon(
-                                                            Icons.check,
-                                                            size: SizeConfig
-                                                                    .imageSizeMultiplier *
-                                                                4,
-                                                            color:
-                                                                kTextWhiteColor,
-                                                          ),
+                                                    if (approver.status ==
+                                                            "APPROVED" ||
+                                                        approver.status ==
+                                                            "REJECTED")
+                                                      CircleAvatar(
+                                                        radius: SizeConfig
+                                                                .heightMultiplier *
+                                                            1.2,
+                                                        backgroundColor:
+                                                            statusColor,
+                                                        child: Icon(
+                                                          approver.status ==
+                                                                  "APPROVED"
+                                                              ? Icons.check
+                                                              : Icons.close,
+                                                          size: SizeConfig
+                                                                  .imageSizeMultiplier *
+                                                              4,
+                                                          color:
+                                                              kTextWhiteColor,
                                                         ),
-                                                        const SizedBox(
-                                                            width: 10),
-                                                        Text(
-                                                          '$statusText $updatedAt',
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodySmall!
-                                                                  .copyWith(
-                                                                    color: approver.status ==
-                                                                            "APPROVED"
-                                                                        ? Colors
-                                                                            .green
-                                                                        : Colors
-                                                                            .red,
-                                                                  ),
+                                                      ),
+                                                    if (approver.status ==
+                                                        "PENDING")
+                                                      CircleAvatar(
+                                                        radius: SizeConfig
+                                                                .heightMultiplier *
+                                                            1.2,
+                                                        backgroundColor:
+                                                            statusColor,
+                                                        child: Icon(
+                                                          approver.status ==
+                                                                  "PENDING"
+                                                              ? Icons.check
+                                                              : Icons.close,
+                                                          size: SizeConfig
+                                                                  .imageSizeMultiplier *
+                                                              4,
+                                                          color:
+                                                              kTextWhiteColor,
                                                         ),
-                                                      ],
-                                                    ),
-
-                                                    // Approver Info
-                                                    Row(
-                                                      children: [
-                                                        Text(Strings.txtBy.tr,
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodySmall),
-                                                        const SizedBox(
-                                                            width: 5),
-                                                        CircleAvatar(
-                                                          radius: SizeConfig
-                                                                  .heightMultiplier *
-                                                              2,
-                                                          backgroundImage:
-                                                              NetworkImage(
-                                                            approver.profile
-                                                                        ?.isNotEmpty ==
-                                                                    true
-                                                                ? approver
-                                                                    .profile!
-                                                                : "https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg",
-                                                          ),
-                                                          onBackgroundImageError:
-                                                              (_, __) =>
-                                                                  const Icon(Icons
-                                                                      .error),
-                                                        ),
-                                                        const SizedBox(
-                                                            width: 5),
-                                                        ConstrainedBox(
-                                                          constraints:
-                                                              BoxConstraints(
-                                                            maxWidth: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                0.3,
-                                                          ),
-                                                          child: Text(
-                                                            approver.username ??
-                                                                'Unknown',
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodySmall!
-                                                                .copyWith(
-                                                                    color:
-                                                                        kBack),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ),
-                                                        ),
-                                                      ],
+                                                      ),
+                                                    const SizedBox(width: 10),
+                                                    Text(
+                                                      '${approver.status == "PENDING " ? statusText : Strings.txtApprov.tr} $updatedAt',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall!
+                                                          .copyWith(
+                                                              color:
+                                                                  statusColor),
                                                     ),
                                                   ],
                                                 ),
-                                                const Divider(color: kGary),
-                                                if ((approver.comment ?? '')
-                                                    .isNotEmpty) ...[
-                                                  Container(
-                                                    width: double.infinity,
-                                                    decoration: BoxDecoration(
-                                                        color:
-                                                            Color(0xFFFCE6E4),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        border: Border.all(
-                                                          color: const Color(
-                                                              0xFFCE1126),
-                                                        )),
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                        10.0,
+
+                                                // Approver Info
+                                                Row(
+                                                  children: [
+                                                    Text(Strings.txtBy.tr,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall),
+                                                    const SizedBox(width: 5),
+                                                    CircleAvatar(
+                                                      radius: SizeConfig
+                                                              .heightMultiplier *
+                                                          2,
+                                                      backgroundImage:
+                                                          NetworkImage(
+                                                        approver.profile
+                                                                    ?.isNotEmpty ==
+                                                                true
+                                                            ? approver.profile!
+                                                            : "https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg",
                                                       ),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            approver.comment!,
-                                                            style: Theme.of(
+                                                      onBackgroundImageError:
+                                                          (_, __) => const Icon(
+                                                              Icons.error),
+                                                    ),
+                                                    const SizedBox(width: 5),
+                                                    ConstrainedBox(
+                                                      constraints:
+                                                          BoxConstraints(
+                                                        maxWidth: MediaQuery.of(
                                                                     context)
-                                                                .textTheme
-                                                                .bodySmall,
-                                                          ),
-                                                        ],
+                                                                .size
+                                                                .width *
+                                                            0.3,
+                                                      ),
+                                                      child: Text(
+                                                        approver.username ??
+                                                            'Unknown',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall!
+                                                            .copyWith(
+                                                                color: kBack),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                                const Divider(color: kGary),
+                                                  ],
+                                                ),
                                               ],
                                             ),
-                                          );
-                                        }).toList(),
-                                      ],
-                                    ),
+                                            const Divider(color: kGary),
+                                            if ((approver.comment ?? '')
+                                                .isNotEmpty) ...[
+                                              Container(
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                    color: approver.status ==
+                                                            "REJECTED"
+                                                        ? const Color(
+                                                            0xFFFCE6E4)
+                                                        : const Color(
+                                                            0xFFE4FCE4),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    border: Border.all(
+                                                      color: approver.status ==
+                                                              "REJECTED"
+                                                          ? const Color(
+                                                              0xFFCE1126)
+                                                          : const Color(
+                                                              0xFF4CAF50),
+                                                    )),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        approver.comment!,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ],
+                                        ),
+                                      );
+                                    }).toList(),
                                   ],
-                                ],
+                                ),
                               ),
                             ),
-                          )
+                          ]
                         ]),
                   ),
                 );

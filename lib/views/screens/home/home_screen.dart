@@ -1,6 +1,6 @@
 import 'dart:async';
-
 import 'package:enterprise/components/constants/key_shared.dart';
+import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/poviders/location_provider/location_provider.dart';
 import 'package:enterprise/components/router/router.dart';
 import 'package:enterprise/components/utils/dialogs.dart';
@@ -10,7 +10,6 @@ import 'package:enterprise/views/screens/home/widgets/coming_events_widget.dart'
 import 'package:enterprise/views/screens/home/widgets/function_widget.dart';
 import 'package:enterprise/views/screens/home/widgets/headerProfile_widget.dart';
 import 'package:enterprise/views/screens/home/widgets/team_highligts_widget.dart';
-
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -20,7 +19,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../../../components/constants/colors.dart';
 import '../../../components/constants/strings.dart';
 import '../../../components/helpers/shared_prefs.dart';
@@ -32,7 +30,6 @@ import '../../widgets/easy_date_time/infinite_item.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
-
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
@@ -43,7 +40,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool isLoadinLocation = false;
   bool cancelled = false;
   bool showClockIn = false;
-
   Future fetchUserApi() async {
     setState(() {
       isLoadinUser = true;
@@ -52,6 +48,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         .callUserInfos(token: sharedPrefs.getStringNow(KeyShared.keyToken))
         .then((value) {
       ref.watch(stateUserProvider).setUserModel(value: value);
+
+      logger.d(value);
     }).catchError((onError) {
       errorDialog(
         context: context,
@@ -105,9 +103,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }
     });
   }
-
-
-  
 
   @override
   void initState() {
@@ -240,6 +235,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         else
                           HeaderProfile(
                             name: userProvider.getUserModel!.data!.firstName
+                                .toString(),
+                            lastName: userProvider.getUserModel!.data!.lastName
                                 .toString(),
                             positionName: userProvider
                                 .getUserModel!.data!.positionName

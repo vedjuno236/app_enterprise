@@ -53,7 +53,13 @@ class AlertCustomDialog extends StatelessWidget {
                 ),
               ],
             ),
-            child: const Text("ຍົກເລີກ"),
+            child: Text(
+              Strings.txtCancel.tr,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(fontSize: SizeConfig.textMultiplier * 2),
+            ),
           ),
         ),
         GestureDetector(
@@ -75,7 +81,13 @@ class AlertCustomDialog extends StatelessWidget {
                 ),
               ],
             ),
-            child: const Text("ຕົກລົງ"),
+            child: Text(
+              Strings.txtOkay.tr,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(fontSize: SizeConfig.textMultiplier * 2),
+            ),
           ),
         )
       ],
@@ -280,7 +292,13 @@ class AlertCancelAction extends StatelessWidget {
       child: Container(
         color: kTextWhiteColor,
         padding: const EdgeInsets.all(20),
-        child: Text(''),
+        child: Text(
+          Strings.txtCancel.tr,
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge!
+              .copyWith(fontSize: SizeConfig.textMultiplier * 2),
+        ),
       ),
     );
   }
@@ -312,14 +330,22 @@ class AlertIOSDialog extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text(
-              "ຍົກເລີກ",
+            child: Text(
+              Strings.txtCancel.tr,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(fontSize: SizeConfig.textMultiplier * 2),
             ),
           ),
           CupertinoDialogAction(
             onPressed: onPressed,
-            child: const Text(
-              "ຕົກລົງ",
+            child: Text(
+              Strings.txtOkay.tr,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(fontSize: SizeConfig.textMultiplier * 2),
             ),
           ),
         ],

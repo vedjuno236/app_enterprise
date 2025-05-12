@@ -315,7 +315,7 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
       elevation: 0,
       flexibleSpace: const AppbarWidget(),
       title: Text(
-        Strings.txtAllLeaveHistory,
+        Strings.txtAllLeaveHistory.tr,
         style: Theme.of(context)
             .textTheme
             .titleLarge!

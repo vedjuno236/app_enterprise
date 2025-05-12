@@ -271,6 +271,7 @@ class Strings {
   static const String txtPayslips = "Payslips";
   static const String txtCalendar = "Calendar";
   static const String txtRequestOt = "Request OT";
+   static const String txtEvent = "Events";
 
   /// news
   static const String txtRequestTitle = "Request title ";
@@ -314,8 +315,6 @@ class Strings {
 
   /// Market place
   static const String txtMyPost = "My post";
-  //event
-  static const String txtEvent = "Event";
 
   /// request
   ///

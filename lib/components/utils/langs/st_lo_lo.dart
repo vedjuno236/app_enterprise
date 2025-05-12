@@ -79,7 +79,7 @@ const Map<String, String> lo = {
   "Payslips": "ເງີນເດືອນ",
   "Calendar": "ປະຕິທີນ",
   "Request OT": "ຂໍໂອທີ",
-
+"Events": "ກິດຈະກໍາ",
   // atten
   "You": "ເຈົ້າ",
 //

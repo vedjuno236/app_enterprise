@@ -18,6 +18,7 @@ import '../../../../components/styles/size_config.dart';
 class HeaderProfile extends ConsumerStatefulWidget {
   final SharedPrefs sharedPrefs;
   final String? name;
+  final String? lastName;
   final String? positionName;
   final String? profile;
 
@@ -25,6 +26,7 @@ class HeaderProfile extends ConsumerStatefulWidget {
       {super.key,
       required this.sharedPrefs,
       this.name,
+      this.lastName,
       this.positionName,
       this.profile});
   @override
@@ -111,10 +113,30 @@ class _HeaderProfileState extends ConsumerState<HeaderProfile> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.name!,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        fontWeight: FontWeight.bold, color: Color(0xFF0F1721)),
+                  Row(
+                    children: [
+                      Text(
+                        widget.name!,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF0F1721)),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        widget.lastName!,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF0F1721)),
+                      ),
+                    ],
                   ),
                   SizedBox(height: SizeConfig.heightMultiplier * 0.5),
                   Text(

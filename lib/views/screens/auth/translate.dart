@@ -118,7 +118,9 @@ class _LanguageSwitcherState extends State<LanguageSwitcher> {
           'assets/icons/la.png',
         );
       default:
-        return const Icon(Icons.flag, size: 24);
+         return Image.asset(
+          'assets/icons/en.png',
+        );
     }
   }
 }
