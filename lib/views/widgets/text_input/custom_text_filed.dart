@@ -17,7 +17,7 @@ class CustomTextField extends StatelessWidget {
   final int maxLines;
   final String? errorText;
   final String? Function(String?)? validator;
-  final TextStyle?hintStyle;
+  final TextStyle? hintStyle;
   final void Function(String)? onChanged;
 
   const CustomTextField({
@@ -37,8 +37,8 @@ class CustomTextField extends StatelessWidget {
     this.maxLines = 1,
     this.errorText,
     this.validator,
-    this.onChanged, 
-   this.hintStyle,
+    this.onChanged,
+    this.hintStyle,
   });
 
   @override
@@ -50,9 +50,7 @@ class CustomTextField extends StatelessWidget {
       maxLines: maxLines,
       validator: validator,
       onChanged: onChanged,
-      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-            color: kBack,
-          ),
+      style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
       decoration: InputDecoration(
         prefixIcon: prefixIcon != null
             ? IconTheme(
@@ -95,7 +93,7 @@ class CustomTextField extends StatelessWidget {
             ),
         errorText: errorText,
         errorStyle: const TextStyle(color: kRedColor),
-        fillColor: Colors.white,
+        fillColor: Theme.of(context).canvasColor,
         filled: true,
       ),
     );

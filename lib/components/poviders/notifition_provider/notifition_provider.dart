@@ -22,6 +22,7 @@ class NotifitionProvider with ChangeNotifier {
     _notificationModel = NotificationModel.fromJson(value);
     notifyListeners();
   }
+
    DateTime? _selectedMonth;
 
   String _selectedMonthText = Strings.txtThisMonth;
@@ -36,6 +37,22 @@ class NotifitionProvider with ChangeNotifier {
     _selectedMonth = month;
     // _selectedMonthText = DateFormat.MMMM().format(month!);
     _selectedMonthText = DateFormatUtil.formatM(month!);
+    notifyListeners();
+  }
+}
+
+
+
+final teamHighlightsProvider = ChangeNotifierProvider<TeamHighlightsNotifier>((ref) {
+  return TeamHighlightsNotifier();
+});
+
+class TeamHighlightsNotifier with ChangeNotifier {
+  NotificationModel? _notificationModel;
+  NotificationModel? get getNotificationModel => _notificationModel;
+
+  Future<void> setNotificationModel({required dynamic value}) async {
+    _notificationModel = NotificationModel.fromJson(value);
     notifyListeners();
   }
 }

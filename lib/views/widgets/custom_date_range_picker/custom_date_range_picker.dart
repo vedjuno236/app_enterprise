@@ -1,8 +1,10 @@
 import 'package:enterprise/components/constants/strings.dart';
+import 'package:enterprise/components/utils/date_format_utils.dart';
 import 'package:enterprise/views/widgets/custom_date_range_picker/custom_calendar.dart.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class CustomDateRangePicker extends StatefulWidget {
   /// The minimum date that can be selected in the calendar.
@@ -108,6 +110,52 @@ class CustomDateRangePickerState extends State<CustomDateRangePicker>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      // Row(
+                      //   children: <Widget>[
+                      //     Expanded(
+                      //       child: Column(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         crossAxisAlignment: CrossAxisAlignment.center,
+                      //         children: <Widget>[
+                      //           Text(
+                      //             'ຈາກວັນທີ',
+                      //             textAlign: TextAlign.left,
+                      //             style: Theme.of(context).textTheme.bodyLarge,
+                      //           ),
+                      //           Text(
+                      //             startDate != null
+                      //                 ? DateFormatUtil.formatedm(
+                      //                     startDate!, null)
+                      //                 : '-------- ',
+                      //             style: Theme.of(context).textTheme.bodyMedium,
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     Expanded(
+                      //       child: Column(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         crossAxisAlignment: CrossAxisAlignment.center,
+                      //         children: <Widget>[
+                      //           Text(
+                      //             'ຫາວັນທີ',
+                      //             textAlign: TextAlign.left,
+                      //             style: Theme.of(context).textTheme.bodyLarge,
+                      //           ),
+                      //           Text(
+                      //             endDate != null
+                      //                 ? DateFormatUtil.formatedm(endDate!, null)
+                      //                 : '-------- ',
+                      //             style: Theme.of(context).textTheme.bodyMedium,
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
                       CustomCalendar(
                         minimumDate: widget.minimumDate,
                         maximumDate: widget.maximumDate,
@@ -211,7 +259,7 @@ class CustomDateRangePickerState extends State<CustomDateRangePicker>
                                     // print('Error in date selection: $e');
                                   }
                                 },
-                               
+
                                 child: Center(
                                   child: Text(
                                     Strings.txtOkay.tr,

@@ -28,7 +28,6 @@ class NewsDetailsScreen extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: const AppbarWidget(),
-      
         title: AnimatedTextAppBarWidget(
           text: Strings.txtDetails.tr,
           style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
@@ -43,14 +42,14 @@ class NewsDetailsScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
-                color: kTextWhiteColor,
-                // boxShadow: const [
-                //   BoxShadow(
-                //     color: Colors.black12,
-                //     blurRadius: 4.0,
-                //     offset: Offset(2, 2),
-                //   ),
-                // ],
+                color: Theme.of(context).cardColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).canvasColor,
+                    blurRadius: 4.0,
+                    offset: Offset(2, 2),
+                  ),
+                ],
               ),
               child: Padding(
                 padding: const EdgeInsets.all(2.0),
@@ -80,8 +79,10 @@ class NewsDetailsScreen extends ConsumerWidget {
                     const SizedBox(height: 16.0),
                     Text(
                       news.title!,
-                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          color: kBack87, fontWeight: FontWeight.bold),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall!
+                          .copyWith(fontWeight: FontWeight.bold),
                     ).animate().fade(duration: 300.ms).moveX(
                         begin: -50,
                         end: 0,
@@ -107,9 +108,7 @@ class NewsDetailsScreen extends ConsumerWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
-                                  .copyWith(
-                                      color: kBack,
-                                      fontWeight: FontWeight.bold),
+                                  .copyWith(fontWeight: FontWeight.bold),
                             ),
                             Text(DateFormatUtil.formatA(
                                 DateTime.parse(news.createdAt!))),
@@ -127,10 +126,7 @@ class NewsDetailsScreen extends ConsumerWidget {
                     ),
                     Text(
                       news.description!,
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelLarge!
-                          .copyWith(color: kGreyColor),
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(),
                     ).animate().fade(duration: 1000.ms).moveX(
                         begin: -50,
                         end: 0,

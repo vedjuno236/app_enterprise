@@ -45,7 +45,6 @@ class _DateTimeBuilderWidgetState extends State<DateTimeBuilderWidget> {
             DateFormat('MMMM', currentLocale).format(DateTime.now()),
             style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 fontSize: SizeConfig.textMultiplier * 2.1,
-                color: kBack87,
                 fontWeight: FontWeight.w500),
           ),
           GestureDetector(
@@ -90,10 +89,7 @@ class _DateTimeBuilderWidgetState extends State<DateTimeBuilderWidget> {
               children: [
                 Text(
                   EasyDateFormatter.shortDayName(date, currentLocale),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: kGreyColor2),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
                 ),
                 const SizedBox(height: 5.0),
                 Flexible(

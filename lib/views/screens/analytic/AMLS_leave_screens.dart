@@ -87,11 +87,11 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
     final dataAPI = ref.watch(leaveHistoryProvider);
 
     int totalLeaveDays = 0;
-    if (dataAPI.getallLeaveHistoryModel != null &&
-        dataAPI.getallLeaveHistoryModel!.data != null) {
-      totalLeaveDays = dataAPI.getallLeaveHistoryModel!.data!
-          .fold(0, (sum, item) => sum + (item.totalDays ?? item.totalDays!));
-    }
+    // if (dataAPI.getallLeaveHistoryModel != null &&
+    //     dataAPI.getallLeaveHistoryModel!.data != null) {
+    //   totalLeaveDays = dataAPI.getallLeaveHistoryModel!.data!
+    //       .fold(0, (sum, item) => sum + (item.totalDays ?? item.totalDays!));
+    // }
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -139,7 +139,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.0),
-                  color: kTextWhiteColor,
+                  color: Theme.of(context).canvasColor,
                   boxShadow: const [
                     BoxShadow(
                       color: kTextWhiteColor,
@@ -190,7 +190,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                             height: 80,
                             padding: const EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
-                              color: kTextWhiteColor,
+                              color: Theme.of(context).canvasColor,
                               borderRadius: BorderRadius.circular(16.0),
                               boxShadow: const [
                                 BoxShadow(
@@ -246,7 +246,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                             padding: const EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16.0),
-                              color: kTextWhiteColor,
+                              color: Theme.of(context).canvasColor,
                               boxShadow: const [
                                 BoxShadow(
                                   color: kPinkColor,
@@ -390,7 +390,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                         height:
                                             SizeConfig.heightMultiplier * 23,
                                         decoration: BoxDecoration(
-                                          color: kTextWhiteColor,
+                                          color: Theme.of(context).canvasColor,
                                           borderRadius:
                                               BorderRadius.circular(20.0),
                                         ),
@@ -444,7 +444,8 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                                 decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
-                                                  color: kGary,
+                                                  color: Theme.of(context)
+                                                      .cardColor,
                                                 ),
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(
@@ -511,7 +512,8 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                                                             0xFF979797)),
                                                               ),
                                                               Text(
-                                                                  '${data.totalDays.toString()} ${Strings.txtDay.tr}',
+                                                                  '${(data.totalDays != null) ? (data.totalDays! % 1 == 0 ? data.totalDays!.toInt().toString() : data.totalDays!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
+                                                                      .tr,
                                                                   style: Theme.of(
                                                                           context)
                                                                       .textTheme
@@ -678,465 +680,451 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
     return showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).canvasColor,
         builder: (BuildContext context) {
-          return DraggableScrollableSheet(
-              initialChildSize: 0.6,
-              minChildSize: 0.3,
-              maxChildSize: 0.6,
-              builder: (context, scrollController) {
-                // var dataStatus =
-                //     getItemColorAndIcon(leaveData.keyWord.toString());
-                // Color colorStatus = dataStatus['color'];
-                // String txt = dataStatus['txt'];
-                // var dataColor = getCheckStatus(leaveData.status.toString());
-                // var dataText = getCheckStatusUser(leaveData.status.toString());
-                // Color colorButton = dataColor['color'];
-                // String txtButton = dataText['txt'];
+          return FractionallySizedBox(
+              heightFactor: 0.7,
+              // initialChildSize: 0.6,
+              // minChildSize: 0.3,
+              // maxChildSize: 0.6,
+              // builder: (context, scrollController) {
+              // var dataStatus =
+              //     getItemColorAndIcon(leaveData.keyWord.toString());
+              // Color colorStatus = dataStatus['color'];
+              // String txt = dataStatus['txt'];
+              // var dataColor = getCheckStatus(leaveData.status.toString());
+              // var dataText = getCheckStatusUser(leaveData.status.toString());
+              // Color colorButton = dataColor['color'];
+              // String txtButton = dataText['txt'];
 
-                return Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFF6F6F9),
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(16)),
-                  ),
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    Strings.txtLeaveHistory.tr,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .copyWith(),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Icon(Icons.close))
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          Text.rich(
-                            TextSpan(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall!
-                                  .copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 1.9,
-                                  ),
-                              text: Strings.txtRequestdetails.tr,
-                              children: [
-                                TextSpan(
-                                  text: leaveData.typeName,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                ),
+                child: SingleChildScrollView(
+                  // controller: scrollController,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  Strings.txtLeaveHistory.tr,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .titleLarge!
-                                      .copyWith(
-                                          fontSize:
-                                              SizeConfig.textMultiplier * 1.9,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF99A1BE)),
+                                      .bodyLarge!
+                                      .copyWith(),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          CustomTextField(
-                            prefixIcon: Image.asset(ImagePath.iconCalendar),
-                            hintText:
-                                '${DateFormatUtil.formatDD(DateTime.parse(leaveData.startDate.toString()))} - ${DateFormatUtil.formatdm(DateTime.parse(leaveData.endDate.toString()))} ',
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: CustomTextField(
-                                  prefixIcon: Image.asset(ImagePath.iconIn),
-                                  hintText:
-                                      '${DateFormatUtil.formatms(DateTime.parse(leaveData.startDate.toString()))} ',
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: CustomTextField(
-                                  prefixIcon: Image.asset(ImagePath.iconOut),
-                                  hintText:
-                                      '${DateFormatUtil.formatms(DateTime.parse(leaveData.endDate.toString()))} ',
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            Strings.txtReason.tr,
+                            GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Icon(Icons.close))
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+                        Text.rich(
+                          TextSpan(
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall!
                                 .copyWith(
                                   fontSize: SizeConfig.textMultiplier * 1.9,
                                 ),
-                          ),
-                          const SizedBox(height: 8),
-                          CustomTextField(
-                            maxLines: 4,
-                            hintText: leaveData.reason ?? '',
-                          ),
-                          const SizedBox(height: 8),
-                          leaveData.document != null &&
-                                  leaveData.document.isNotEmpty
-                              ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      Strings.txtImage.tr,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall!
-                                          .copyWith(
-                                            fontSize:
-                                                SizeConfig.textMultiplier * 1.9,
-                                          ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Container(
-                                      decoration: ShapeDecoration(
-                                        color: Colors.white,
-                                        shape: DashedBorder(
-                                          color: Colors.red,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          child: CachedNetworkImage(
-                                            imageUrl: leaveData.document,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : const SizedBox.shrink(),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          if (leaveData.approvedBy != null &&
-                              leaveData.approvedBy!.isNotEmpty) ...[
-                            Container(
-                              decoration: BoxDecoration(
-                                color: kTextWhiteColor,
-                                borderRadius: BorderRadius.circular(10),
+                            text: Strings.txtRequestdetails.tr,
+                            children: [
+                              TextSpan(
+                                text: leaveData.typeName,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(
+                                        fontSize:
+                                            SizeConfig.textMultiplier * 1.9,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFF99A1BE)),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ...leaveData.approvedBy!.map((approver) {
-                                      // Determine status text and color
-                                      final statusText =
-                                          approver.status == "APPROVED"
-                                              ? Strings.txtApproved.tr
-                                              : approver.status == "REJECTED"
-                                                  ? Strings.txtRejected.tr
-                                                  : Strings.txtWaiting.tr;
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        CustomTextField(
+                          prefixIcon: Image.asset(ImagePath.iconCalendar),
+                          hintText:
+                              '${DateFormatUtil.formatDD(DateTime.parse(leaveData.startDate.toString()))} - ${DateFormatUtil.formatdm(DateTime.parse(leaveData.endDate.toString()))} ',
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: CustomTextField(
+                                prefixIcon: Image.asset(ImagePath.iconIn),
+                                hintText:
+                                    '${DateFormatUtil.formatms(DateTime.parse(leaveData.startDate.toString()))} ',
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: CustomTextField(
+                                prefixIcon: Image.asset(ImagePath.iconOut),
+                                hintText:
+                                    '${DateFormatUtil.formatms(DateTime.parse(leaveData.endDate.toString()))} ',
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          Strings.txtReason.tr,
+                          style:
+                              Theme.of(context).textTheme.titleSmall!.copyWith(
+                                    fontSize: SizeConfig.textMultiplier * 1.9,
+                                  ),
+                        ),
+                        const SizedBox(height: 8),
+                        CustomTextField(
+                          maxLines: 4,
+                          hintText: leaveData.reason ?? '',
+                        ),
+                        const SizedBox(height: 8),
+                        leaveData.document != null &&
+                                leaveData.document.isNotEmpty
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    Strings.txtImage.tr,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall!
+                                        .copyWith(
+                                          fontSize:
+                                              SizeConfig.textMultiplier * 1.9,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    decoration: ShapeDecoration(
+                                      color: Colors.white,
+                                      shape: DashedBorder(
+                                        color: Colors.red,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: CachedNetworkImage(
+                                          imageUrl: leaveData.document,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox.shrink(),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        if (leaveData.approvedBy != null &&
+                            leaveData.approvedBy!.isNotEmpty) ...[
+                          Container(
+                            decoration: BoxDecoration(
+                              color: kTextWhiteColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ...leaveData.approvedBy!.map((approver) {
+                                    // Determine status text and color
+                                    final statusText =
+                                        approver.status == "APPROVED"
+                                            ? Strings.txtApproved.tr
+                                            : approver.status == "REJECTED"
+                                                ? Strings.txtRejected.tr
+                                                : Strings.txtWaiting.tr;
 
-                                      final statusColor = approver.status ==
-                                              "APPROVED"
-                                          ? Colors.green
-                                          : approver.status == "REJECTED"
-                                              ? Colors.red
-                                              : Colors
-                                                  .orange; // Color for PENDING
+                                    final statusColor = approver.status ==
+                                            "APPROVED"
+                                        ? Colors.green
+                                        : approver.status == "REJECTED"
+                                            ? Colors.red
+                                            : Colors
+                                                .orange; // Color for PENDING
 
-                                      final updatedAt = leaveData.updatedAt !=
-                                              null
-                                          ? DateFormatUtil.formatddMMy(
-                                              DateTime.parse(leaveData.updatedAt
-                                                  .toString()))
-                                          : 'N/A';
+                                    final updatedAt = leaveData.updatedAt !=
+                                            null
+                                        ? DateFormatUtil.formatddMMy(
+                                            DateTime.parse(
+                                                leaveData.updatedAt.toString()))
+                                        : 'N/A';
 
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 8.0),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                // Status Indicator
-                                                Row(
-                                                  children: [
-                                                    if (approver.status ==
-                                                            "APPROVED" ||
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 8.0),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              // Status Indicator
+                                              Row(
+                                                children: [
+                                                  if (approver.status ==
+                                                          "APPROVED" ||
+                                                      approver.status ==
+                                                          "REJECTED")
+                                                    CircleAvatar(
+                                                      radius: SizeConfig
+                                                              .heightMultiplier *
+                                                          1.2,
+                                                      backgroundColor:
+                                                          statusColor,
+                                                      child: Icon(
                                                         approver.status ==
-                                                            "REJECTED")
-                                                      CircleAvatar(
-                                                        radius: SizeConfig
-                                                                .heightMultiplier *
-                                                            1.2,
-                                                        backgroundColor:
-                                                            statusColor,
-                                                        child: Icon(
-                                                          approver.status ==
-                                                                  "APPROVED"
-                                                              ? Icons.check
-                                                              : Icons.close,
-                                                          size: SizeConfig
-                                                                  .imageSizeMultiplier *
-                                                              4,
-                                                          color:
-                                                              kTextWhiteColor,
-                                                        ),
+                                                                "APPROVED"
+                                                            ? Icons.check
+                                                            : Icons.close,
+                                                        size: SizeConfig
+                                                                .imageSizeMultiplier *
+                                                            4,
+                                                        color: kTextWhiteColor,
                                                       ),
-                                                    if (approver.status ==
-                                                        "PENDING")
-                                                      CircleAvatar(
-                                                        radius: SizeConfig
-                                                                .heightMultiplier *
-                                                            1.2,
-                                                        backgroundColor:
-                                                            statusColor,
-                                                        child: Icon(
-                                                          approver.status ==
-                                                                  "PENDING"
-                                                              ? Icons.check
-                                                              : Icons.close,
-                                                          size: SizeConfig
-                                                                  .imageSizeMultiplier *
-                                                              4,
-                                                          color:
-                                                              kTextWhiteColor,
-                                                        ),
+                                                    ),
+                                                  if (approver.status ==
+                                                      "PENDING")
+                                                    CircleAvatar(
+                                                      radius: SizeConfig
+                                                              .heightMultiplier *
+                                                          1.2,
+                                                      backgroundColor:
+                                                          statusColor,
+                                                      child: Icon(
+                                                        approver.status ==
+                                                                "PENDING"
+                                                            ? Icons.check
+                                                            : Icons.close,
+                                                        size: SizeConfig
+                                                                .imageSizeMultiplier *
+                                                            4,
+                                                        color: kTextWhiteColor,
                                                       ),
-                                                    const SizedBox(width: 10),
-                                                    Text(
-                                                      '${approver.status == "PENDING " ? statusText : Strings.txtApprov.tr} $updatedAt',
+                                                    ),
+                                                  const SizedBox(width: 10),
+                                                  Text(
+                                                    '${approver.status == "PENDING " ? statusText : Strings.txtApprov.tr} $updatedAt',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall!
+                                                        .copyWith(
+                                                            color: statusColor),
+                                                  ),
+                                                ],
+                                              ),
+
+                                              // Approver Info
+                                              Row(
+                                                children: [
+                                                  Text(Strings.txtBy.tr,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall),
+                                                  const SizedBox(width: 5),
+                                                  CircleAvatar(
+                                                    radius: SizeConfig
+                                                            .heightMultiplier *
+                                                        2,
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                      approver.profile
+                                                                  ?.isNotEmpty ==
+                                                              true
+                                                          ? approver.profile!
+                                                          : "https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg",
+                                                    ),
+                                                    onBackgroundImageError: (_,
+                                                            __) =>
+                                                        const Icon(Icons.error),
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  ConstrainedBox(
+                                                    constraints: BoxConstraints(
+                                                      maxWidth:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.3,
+                                                    ),
+                                                    child: Text(
+                                                      approver.username ??
+                                                          'Unknown',
                                                       style: Theme.of(context)
                                                           .textTheme
                                                           .bodySmall!
                                                           .copyWith(
-                                                              color:
-                                                                  statusColor),
+                                                              color: kBack),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
-                                                  ],
-                                                ),
-
-                                                // Approver Info
-                                                Row(
-                                                  children: [
-                                                    Text(Strings.txtBy.tr,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodySmall),
-                                                    const SizedBox(width: 5),
-                                                    CircleAvatar(
-                                                      radius: SizeConfig
-                                                              .heightMultiplier *
-                                                          2,
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                        approver.profile
-                                                                    ?.isNotEmpty ==
-                                                                true
-                                                            ? approver.profile!
-                                                            : "https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg",
-                                                      ),
-                                                      onBackgroundImageError:
-                                                          (_, __) => const Icon(
-                                                              Icons.error),
-                                                    ),
-                                                    const SizedBox(width: 5),
-                                                    ConstrainedBox(
-                                                      constraints:
-                                                          BoxConstraints(
-                                                        maxWidth: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.3,
-                                                      ),
-                                                      child: Text(
-                                                        approver.username ??
-                                                            'Unknown',
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodySmall!
-                                                            .copyWith(
-                                                                color: kBack),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            const Divider(color: kGary),
-                                            if ((approver.comment ?? '')
-                                                .isNotEmpty) ...[
-                                              Container(
-                                                width: double.infinity,
-                                                decoration: BoxDecoration(
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          const Divider(color: kGary),
+                                          if ((approver.comment ?? '')
+                                              .isNotEmpty) ...[
+                                            Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                  color: approver.status ==
+                                                          "REJECTED"
+                                                      ? const Color(0xFFFCE6E4)
+                                                      : const Color(0xFFE4FCE4),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
                                                     color: approver.status ==
                                                             "REJECTED"
                                                         ? const Color(
-                                                            0xFFFCE6E4)
+                                                            0xFFCE1126)
                                                         : const Color(
-                                                            0xFFE4FCE4),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    border: Border.all(
-                                                      color: approver.status ==
-                                                              "REJECTED"
-                                                          ? const Color(
-                                                              0xFFCE1126)
-                                                          : const Color(
-                                                              0xFF4CAF50),
-                                                    )),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      10.0),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        approver.comment!,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodySmall,
-                                                      ),
-                                                    ],
-                                                  ),
+                                                            0xFF4CAF50),
+                                                  )),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      approver.comment!,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall,
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            ],
+                                            ),
                                           ],
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ],
-                                ),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList(),
+                                ],
                               ),
                             ),
-                          ]
-                        ]),
-                  ),
-                );
-              });
+                          ),
+                        ]
+                      ]),
+                ),
+              ));
         });
   }
+}
 
-  Widget _buildShimmerItem() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-      child: SingleChildScrollView(
-        child: Column(children: [
-          AppShimmer(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 20,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+Widget _buildShimmerItem() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+    child: SingleChildScrollView(
+      child: Column(children: [
+        AppShimmer(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: double.infinity,
+                height: SizeConfig.heightMultiplier * 20,
+                decoration: BoxDecoration(
+                  color: kGary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 20,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              ),
+              SizedBox(height: SizeConfig.heightMultiplier * 1),
+              Container(
+                width: double.infinity,
+                height: SizeConfig.heightMultiplier * 20,
+                decoration: BoxDecoration(
+                  color: kGary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 20,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10), // <-- And here too
-                  ),
+              ),
+              SizedBox(height: SizeConfig.heightMultiplier * 1),
+              Container(
+                width: double.infinity,
+                height: SizeConfig.heightMultiplier * 20,
+                decoration: BoxDecoration(
+                  color: kGary,
+                  borderRadius: BorderRadius.circular(10), // <-- And here too
                 ),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-              ],
-            ),
-          )
-        ]),
-      ),
-    );
+              ),
+              SizedBox(height: SizeConfig.heightMultiplier * 1),
+            ],
+          ),
+        )
+      ]),
+    ),
+  );
+}
+
+Map<String, dynamic> getCheckStatus(String title) {
+  switch (title) {
+    case "APPROVED":
+      return {
+        'color': const Color(0xFF23A26D),
+        'txt': Strings.txtApproved.tr,
+      };
+    case "REJECTED":
+      return {
+        'color': const Color(0xFFF45B69),
+        'txt': Strings.txtRejected.tr,
+      };
+
+    case "PENDING":
+      return {
+        'color': const Color(0xFFF59E0B),
+        'txt': Strings.txtWaiting.tr,
+      };
+
+    default:
+      return {
+        'color': Colors.blueAccent,
+      };
   }
+}
 
-  Map<String, dynamic> getCheckStatus(String title) {
-    switch (title) {
-      case "APPROVED":
-        return {
-          'color': const Color(0xFF23A26D),
-          'txt': Strings.txtApproved.tr,
-        };
-      case "REJECTED":
-        return {
-          'color': const Color(0xFFF45B69),
-          'txt': Strings.txtRejected.tr,
-        };
+Map<String, dynamic> getItemColor(String keywrd) {
+  switch (keywrd) {
+    case "ANNUAL":
+      return {'color': Color(0xFF3085FE), 'txt': Strings.txtAnnual.tr};
+    case "LAKIT":
+      return {'color': Color(0xFFF45B69), 'txt': Strings.txtLakit.tr};
+    case "SICK":
+      return {'color': Color(0xFFF59E0B), 'txt': Strings.txtSick.tr};
+    case "MATERNITY":
+      return {'color': Color(0xFF23A26D), 'txt': Strings.txtMaternity.tr};
 
-      case "PENDING":
-        return {
-          'color': const Color(0xFFF59E0B),
-          'txt': Strings.txtWaiting.tr,
-        };
-
-      default:
-        return {
-          'color': Colors.blueAccent,
-        };
-    }
-  }
-
-  Map<String, dynamic> getItemColor(String keywrd) {
-    switch (keywrd) {
-      case "ANNUAL":
-        return {'color': Color(0xFF3085FE), 'txt': Strings.txtAnnual.tr};
-      case "LAKIT":
-        return {'color': Color(0xFFF45B69), 'txt': Strings.txtLakit.tr};
-      case "SICK":
-        return {'color': Color(0xFFF59E0B), 'txt': Strings.txtSick.tr};
-      case "MATERNITY":
-        return {'color': Color(0xFF23A26D), 'txt': Strings.txtMaternity.tr};
-
-      default:
-        return {
-          'color': Colors.blueAccent,
-        };
-    }
+    default:
+      return {
+        'color': Colors.blueAccent,
+      };
   }
 }

@@ -74,12 +74,12 @@ class _FunctionWidgetState extends ConsumerState<FunctionWidget> {
     return Container(
       height: containerHeight,
       width: double.infinity,
-      padding: const EdgeInsets.only(bottom: 2),
-      decoration: const BoxDecoration(
-        color: kTextWhiteColor,
+      padding: EdgeInsets.only(bottom: 2),
+      decoration: BoxDecoration(
+        color: Theme.of(context).canvasColor,
         boxShadow: [
           BoxShadow(
-            color: kTextWhiteColor,
+            color: Theme.of(context).canvasColor,
             blurRadius: 1.0,
             spreadRadius: 1.0,
           ),
@@ -201,7 +201,8 @@ class _FunctionWidgetState extends ConsumerState<FunctionWidget> {
                                       CircleAvatar(
                                         radius:
                                             SizeConfig.imageSizeMultiplier * 8,
-                                        backgroundColor: kGary,
+                                        backgroundColor:
+                                            Theme.of(context).cardColor,
                                         child: SizedBox(
                                           width: SizeConfig.widthMultiplier * 7,
                                           child: CachedNetworkImage(

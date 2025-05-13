@@ -172,7 +172,8 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
   @override
   Widget build(BuildContext context) {
     final analyticState = ref.watch(stateAnalyticProvider);
-final isDataEmpty = analyticState.getAttendanceModel?.data?.items?.isEmpty ?? true;
+    final isDataEmpty =
+        analyticState.getAttendanceModel?.data?.items?.isEmpty ?? true;
 
     final dataProvider = ref.watch(stateAnalyticProvider);
     return Scaffold(
@@ -206,33 +207,33 @@ final isDataEmpty = analyticState.getAttendanceModel?.data?.items?.isEmpty ?? tr
                 .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
           ),
         ],
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        // systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: isDataEmpty
-              ?   GridView.builder(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 2),
-              itemCount: 4,
-              itemBuilder: (context, index) => Shimmer.fromColors(
-                baseColor: kGreyColor1,
-                highlightColor: kGary,
-                child: Container(
-                  height: 10,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: kTextWhiteColor,
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-              ),
-            )
+              ? GridView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 2),
+                  itemCount: 4,
+                  itemBuilder: (context, index) => Shimmer.fromColors(
+                    baseColor: kGreyColor1,
+                    highlightColor: kGary,
+                    child: Container(
+                      height: 10,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: kTextWhiteColor,
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+                )
               : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   // Text(
                   //     "Attendance History ${analyticState.getAnalyticModel!.data!.length} day"),
@@ -349,10 +350,12 @@ final isDataEmpty = analyticState.getAttendanceModel?.data?.items?.isEmpty ?? tr
                                     const EdgeInsets.symmetric(vertical: 8.0),
                                 padding: const EdgeInsets.all(16.0),
                                 decoration: BoxDecoration(
-                                  color: kTextWhiteColor,
+                                  color: Theme.of(context).canvasColor,
                                   borderRadius: BorderRadius.circular(20),
                                   border: Border.all(
-                                    color: isToday ? kYellowFirstColor : kGary,
+                                    color: isToday
+                                        ? kYellowFirstColor
+                                        : Theme.of(context).cardColor,
                                   ),
                                 ),
                                 child: Column(
@@ -416,7 +419,8 @@ final isDataEmpty = analyticState.getAttendanceModel?.data?.items?.isEmpty ?? tr
                                     Container(
                                       padding: const EdgeInsets.all(16.0),
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFFF5F6FA),
+                                        // color: const Color(0xFFF5F6FA),
+                                        color: Theme.of(context).cardColor,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Row(
@@ -526,7 +530,9 @@ final isDataEmpty = analyticState.getAttendanceModel?.data?.items?.isEmpty ?? tr
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           color: isLate
-                                                              ? kBack87
+                                                              ? Theme.of(
+                                                                      context)
+                                                                  .primaryColorLight
                                                               : kRedColor),
                                                 ),
                                               ],

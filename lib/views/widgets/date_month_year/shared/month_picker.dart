@@ -329,7 +329,7 @@ class _MonthPickerState extends State<MonthPicker> {
     final BoxDecoration currentDateDecoration = widget.currentDateDecoration ??
         BoxDecoration(
           border: Border.all(color: colorScheme.primary),
-          shape: BoxShape.circle,
+          // shape: BoxShape.circle,
         );
 
     //
@@ -347,7 +347,7 @@ class _MonthPickerState extends State<MonthPicker> {
         widget.selectedCellDecoration ??
             BoxDecoration(
               color: colorScheme.primary,
-              shape: BoxShape.circle,
+              // shape: BoxShape.circle,
             );
 
     //

@@ -134,7 +134,6 @@ class ImagePickerBottomSheet extends StatelessWidget {
 //   );
 // }
 
-
 Future<void> bottomSheetPushContainer({
   BuildContext? context,
   Widget? child,
@@ -148,7 +147,7 @@ Future<void> bottomSheetPushContainer({
     context: context!,
     builder: (context) => Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).canvasColor,
         boxShadow: [BoxShadow(color: kPrimaryColor.shade50, blurRadius: 10)],
         borderRadius: BorderRadius.circular(10),
       ),
@@ -166,21 +165,16 @@ void bottomSheetPushContainerForme({
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (BuildContext context) {
-      return DraggableScrollableSheet(
-        initialChildSize: 0.8,
-        minChildSize: 0.3,
-        maxChildSize: 0.9,
-        builder: (context, scrollController) {
-          return Container(
+      return FractionallySizedBox(
+          heightFactor: 0.8,
+          child: Container(
             padding: const EdgeInsets.all(16),
-            decoration: const BoxDecoration(
-              color: Colors.white,
+            decoration: BoxDecoration(
+              color: Theme.of(context).canvasColor,
               borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
             ),
             child: child,
-          );
-        },
-      );
+          ));
     },
   );
 }

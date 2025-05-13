@@ -305,6 +305,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
     final locProvider = ref.watch(stateLocationProvider);
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -380,7 +381,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
         child: SingleChildScrollView(
           physics: const NeverScrollableScrollPhysics(),
           child: Container(
-            color: kTextWhiteColor,
+            color: Theme.of(context).canvasColor,
             width: double.infinity,
             height: SizeConfig.heightMultiplier * 100,
             child: Column(
@@ -424,8 +425,8 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                   child: Container(
                     height: 300,
                     width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFF5F6F9),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).canvasColor,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30),
@@ -521,7 +522,8 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                                       controller: description,
                                       decoration: InputDecoration(
                                         filled: true,
-                                        fillColor: kTextWhiteColor,
+                                        fillColor:
+                                            Theme.of(context).canvasColor,
                                         focusColor: kGary,
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(
@@ -582,7 +584,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                                         bottomSheetPushContainer(
                                           context: context,
                                           constantsSize: 1,
-                                          child: buttonChooseImage(context),  
+                                          child: buttonChooseImage(context),
                                         );
                                       },
                                       child: Container(
@@ -591,7 +593,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                                             : null,
                                         width: SizeConfig.widthMultiplier * 100,
                                         decoration: ShapeDecoration(
-                                          color: Colors.white,
+                                          color: Theme.of(context).canvasColor,
                                           shape: DashedBorder(
                                             color: Color(0xFFE2E6EA),
                                             borderRadius:
@@ -798,6 +800,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
   // ignore: non_constant_identifier_names
   Widget buttonChooseImage(context) {
     return Container(
+      color: Theme.of(context).canvasColor,
       height: SizeConfig.heightMultiplier * 9,
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.only(top: 20, bottom: 10),

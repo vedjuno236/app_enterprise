@@ -165,12 +165,15 @@ class MonthView extends StatelessWidget {
         decoration = disabledCellsDecoration;
       }
 
-      Widget monthWidget = Container(
-        decoration: decoration,
-        child: Center(
-          child: Text(
-            monthsNames[month],
-            style: style,
+      Widget monthWidget = Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        child: Container(
+          decoration: decoration,
+          child: Center(
+            child: Text(
+              monthsNames[month],
+              style: style,
+            ),
           ),
         ),
       );

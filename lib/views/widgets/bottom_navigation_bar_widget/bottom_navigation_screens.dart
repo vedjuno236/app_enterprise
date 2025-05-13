@@ -46,36 +46,40 @@ class HomeScreenPage extends ConsumerWidget {
       bottomNavigationBar: ClipRRect(
         clipBehavior: Clip.antiAlias,
         child: BottomNavigationBar(
-          backgroundColor: kYellowColor,
+          backgroundColor:
+              Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: kBack87,
-          unselectedItemColor: kBack87,
+          selectedItemColor: Theme.of(context).primaryColorLight,
+          unselectedItemColor: Theme.of(context).primaryColorLight,
           showUnselectedLabels: true,
           showSelectedLabels: false,
           currentIndex: selectedIndex,
           unselectedLabelStyle:
               TextStyle(fontSize: SizeConfig.textMultiplier * 1.8),
           selectedLabelStyle: TextStyle(
-              fontSize: SizeConfig.textMultiplier * 1,
-              fontWeight: FontWeight.bold,
-              color: kBack87),
+            fontSize: SizeConfig.textMultiplier * 1,
+            fontWeight: FontWeight.bold,
+          ),
+
+          // unselectedLabelStyle: TextStyle(),
+
           onTap: (index) {
             notifier.updateTabSelection(index, _tabLabels[index].tr);
           },
           items: [
             BottomNavigationBarItem(
               label: 'Home'.tr,
-              icon: _buildIcon(ImagePath.iconHome),
+              icon: _buildIcon(context, ImagePath.iconHome),
               activeIcon: _buildActiveIcon(ImagePath.iconHome),
             ),
             BottomNavigationBarItem(
               label: 'Analytic'.tr,
-              icon: _buildIcon(ImagePath.iconAnalytic),
+              icon: _buildIcon(context, ImagePath.iconAnalytic),
               activeIcon: _buildActiveIcon(ImagePath.iconAnalytic),
             ),
             BottomNavigationBarItem(
               label: 'News'.tr,
-              icon: _buildIcon(ImagePath.iconNews),
+              icon: _buildIcon(context, ImagePath.iconNews),
               activeIcon: _buildActiveIcon(ImagePath.iconNews),
             ),
             BottomNavigationBarItem(
@@ -93,14 +97,14 @@ class HomeScreenPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildIcon(String imagePath) {
+  Widget _buildIcon(BuildContext context, String imagePath) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: 10),
       child: Image.asset(
         imagePath,
         height: SizeConfig.imageSizeMultiplier * 7,
         width: SizeConfig.imageSizeMultiplier * 7,
-        color: kBack87,
+        color: Theme.of(context).primaryColorLight,
       ),
     );
   }

@@ -105,10 +105,10 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
                             padding: const EdgeInsets.all(16.0),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16.0),
-                              color: kTextWhiteColor,
-                              boxShadow: const [
+                              color: Theme.of(context).canvasColor,
+                              boxShadow: [
                                 BoxShadow(
-                                  color: kTextWhiteColor,
+                                  color: Theme.of(context).canvasColor,
                                   blurRadius: 1.0,
                                 ),
                               ],
@@ -156,7 +156,7 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
                                         height: 80,
                                         padding: const EdgeInsets.all(8.0),
                                         decoration: BoxDecoration(
-                                          color: const Color(0xFFF6FCFB),
+                                          color: Theme.of(context).cardColor,
                                           borderRadius:
                                               BorderRadius.circular(16.0),
                                           boxShadow: const [
@@ -200,7 +200,11 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
                                             ),
                                             const SizedBox(height: 8),
                                             Text(
-                                              leave.total.toString(),
+                                              // leave.total.toString(),
+                                              // '${(leave.total != null) ? (leave.total! % 1 == 0 ? leave.total!.toInt().toString() : leave.total!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
+                                              //     .tr,
+                                              '${(leave.total != null && leave.used != null) ? (leave.total! - leave.used! % 1 == 0 ? (leave.total! - leave.used!).toInt().toString() : (leave.total! - leave.used!).toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
+                                                  .tr,
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .titleLarge!
@@ -221,7 +225,7 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(16.0),
-                                          color: kTextWhiteColor,
+                                          color: Theme.of(context).cardColor,
                                           boxShadow: const [
                                             BoxShadow(
                                               color: kPinkColor,
@@ -261,7 +265,9 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
                                             ),
                                             const SizedBox(height: 8),
                                             Text(
-                                              leave.used.toString(),
+                                              // leave.used.toString(),
+                                              '${(leave.used != null) ? (leave.used! % 1 == 0 ? leave.used!.toInt().toString() : leave.used!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
+                                                  .tr,
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .titleLarge!

@@ -318,6 +318,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final userData = userProvider.getUserModel?.data;
     final darkTheme = ref.watch(darkThemeProviderProvider);
     return Scaffold(
+      // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
         physics: const ClampingScrollPhysics(),
         child: Builder(builder: (context) {
@@ -358,9 +359,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                         .textTheme
                                         .titleLarge!
                                         .copyWith(
-                                            fontSize:
-                                                SizeConfig.textMultiplier * 3,
-                                            color: Color(0xFF19295C)),
+                                          fontSize:
+                                              SizeConfig.textMultiplier * 3,
+                                        ),
                                   ),
                                   const SizedBox(
                                     width: 10,
@@ -371,9 +372,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                         .textTheme
                                         .titleLarge!
                                         .copyWith(
-                                            fontSize:
-                                                SizeConfig.textMultiplier * 3,
-                                            color: Color(0xFF19295C)),
+                                          fontSize:
+                                              SizeConfig.textMultiplier * 3,
+                                        ),
                                   )
                                       .animate()
                                       .slideY(
@@ -401,7 +402,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     .titleLarge!
                                     .copyWith(
                                         fontSize: SizeConfig.textMultiplier * 2,
-                                        color: const Color(0xFF99A1BE)),
+                                        color: Theme.of(context)
+                                            .primaryColorLight),
                               )
                                   .animate()
                                   .slideY(
@@ -417,7 +419,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     height: SizeConfig.heightMultiplier * 5,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFFFBD346),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
                                       // color: submitButtonColor,
                                       borderRadius: BorderRadius.circular(50),
                                     ),
@@ -460,7 +464,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   child: Container(
                                     height: SizeConfig.heightMultiplier * 10,
                                     decoration: BoxDecoration(
-                                      color: kTextWhiteColor,
+                                      color: Theme.of(context).canvasColor,
                                       borderRadius: BorderRadius.circular(16),
                                     ),
                                     child: Padding(
@@ -556,7 +560,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: kTextWhiteColor,
+                              color: Theme.of(context).canvasColor,
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Padding(
@@ -567,9 +571,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     .textTheme
                                     .titleMedium!
                                     .copyWith(
-                                        fontSize:
-                                            SizeConfig.textMultiplier * 1.8,
-                                        color: kBack.withOpacity(0.8)),
+                                      fontSize: SizeConfig.textMultiplier * 1.8,
+                                    ),
                                 textAlign: TextAlign.left,
                               ),
                             ),
@@ -586,7 +589,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                 .textTheme
                                 .titleLarge!
                                 .copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 2),
+                                  fontSize: SizeConfig.textMultiplier * 2,
+                                ),
                           )
                               .animate()
                               .fadeIn(duration: 500.ms, delay: 500.ms)
@@ -598,7 +602,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: kTextWhiteColor,
+                              color: Theme.of(context).canvasColor,
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Padding(
@@ -618,10 +622,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                             .textTheme
                                             .titleMedium!
                                             .copyWith(
-                                                fontSize:
-                                                    SizeConfig.textMultiplier *
-                                                        1.8,
-                                                color: kBack.withOpacity(0.8)),
+                                              fontSize:
+                                                  SizeConfig.textMultiplier *
+                                                      1.8,
+                                            ),
                                         textAlign: TextAlign.left,
                                       ),
                                     ],
@@ -640,12 +644,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                               .textTheme
                                               .titleLarge!
                                               .copyWith(
-                                                  fontSize: SizeConfig
-                                                          .textMultiplier *
-                                                      1.9,
-                                                  color:
-                                                      // ignore: deprecated_member_use
-                                                      kBack.withOpacity(0.8)),
+                                                fontSize:
+                                                    SizeConfig.textMultiplier *
+                                                        1.9,
+                                              ),
                                           text: '${Strings.txtLivesIn.tr} ',
                                           children: [
                                             TextSpan(
@@ -657,7 +659,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                       fontSize: SizeConfig
                                                               .textMultiplier *
                                                           1.9,
-                                                      color: kText,
                                                       fontWeight:
                                                           FontWeight.bold),
                                             ),
@@ -680,11 +681,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                               .textTheme
                                               .titleLarge!
                                               .copyWith(
-                                                  fontSize: SizeConfig
-                                                          .textMultiplier *
-                                                      1.9,
-                                                  color:
-                                                      kBack.withOpacity(0.8)),
+                                                fontSize:
+                                                    SizeConfig.textMultiplier *
+                                                        1.9,
+                                              ),
                                           text: '${Strings.txtDep.tr} ',
                                           children: [
                                             TextSpan(
@@ -697,7 +697,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                       fontSize: SizeConfig
                                                               .textMultiplier *
                                                           1.9,
-                                                      color: kText,
                                                       fontWeight:
                                                           FontWeight.bold),
                                             ),
@@ -720,11 +719,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                               .textTheme
                                               .titleLarge!
                                               .copyWith(
-                                                  fontSize: SizeConfig
-                                                          .textMultiplier *
-                                                      1.9,
-                                                  color:
-                                                      kBack.withOpacity(0.8)),
+                                                fontSize:
+                                                    SizeConfig.textMultiplier *
+                                                        1.9,
+                                              ),
                                           text: '${Strings.txtSartWork.tr} ',
                                           children: [
                                             TextSpan(
@@ -738,7 +736,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                       fontSize: SizeConfig
                                                               .textMultiplier *
                                                           1.9,
-                                                      color: kText,
                                                       fontWeight:
                                                           FontWeight.bold),
                                             ),
@@ -815,14 +812,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                 const SizedBox(height: 8),
                                                 Expanded(
                                                   child: Text(
-                                                      wardData[index]['name']
-                                                          .toString(),
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium!
-                                                          .copyWith(
-                                                              color: kText)),
-                                                ),
+                                                    wardData[index]['name']
+                                                        .toString(),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium!
+                                                        .copyWith(),
+                                                  ),
+                                                )
                                               ],
                                             ),
                                           );
@@ -852,10 +849,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                 margin: const EdgeInsets.only(top: 10),
                                 padding: const EdgeInsets.all(8.0),
                                 decoration: BoxDecoration(
-                                  color: kTextWhiteColor,
+                                  color: Theme.of(context).cardColor,
                                   borderRadius: BorderRadius.circular(50),
                                   border: Border.all(
-                                    color: kYellowFirstColor,
+                                    color: Theme.of(context).cardColor,
                                     width: 1.0,
                                   ),
                                 ),
@@ -872,7 +869,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium!
-                                              .copyWith(color: txt),
+                                              .copyWith(),
                                         ),
                                       ],
                                     )
@@ -885,18 +882,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                     ),
                   ),
-                  const Padding(
+                  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 13),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        LanguageSwitcher(),
-                        // Switch.adaptive(
-                        //   value: darkTheme.darkTheme,
-                        //   onChanged: (value) {
-                        //     darkTheme.darkTheme = value;
-                        //   },
-                        // ),
+                        const LanguageSwitcher(),
+                        Switch.adaptive(
+                          value: darkTheme.darkTheme,
+                          onChanged: (value) {
+                            darkTheme.darkTheme = value;
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -920,8 +917,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           }
                         },
                         style: OutlinedButton.styleFrom(
-                          backgroundColor: kTextWhiteColor,
-                          side: const BorderSide(color: kTextWhiteColor),
+                          backgroundColor: Theme.of(context).canvasColor,
+                          side: BorderSide(
+                            color: Theme.of(context).canvasColor,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -938,7 +937,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium!
-                                  .copyWith(color: kRedColor),
+                                  .copyWith(),
                             ),
                           ],
                         ),

@@ -2,10 +2,10 @@ import 'package:enterprise/components/constants/colors.dart';
 import 'package:enterprise/components/constants/image_path.dart';
 import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/poviders/bottom_bar_provider/bottom_bar_provider.dart';
+import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/components/utils/date_format_utils.dart';
 import 'package:enterprise/views/screens/home/widgets/box_checkIn_widgets.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,66 +13,71 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
-class AttendanceSuccess extends StatefulWidget {
+class AttendanceSuccess extends ConsumerWidget {
   final String clockInTime;
   final String typeClock;
   final bool isLate;
+
   const AttendanceSuccess({
     super.key,
     required this.clockInTime,
     required this.typeClock,
     required this.isLate,
   });
+
+  List<Color> get kPrimaryGradient => [
+        const Color(0x99FCE7BB),
+        Colors.white,
+        Colors.white,
+        const Color(0x99FCE7BB),
+      ];
+
   @override
-  State<AttendanceSuccess> createState() => _AttendanceSuccessState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final darkTheme = ref.watch(darkThemeProviderProvider);
 
-class _AttendanceSuccessState extends State<AttendanceSuccess> {
-  @override
-  List<Color> kPrimaryGradient = [
-    // const Color(0xFFFEF5E1),
-    const Color(0x99FCE7BB),
-    Colors.white,
-    Colors.white,
-
-    const Color(0x99FCE7BB),
-    // const Color(0xFFFDF6E5),
-  ];
-
-  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         clipBehavior: Clip.none,
         children: [
+          // Back button
           Positioned(
             top: 65,
             left: 16,
             child: GestureDetector(
               onTap: () {
-                context.pop();
-                context.pop();
+                if (Navigator.canPop(context)) context.pop();
+                if (Navigator.canPop(context)) context.pop();
               },
               child: const Center(
-                  child: Icon(Icons.arrow_back_ios_new_outlined,
-                      color: Colors.black)),
+                child: Icon(Icons.arrow_back_ios_new_outlined,
+                    color: Colors.black),
+              ),
             ),
           ).animate().scaleXY(
-              begin: 0,
-              end: 1,
-              delay: 1000.ms,
-              duration: 500.ms,
-              curve: Curves.easeInOutCubic),
+                begin: 0,
+                end: 1,
+                delay: 1000.ms,
+                duration: 500.ms,
+                curve: Curves.easeInOutCubic,
+              ),
+
+          // Gradient background
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: kPrimaryGradient,
+                colors: darkTheme.darkTheme
+                    ? [Colors.black12, Colors.black26, Colors.black]
+                    : kPrimaryGradient,
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
               ),
             ),
           ),
+
+          // Main content
           Column(
             children: [
               Expanded(
@@ -84,13 +89,13 @@ class _AttendanceSuccessState extends State<AttendanceSuccess> {
                         width: 80,
                         height: 80,
                         decoration: BoxDecoration(
-                          color: widget.typeClock == 'IN'
+                          color: typeClock == 'IN'
                               ? Colors.green.shade50
                               : Colors.yellow.shade50,
                           shape: BoxShape.circle,
                         ),
                         child: Lottie.asset(
-                          widget.typeClock == 'IN'
+                          typeClock == 'IN'
                               ? ImagePath.imgSuccessfully
                               : ImagePath.imgSuccessOutFully,
                           width: SizeConfig.widthMultiplier * 10,
@@ -100,8 +105,7 @@ class _AttendanceSuccessState extends State<AttendanceSuccess> {
                       const SizedBox(height: 24),
                       Center(
                         child: Text(
-                          "${Strings.txtYou.tr} ${widget.typeClock == "IN" ? Strings.txtClockedIn.tr : Strings.txtClockedOut.tr} ${Strings.txtSuccessFully.tr}."
-                              .tr,
+                          "${Strings.txtYou.tr} ${typeClock == "IN" ? Strings.txtClockedIn.tr : Strings.txtClockedOut.tr} ${Strings.txtSuccessFully.tr}.",
                           style:
                               Theme.of(context).textTheme.titleLarge!.copyWith(
                                     fontSize: SizeConfig.textMultiplier * 1.9,
@@ -110,18 +114,16 @@ class _AttendanceSuccessState extends State<AttendanceSuccess> {
                       ),
                       const SizedBox(height: 30),
                       Text(
-                        DateFormatUtil.formats(
-                            DateTime.parse(widget.clockInTime)),
+                        DateFormatUtil.formats(DateTime.parse(clockInTime)),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: SizeConfig.textMultiplier * 3,
                               fontWeight: FontWeight.bold,
-                              color: widget.isLate ? kBack : kRedColor,
+                              color: isLate ? kRedColor : kBack,
                             ),
                       ),
                       SizedBox(height: SizeConfig.heightMultiplier * 1),
                       Text(
-                        DateFormatUtil.formatA(
-                            DateTime.parse(widget.clockInTime)),
+                        DateFormatUtil.formatA(DateTime.parse(clockInTime)),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: SizeConfig.textMultiplier * 2,
                               color: kBack,
@@ -129,9 +131,9 @@ class _AttendanceSuccessState extends State<AttendanceSuccess> {
                       ),
                       SizedBox(height: SizeConfig.heightMultiplier * 1),
                       Text(
-                        widget.isLate
-                            ? ''
-                            : Strings.txtTryClockingInEarlierTomorrow.tr,
+                        isLate
+                            ? Strings.txtTryClockingInEarlierTomorrow.tr
+                            : '',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: SizeConfig.textMultiplier * 1.9,
                             ),
@@ -140,29 +142,23 @@ class _AttendanceSuccessState extends State<AttendanceSuccess> {
                   ),
                 ),
               ),
-
-              // Bottom button
               Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton(
                   onPressed: () {
-                    if (Navigator.canPop(context)) {
-                      context.pop();
-                    }
-                    if (Navigator.canPop(context)) {
-                      context.pop();
-                    }
+                    if (Navigator.canPop(context)) context.pop();
+                    if (Navigator.canPop(context)) context.pop();
                   },
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
-                    backgroundColor: Color(0xFFF9CE4A),
+                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
                     minimumSize: const Size(double.infinity, 56),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(28),
                     ),
                   ),
                   child: Text(
-                    widget.isLate
+                    isLate
                         ? Strings.txtHaveAproductiveday.tr
                         : Strings.txtHaveAgoodday.tr,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -171,11 +167,13 @@ class _AttendanceSuccessState extends State<AttendanceSuccess> {
                   ),
                 ),
               ).animate().scaleXY(
-                  begin: 0,
-                  end: 1,
-                  delay: 1000.ms,
-                  duration: 500.ms,
-                  curve: Curves.easeInOutCubic),
+                    begin: 0,
+                    end: 1,
+                    delay: 1000.ms,
+                    duration: 500.ms,
+                    curve: Curves.easeInOutCubic,
+                  ),
+              SizedBox(height: SizeConfig.heightMultiplier * 5),
             ],
           ),
         ],

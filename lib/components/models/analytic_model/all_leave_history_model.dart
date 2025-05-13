@@ -35,7 +35,7 @@ class Data {
   String? logo;
   String? startDate;
   String? endDate;
-  int? totalDays;
+  double? totalDays;
   String? reason;
   String? document;
   String? status;
@@ -73,7 +73,8 @@ class Data {
     logo = json['logo'];
     startDate = json['start_date'];
     endDate = json['end_date'];
-    totalDays = json['total_days'];
+    totalDays = json['total_days'] is num ? (json['total_days'] as num).toDouble() : 0.0;
+ 
     reason = json['reason'];
     document = json['document'];
     status = json['status'];

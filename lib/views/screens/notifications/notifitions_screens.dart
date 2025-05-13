@@ -235,7 +235,7 @@ class _NotifitionsNewScreensState
 
     String? role = sharedPrefs.getStringNow(KeyShared.keyRole);
     return Scaffold(
-        backgroundColor: const Color(0xFFF8F9FC),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           elevation: 0,
           flexibleSpace: const AppbarWidget(),
@@ -353,10 +353,10 @@ class _NotifitionsNewScreensState
                                             vertical: 8),
                                         padding: const EdgeInsets.all(10),
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          color: Colors.white,
-                                        ),
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            color:
+                                                Theme.of(context).canvasColor),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -497,6 +497,9 @@ class _NotifitionsNewScreensState
                                                     height: SizeConfig
                                                             .widthMultiplier *
                                                         8.5,
+                                                    width: SizeConfig
+                                                            .widthMultiplier *
+                                                        25,
                                                     child: OutlinedButton(
                                                       onPressed: () async {
                                                         widgetBottomSheetREJECTEDandAPPROVED(
@@ -820,7 +823,7 @@ class _NotifitionsNewScreensState
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(16),
-                                          color: Colors.white),
+                                          color: Theme.of(context).canvasColor),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -1095,7 +1098,7 @@ class _NotifitionsNewScreensState
     return showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).cardColor,
         builder: (BuildContext context) {
           return DraggableScrollableSheet(
               initialChildSize: 0.9,
@@ -1113,8 +1116,8 @@ class _NotifitionsNewScreensState
 
                 return Container(
                   padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFF6F6F9),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).canvasColor,
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(16)),
                   ),
@@ -1236,7 +1239,7 @@ class _NotifitionsNewScreensState
                           ),
                           Container(
                             decoration: BoxDecoration(
-                              color: kTextWhiteColor,
+                              color: Theme.of(context).canvasColor,
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Padding(
@@ -1274,10 +1277,10 @@ class _NotifitionsNewScreensState
                                                 .textTheme
                                                 .titleMedium
                                                 ?.copyWith(
-                                                    fontSize: SizeConfig
-                                                            .textMultiplier *
-                                                        1.5,
-                                                    color: kBack87),
+                                                  fontSize: SizeConfig
+                                                          .textMultiplier *
+                                                      1.5,
+                                                ),
                                           ),
                                         ],
                                       ),
@@ -1297,7 +1300,7 @@ class _NotifitionsNewScreensState
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(16.0),
-                                            color: kTextWhiteColor,
+                                            color: Theme.of(context).cardColor,
                                             boxShadow: const [
                                               BoxShadow(
                                                 color: Color(0xFf23A26D),
@@ -1359,7 +1362,7 @@ class _NotifitionsNewScreensState
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(16.0),
-                                            color: kTextWhiteColor,
+                                            color: Theme.of(context).cardColor,
                                             boxShadow: const [
                                               BoxShadow(
                                                 color: kPinkColor,
@@ -1483,7 +1486,7 @@ class _NotifitionsNewScreensState
                                   leaveData.document.isNotEmpty
                               ? Container(
                                   decoration: ShapeDecoration(
-                                    color: Colors.white,
+                                    color: Theme.of(context).cardColor,
                                     shape: DashedBorder(
                                       color: Colors.red,
                                       borderRadius: BorderRadius.circular(15),
@@ -1520,7 +1523,7 @@ class _NotifitionsNewScreensState
     return showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).cardColor,
         builder: (BuildContext context) {
           return DraggableScrollableSheet(
               initialChildSize: 0.9,
@@ -1534,8 +1537,8 @@ class _NotifitionsNewScreensState
 
                 return Container(
                   padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFF6F6F9),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).canvasColor,
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(16)),
                   ),
@@ -1960,7 +1963,7 @@ class _NotifitionsNewScreensState
                           ),
                           Container(
                             decoration: BoxDecoration(
-                              color: kTextWhiteColor,
+                              color: Theme.of(context).canvasColor,
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Padding(
@@ -2004,10 +2007,10 @@ class _NotifitionsNewScreensState
                                                 .textTheme
                                                 .titleMedium
                                                 ?.copyWith(
-                                                    fontSize: SizeConfig
-                                                            .textMultiplier *
-                                                        1.5,
-                                                    color: kBack87),
+                                                  fontSize: SizeConfig
+                                                          .textMultiplier *
+                                                      1.5,
+                                                ),
                                           ),
                                         ],
                                       ),
@@ -2027,7 +2030,7 @@ class _NotifitionsNewScreensState
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(16.0),
-                                            color: kTextWhiteColor,
+                                            color: Theme.of(context).cardColor,
                                             boxShadow: const [
                                               BoxShadow(
                                                 color: Color(0xFf23A26D),
@@ -2090,7 +2093,7 @@ class _NotifitionsNewScreensState
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(16.0),
-                                            color: kTextWhiteColor,
+                                            color: Theme.of(context).cardColor,
                                             boxShadow: const [
                                               BoxShadow(
                                                 color: kPinkColor,
@@ -2251,216 +2254,124 @@ class _NotifitionsNewScreensState
     return showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).canvasColor,
         builder: (BuildContext context) {
-          return DraggableScrollableSheet(
-              initialChildSize: 0.6,
-              minChildSize: 0.3,
-              maxChildSize: 0.6,
-              builder: (context, scrollController) {
-                var status = getCheckStatusUser(leaveData.status.toString());
-                var dataStatus =
-                    getItemColorAndIcon(leaveData.status.toString());
-                var colorStatus =
-                    getItemColorAndIcon(leaveData.keyWord.toString());
-                Color colorS = colorStatus['color'];
-                Color color = dataStatus['color'];
-                Color colorstatus = status['color'];
-                String txtStatus = status['txt'];
+          var status = getCheckStatusUser(leaveData.status.toString());
+          var dataStatus = getItemColorAndIcon(leaveData.status.toString());
+          var colorStatus = getItemColorAndIcon(leaveData.keyWord.toString());
+          Color colorS = colorStatus['color'];
+          Color color = dataStatus['color'];
+          Color colorstatus = status['color'];
+          String txtStatus = status['txt'];
+          return FractionallySizedBox(
+              heightFactor: 0.6,
 
-                return Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFF6F6F9),
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(16)),
-                  ),
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Align(
-                                  alignment: Alignment.topRight,
-                                  child: Icon(Icons.close))),
-                          if (leaveData.approvedBy != null &&
-                              leaveData.approvedBy!.isNotEmpty) ...[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children:
-                                  leaveData.approvedBy!.map<Widget>((user) {
-                                final username = user.username ?? 'username';
-                                final positionName =
-                                    user.positionName ?? 'positionName';
+              // initialChildSize: 0.6,
+              // minChildSize: 0.3,
+              // maxChildSize: 0.6,
+              // builder: (context, scrollController) {
 
-                                final profileUrl = (user.profile != null &&
-                                        user.profile!.isNotEmpty)
-                                    ? user.profile.toString()
-                                    : 'https://static.vecteezy.com/system/resources/previews/012/621/570/large_2x/dwarf-dachshund-in-a-striped-dog-jumpsuit-and-a-red-cap-is-sunbathing-on-a-sandy-beach-dog-traveler-blogger-travelblogger-dog-enjoys-a-walk-in-the-fresh-air-outdoors-high-quality-photo.jpg';
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                ),
+                child: SingleChildScrollView(
+                  // controller: scrollController,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Align(
+                                alignment: Alignment.topRight,
+                                child: Icon(Icons.close))),
+                        if (leaveData.approvedBy != null &&
+                            leaveData.approvedBy!.isNotEmpty) ...[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: leaveData.approvedBy!.map<Widget>((user) {
+                              final username = user.username ?? 'username';
+                              final positionName =
+                                  user.positionName ?? 'positionName';
 
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 4.0, vertical: 5),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 60,
-                                        backgroundColor: kTextWhiteColor,
-                                        child: CircleAvatar(
-                                          radius: 55,
-                                          backgroundColor: Colors.grey[
-                                              200], // optional fallback color
-                                          child: ClipOval(
-                                            child: Image.network(
-                                              profileUrl,
-                                              width: 110,
-                                              height: 110,
-                                              fit: BoxFit.cover,
-                                              loadingBuilder: (context, child,
-                                                  loadingProgress) {
-                                                if (loadingProgress == null)
-                                                  return child;
-                                                return const Center(
-                                                  child: LoadingPlatformV1(),
-                                                );
-                                              },
-                                              errorBuilder:
-                                                  (context, error, stackTrace) {
-                                                return const Icon(Icons.error,
-                                                    size: 40,
-                                                    color: Colors.red);
-                                              },
-                                            ),
+                              final profileUrl = (user.profile != null &&
+                                      user.profile!.isNotEmpty)
+                                  ? user.profile.toString()
+                                  : 'https://static.vecteezy.com/system/resources/previews/012/621/570/large_2x/dwarf-dachshund-in-a-striped-dog-jumpsuit-and-a-red-cap-is-sunbathing-on-a-sandy-beach-dog-traveler-blogger-travelblogger-dog-enjoys-a-walk-in-the-fresh-air-outdoors-high-quality-photo.jpg';
+
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 4.0, vertical: 5),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 60,
+                                      backgroundColor: kTextWhiteColor,
+                                      child: CircleAvatar(
+                                        radius: 55,
+                                        backgroundColor: Colors.grey[
+                                            200], // optional fallback color
+                                        child: ClipOval(
+                                          child: Image.network(
+                                            profileUrl,
+                                            width: 110,
+                                            height: 110,
+                                            fit: BoxFit.cover,
+                                            loadingBuilder: (context, child,
+                                                loadingProgress) {
+                                              if (loadingProgress == null)
+                                                return child;
+                                              return const Center(
+                                                child: LoadingPlatformV1(),
+                                              );
+                                            },
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return const Icon(Icons.error,
+                                                  size: 40, color: Colors.red);
+                                            },
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(height: 5),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            username,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium
-                                                ?.copyWith(
-                                                    fontSize: SizeConfig
-                                                            .textMultiplier *
-                                                        1.9),
-                                          ),
-                                          const SizedBox(width: 10),
-                                          const CircleAvatar(
-                                            radius: 8,
-                                            backgroundColor: kBlueColor,
-                                            child: Icon(
-                                              Icons.check,
-                                              color: kTextWhiteColor,
-                                              size: 13,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          positionName,
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          username,
                                           style: Theme.of(context)
                                               .textTheme
                                               .titleMedium
                                               ?.copyWith(
                                                   fontSize: SizeConfig
                                                           .textMultiplier *
-                                                      1.5,
-                                                  color: Color(0XFF99A1BE)),
+                                                      1.9),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ],
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          SizedBox(
-                            width: double.infinity,
-                            height: SizeConfig.heightMultiplier * 5,
-                            child: OutlinedButton(
-                              onPressed: () async {},
-                              style: OutlinedButton.styleFrom(
-                                  side: BorderSide(color: colorstatus),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  backgroundColor: colorstatus),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Bootstrap.check_circle_fill,
-                                    color: Colors.white,
-                                    size: 15,
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    '$txtStatus  ${leaveData.typeName}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.copyWith(
-                                          color: Colors.white,
+                                        const SizedBox(width: 10),
+                                        const CircleAvatar(
+                                          radius: 8,
+                                          backgroundColor: kBlueColor,
+                                          child: Icon(
+                                            Icons.check,
+                                            color: kTextWhiteColor,
+                                            size: 13,
+                                          ),
                                         ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: kTextWhiteColor,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      CircleAvatar(
-                                        radius:
-                                            SizeConfig.heightMultiplier * 2.2,
-                                        backgroundColor:
-                                            colorS.withOpacity(0.10),
-                                        child: CachedNetworkImage(
-                                          imageUrl: leaveData.logo!,
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              LoadingPlatformV1(),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
-                                          color: colorS,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        '${DateFormatUtil.formatddMMy(DateTime.parse(leaveData.createdAt.toString()))} ',
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        positionName,
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleMedium
@@ -2468,278 +2379,364 @@ class _NotifitionsNewScreensState
                                                 fontSize:
                                                     SizeConfig.textMultiplier *
                                                         1.5,
-                                                color: kGreyColor),
+                                                color: Color(0XFF99A1BE)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: SizeConfig.heightMultiplier * 5,
+                          child: OutlinedButton(
+                            onPressed: () async {},
+                            style: OutlinedButton.styleFrom(
+                                side: BorderSide(color: colorstatus),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                backgroundColor: colorstatus),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Bootstrap.check_circle_fill,
+                                  color: Colors.white,
+                                  size: 15,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  '$txtStatus  ${leaveData.typeName}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).canvasColor,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: SizeConfig.heightMultiplier * 2.2,
+                                      backgroundColor: colorS.withOpacity(0.10),
+                                      child: CachedNetworkImage(
+                                        imageUrl: leaveData.logo!,
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                LoadingPlatformV1(),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.error),
+                                        color: colorS,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      '${DateFormatUtil.formatddMMy(DateTime.parse(leaveData.createdAt.toString()))} ',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.copyWith(
+                                              fontSize:
+                                                  SizeConfig.textMultiplier *
+                                                      1.5,
+                                              color: kGreyColor),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    color: Theme.of(context).cardColor,
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Color(0xFFF8F9FC),
+                                        blurRadius: 1.0,
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.all(8.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16.0),
-                                      color: const Color(0xFFF8F9FC),
-                                      boxShadow: const [
-                                        BoxShadow(
-                                          color: Color(0xFFF8F9FC),
-                                          blurRadius: 1.0,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          const SizedBox(width: 10),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    Strings.txtLeaveDate.tr,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleLarge!
-                                                        .copyWith(
-                                                            fontSize: SizeConfig
-                                                                    .textMultiplier *
-                                                                1.7,
-                                                            color: kTextGrey),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Text(
-                                                    '${DateFormatUtil.formatDD(DateTime.parse(leaveData.startDate.toString()))} - ${DateFormatUtil.formatdm(DateTime.parse(leaveData.endDate.toString()))} ',
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleLarge!
-                                                        .copyWith(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        const SizedBox(width: 10),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  Strings.txtLeaveDate.tr,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleLarge!
+                                                      .copyWith(
                                                           fontSize: SizeConfig
                                                                   .textMultiplier *
                                                               1.7,
-                                                        ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    Strings.txtTotalLeave.tr,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleLarge!
-                                                        .copyWith(
-                                                            fontSize: SizeConfig
-                                                                    .textMultiplier *
-                                                                1.7,
-                                                            color: kTextGrey),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Text(
-                                                    '${leaveData.totalDays.toString()} ${Strings.txtDay.tr}',
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleLarge!
-                                                        .copyWith(
-                                                            fontSize: SizeConfig
-                                                                    .textMultiplier *
-                                                                1.7),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                                                          color: kTextGrey),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  '${DateFormatUtil.formatDD(DateTime.parse(leaveData.startDate.toString()))} - ${DateFormatUtil.formatdm(DateTime.parse(leaveData.endDate.toString()))} ',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleLarge!
+                                                      .copyWith(
+                                                        fontSize: SizeConfig
+                                                                .textMultiplier *
+                                                            1.7,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  Strings.txtTotalLeave.tr,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleLarge!
+                                                      .copyWith(
+                                                          fontSize: SizeConfig
+                                                                  .textMultiplier *
+                                                              1.7,
+                                                          color: kTextGrey),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  '${leaveData.totalDays.toString()} ${Strings.txtDay.tr}',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleLarge!
+                                                      .copyWith(
+                                                          fontSize: SizeConfig
+                                                                  .textMultiplier *
+                                                              1.7),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 8,
-                                            backgroundColor: colorstatus,
-                                            child: const Icon(
-                                              Icons.check,
-                                              color: kTextWhiteColor,
-                                              size: 13,
-                                            ),
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 8,
+                                          backgroundColor: colorstatus,
+                                          child: const Icon(
+                                            Icons.check,
+                                            color: kTextWhiteColor,
+                                            size: 13,
                                           ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            '$txtStatus  ${DateFormatUtil.formatddMMy(DateTime.parse(leaveData.updatedAt.toString()))} ',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .copyWith(color: colorstatus),
-                                          ),
-                                        ],
-                                      ),
-                                      Text(
-                                        '  ${DateFormatUtil.formatms(DateTime.parse(leaveData.updatedAt.toString()))} ',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .copyWith(color: kTextGrey),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          '$txtStatus  ${DateFormatUtil.formatddMMy(DateTime.parse(leaveData.updatedAt.toString()))} ',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .copyWith(color: colorstatus),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      '  ${DateFormatUtil.formatms(DateTime.parse(leaveData.updatedAt.toString()))} ',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(color: kTextGrey),
+                                    )
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          leaveData.document != null &&
-                                  leaveData.document.isNotEmpty
-                              ? Container(
-                                  decoration: ShapeDecoration(
-                                    color: Colors.white,
-                                    shape: DashedBorder(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        leaveData.document != null &&
+                                leaveData.document.isNotEmpty
+                            ? Container(
+                                decoration: ShapeDecoration(
+                                  color: Theme.of(context).canvasColor,
+                                  shape: DashedBorder(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15),
-                                      child: CachedNetworkImage(
-                                        imageUrl: leaveData.document,
-                                        placeholder: (context, url) =>
-                                            const Center(
-                                                child: LoadingPlatformV1()),
-                                        errorWidget: (context, url, error) =>
-                                            const Center(
-                                          child: Icon(Icons.error,
-                                              color: Colors.red),
-                                        ),
-                                        fit: BoxFit.cover,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: CachedNetworkImage(
+                                      imageUrl: leaveData.document,
+                                      placeholder: (context, url) =>
+                                          const Center(
+                                              child: LoadingPlatformV1()),
+                                      errorWidget: (context, url, error) =>
+                                          const Center(
+                                        child: Icon(Icons.error,
+                                            color: Colors.red),
                                       ),
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                )
-                              : const SizedBox.shrink()
-                        ]),
-                  ),
-                );
-              });
+                                ),
+                              )
+                            : const SizedBox.shrink()
+                      ]),
+                ),
+              ));
         });
   }
+}
 
-  Widget _buildShimmerItem() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-      child: SingleChildScrollView(
-        child: Column(children: [
-          AppShimmer(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 10,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+Widget _buildShimmerItem() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+    child: SingleChildScrollView(
+      child: Column(children: [
+        AppShimmer(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: double.infinity,
+                height: SizeConfig.heightMultiplier * 10,
+                decoration: BoxDecoration(
+                  color: kGary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 10,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              ),
+              SizedBox(height: SizeConfig.heightMultiplier * 1),
+              Container(
+                width: double.infinity,
+                height: SizeConfig.heightMultiplier * 10,
+                decoration: BoxDecoration(
+                  color: kGary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 10,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              ),
+              SizedBox(height: SizeConfig.heightMultiplier * 1),
+              Container(
+                width: double.infinity,
+                height: SizeConfig.heightMultiplier * 10,
+                decoration: BoxDecoration(
+                  color: kGary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 10,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              ),
+              SizedBox(height: SizeConfig.heightMultiplier * 1),
+              Container(
+                width: double.infinity,
+                height: SizeConfig.heightMultiplier * 10,
+                decoration: BoxDecoration(
+                  color: kGary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 10,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              ),
+              SizedBox(height: SizeConfig.heightMultiplier * 1),
+              Container(
+                width: double.infinity,
+                height: SizeConfig.heightMultiplier * 10,
+                decoration: BoxDecoration(
+                  color: kGary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 10,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              ),
+              SizedBox(height: SizeConfig.heightMultiplier * 1),
+              Container(
+                width: double.infinity,
+                height: SizeConfig.heightMultiplier * 10,
+                decoration: BoxDecoration(
+                  color: kGary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 10,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              ),
+              SizedBox(height: SizeConfig.heightMultiplier * 1),
+              Container(
+                width: double.infinity,
+                height: SizeConfig.heightMultiplier * 10,
+                decoration: BoxDecoration(
+                  color: kGary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 10,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              ),
+              SizedBox(height: SizeConfig.heightMultiplier * 1),
+              Container(
+                width: double.infinity,
+                height: SizeConfig.heightMultiplier * 10,
+                decoration: BoxDecoration(
+                  color: kGary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 10,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              ),
+              SizedBox(height: SizeConfig.heightMultiplier * 1),
+              Container(
+                width: double.infinity,
+                height: SizeConfig.heightMultiplier * 10,
+                decoration: BoxDecoration(
+                  color: kGary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ],
-            ),
-          )
-        ]),
-      ),
-    );
-  }
+              ),
+            ],
+          ),
+        )
+      ]),
+    ),
+  );
 }

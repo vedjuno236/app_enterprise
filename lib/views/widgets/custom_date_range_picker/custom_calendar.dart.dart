@@ -1,4 +1,5 @@
 import 'package:enterprise/components/constants/colors.dart';
+import 'package:enterprise/components/utils/date_format_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -118,7 +119,7 @@ class CustomCalendarState extends State<CustomCalendar> {
                       },
                       child: const Icon(
                         Icons.keyboard_arrow_left,
-                        color: Colors.black,
+                        // color: Colors.black,
                       ),
                     ),
                   ),
@@ -134,7 +135,7 @@ class CustomCalendarState extends State<CustomCalendar> {
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 20,
-                          color: Color(0xFF222B45),
+                          // color: Color(0xFF222B45),
                         ),
                       ),
                     ),
@@ -144,7 +145,7 @@ class CustomCalendarState extends State<CustomCalendar> {
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 16,
-                          color: Color(0xFF8F9BB3),
+                          // color: Color(0xFF8F9BB3),
                         ),
                       ),
                     ),
@@ -176,12 +177,117 @@ class CustomCalendarState extends State<CustomCalendar> {
                       },
                       child: const Icon(
                         Icons.keyboard_arrow_right,
-                        color: Colors.black,
+                        // color: Colors.black,
                       ),
                     ),
                   ),
                 ),
               ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 13),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: kGreyBGColor)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'ຈາກວັນທີ',
+                        textAlign: TextAlign.left,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      Text(
+                        startDate != null
+                            ? DateFormatUtil.formatedm(startDate!, null)
+                            : '',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Container(
+                  height: 50,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: kGreyBGColor)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'ຫາວັນທີ',
+                        textAlign: TextAlign.left,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      Text(
+                        endDate != null
+                            ? DateFormatUtil.formatedm(endDate!, null)
+                            : '',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+              // Expanded(
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     crossAxisAlignment: CrossAxisAlignment.center,
+              //     children: <Widget>[
+              //       Text(
+              //         'ຈາກວັນທີ',
+              //         textAlign: TextAlign.left,
+              //         style: Theme.of(context).textTheme.bodyLarge,
+              //       ),
+              //       Text(
+              //         startDate != null
+              //             ? DateFormatUtil.formatedm(startDate!, null)
+              //             : '-------- ',
+              //         style: Theme.of(context).textTheme.bodyMedium,
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // Expanded(
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     crossAxisAlignment: CrossAxisAlignment.center,
+              //     children: <Widget>[
+              //       Text(
+              //         'ຫາວັນທີ',
+              //         textAlign: TextAlign.left,
+              //         style: Theme.of(context).textTheme.bodyLarge,
+              //       ),
+              //       Text(
+              //         endDate != null
+              //             ? DateFormatUtil.formatedm(endDate!, null)
+              //             : '-------- ',
+              //         style: Theme.of(context).textTheme.bodyMedium,
+              //       ),
+              //     ],
+              //   ),
+              // )
             ],
           ),
         ),
@@ -218,10 +324,7 @@ class CustomCalendarState extends State<CustomCalendar> {
               //     fontSize: 15,
               //     fontWeight: FontWeight.w500,
               //     color: Color(0xFF7B8199)),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: Color(0xFF7B8199)),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
             ),
           ),
         ),
@@ -258,7 +361,7 @@ class CustomCalendarState extends State<CustomCalendar> {
                             color: startDate != null && endDate != null
                                 ? getIsItStartAndEndDate(date) ||
                                         getIsInRange(date)
-                                    ? Color(0xFFFDF6D0)
+                                    ? kYellowColor.withOpacity(0.8)
                                     : Colors.transparent
                                 : Colors.transparent,
                             borderRadius: BorderRadius.only(
@@ -358,9 +461,9 @@ class CustomCalendarState extends State<CustomCalendar> {
                               '${date.day}',
                               style: TextStyle(
                                   color: getIsItStartAndEndDate(date)
-                                      ? Colors.white
+                                      ? Theme.of(context).primaryColorLight
                                       : currentMonthDate.month == date.month
-                                          ? widget.primaryColor
+                                          ? Theme.of(context).primaryColorLight
                                           : Colors.grey.withOpacity(0.6),
                                   fontSize:
                                       MediaQuery.of(context).size.width > 360

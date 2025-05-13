@@ -28,6 +28,8 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app uses your location to provide you with a seamless and personalized experience. And to confirm locations for employee check-in and check-out.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Your camera is needed to capture photos.</string>
 	<key>NSLocationAlwaysUsageDescription</key>

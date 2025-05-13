@@ -27,11 +27,11 @@ class _ComingEventsWidgetState extends ConsumerState<ComingEventsWidget> {
     return Container(
       width: double.infinity,
       height: SizeConfig.heightMultiplier * 45,
-      decoration: const BoxDecoration(
-        color: kTextWhiteColor,
+      decoration: BoxDecoration(
+        color: Theme.of(context).canvasColor,
         boxShadow: [
           BoxShadow(
-            color: Color(0xFFF3F3F3),
+            color: Theme.of(context).cardColor,
             blurRadius: 1.0,
             spreadRadius: 1.0,
           ),
@@ -165,10 +165,11 @@ class _ComingEventsWidgetState extends ConsumerState<ComingEventsWidget> {
                                 child: Align(
                                   widthFactor: 0.5,
                                   child: CircleAvatar(
-                                    radius: SizeConfig.heightMultiplier * 3,
-                                    backgroundColor: Colors.white,
+                                    radius: SizeConfig.heightMultiplier * 2.9,
+                                    backgroundColor:
+                                        Theme.of(context).cardColor,
                                     child: CircleAvatar(
-                                      radius: SizeConfig.heightMultiplier * 2,
+                                      radius: SizeConfig.heightMultiplier * 2.2,
                                       backgroundImage:
                                           NetworkImage(joinImage[i]),
                                     ),

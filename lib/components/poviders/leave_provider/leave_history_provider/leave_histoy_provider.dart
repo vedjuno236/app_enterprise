@@ -1,4 +1,3 @@
-
 import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/models/analytic_model/all_leave_history_model.dart';
@@ -22,8 +21,12 @@ class LeaveHistoryProvider with ChangeNotifier {
   int get selectedIndex => selectedIndexV;
 
   void updateSelectedIndex(int index) {
-    selectedIndexV = index;
-    notifyListeners();
+    if (selectedIndexV != index) {
+      selectedIndexV = index;
+
+      _allLeaveHistoryModel = null;
+      notifyListeners();
+    }
   }
 
   int selectedIndexOnleave = 0;
@@ -32,13 +35,15 @@ class LeaveHistoryProvider with ChangeNotifier {
 
   void updateSelectedIndexOnleave(int index) {
     selectedIndexOnleave = index;
+
     notifyListeners();
   }
-void clearSelectedIndex() {
-  selectedIndexV = 0;
-  selectedIndexOnleave=0;
-  notifyListeners();
-}
+
+  void clearSelectedIndex() {
+    selectedIndexV = 0;
+    selectedIndexOnleave = 0;
+    notifyListeners();
+  }
 
   DateTime? _selectedMonth;
 
@@ -56,10 +61,10 @@ void clearSelectedIndex() {
     _selectedMonthText = DateFormatUtil.formatM(month!);
     notifyListeners();
   }
-
 }
 
 final leaveHistoryProvider =
     ChangeNotifierProvider<LeaveHistoryProvider>((ref) {
   return LeaveHistoryProvider();
 });
+

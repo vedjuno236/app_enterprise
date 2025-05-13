@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/logger/logger.dart';
+import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/poviders/location_provider/location_provider.dart';
 import 'package:enterprise/components/router/router.dart';
 import 'package:enterprise/components/utils/dialogs.dart';
@@ -142,6 +143,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final userProvider = ref.watch(stateUserProvider);
     final roleName = userProvider.getUserModel?.data?.role?.name;
+    final darkTheme = ref.watch(darkThemeProviderProvider);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -151,7 +153,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: kPrimaryGradientColors,
+                colors: darkTheme.darkTheme
+                    ? [Colors.black12, Colors.black26, Colors.black]
+                    : kPrimaryGradientColors,
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),

@@ -1,3 +1,4 @@
+import 'package:enterprise/components/constants/colors.dart';
 import 'package:enterprise/components/languages/localization_service.dart';
 import 'package:enterprise/components/styles/size_config.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,10 @@ class AppTheme {
     if (isDarkTheme) {
       ///dark theme
       return ThemeData(
-        fontFamily: LocalizationService.locale!.languageCode == "lo"
-            ? GoogleFonts.notoSansLao().fontFamily
-            : GoogleFonts.rubik().fontFamily,
-        // fontFamily: GoogleFonts.notoSansLao().fontFamily,
+        // fontFamily: LocalizationService.locale!.languageCode == "lo"
+        // ? GoogleFonts.notoSansLao().fontFamily
+        // : GoogleFonts.rubik().fontFamily,
+        fontFamily: GoogleFonts.notoSansLao().fontFamily,
         colorScheme: const ColorScheme.dark(
           primary: Colors.white,
           onPrimary: Color(0xff262626),
@@ -46,9 +47,11 @@ class AppTheme {
         hoverColor: const Color(0xff3A3A3B),
         focusColor: const Color(0xff0B2512),
         disabledColor: Colors.grey,
-        cardColor: const Color(0xff262626),
-        canvasColor: const Color(0xff262626),
+        cardColor: const Color(0xFF211B10),
+        canvasColor: const Color(0xff242424),
         brightness: Brightness.dark,
+        bottomNavigationBarTheme:
+            BottomNavigationBarThemeData(backgroundColor: Colors.black),
         buttonTheme: Theme.of(context)
             .buttonTheme
             .copyWith(colorScheme: const ColorScheme.dark()),
@@ -70,7 +73,7 @@ class AppTheme {
         fontFamily: GoogleFonts.notoSansLao().fontFamily,
         colorScheme: const ColorScheme.light(
           primary: Colors.black,
-          onPrimary: Colors.black,
+          onPrimary: kYellowColor,
           secondary: Color(0xffF56C15),
         ),
         cardTheme: const CardTheme(
@@ -91,6 +94,9 @@ class AppTheme {
           color: Colors.black,
         ),
         scaffoldBackgroundColor: const Color(0xffF0F2F6),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: kYellowColor,
+        ),
         primaryColorDark: Colors.white,
         primaryColorLight: Colors.black,
         primarySwatch: Colors.green,
@@ -102,14 +108,14 @@ class AppTheme {
         hoverColor: const Color(0xffF7F7F7),
         focusColor: const Color(0xffA8DAB5),
         disabledColor: Colors.grey,
-        cardColor: Colors.white,
-        canvasColor: Colors.grey[50],
+        cardColor: Color(0xFFF5F6FA),
+        canvasColor: kTextWhiteColor,
         brightness: Brightness.light,
         buttonTheme: Theme.of(context)
             .buttonTheme
             .copyWith(colorScheme: const ColorScheme.light()),
         appBarTheme: const AppBarTheme(
-          color: Colors.white,
+          color: Colors.transparent,
           centerTitle: true,
           elevation: 0.0,
         ),

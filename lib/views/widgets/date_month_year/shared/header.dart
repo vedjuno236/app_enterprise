@@ -105,8 +105,12 @@ class Header extends StatelessWidget {
         width: 36,
         height: 36,
         child: DecoratedBox(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              width: 1,
+              color: Color(0xFFEDEFF7),
+            ),
           ),
           child: Icon(
             Icons.arrow_forward_ios_rounded,
@@ -123,8 +127,12 @@ class Header extends StatelessWidget {
         width: 36,
         height: 36,
         child: DecoratedBox(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              width: 1,
+              color: Color(0xFFEDEFF7),
+            ),
           ),
           child: Icon(
             Icons.arrow_back_ios_rounded,

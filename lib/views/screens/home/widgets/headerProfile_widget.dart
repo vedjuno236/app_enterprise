@@ -48,6 +48,51 @@ class _HeaderProfileState extends ConsumerState<HeaderProfile> {
         children: [
           Row(
             children: [
+              // Stack(
+              //   alignment: Alignment.center,
+              //   children: [
+              //     Lottie.asset(
+              //       'assets/lottie/pro.json',
+              //       width: SizeConfig.widthMultiplier * 30,
+              //       // height: SizeConfig.heightMultiplier * 30,
+              //     ),
+              //     CircleAvatar(
+              //         radius: 35,
+              //         backgroundColor: Colors.white.withOpacity(0.4),
+              //         child: CircleAvatar(
+              //           radius: 32,
+              //           child: ClipOval(
+              //               child: widget.profile != null
+              //                   ? CachedNetworkImage(
+              //                       imageUrl: widget.profile!,
+              //                       width: SizeConfig.heightMultiplier * 8,
+              //                       height: SizeConfig.heightMultiplier * 8,
+              //                       fit: BoxFit.cover,
+              //                       key: ValueKey(Random().nextInt(1000000)),
+              //                       placeholder: (context, url) =>
+              //                           const LoadingPlatformV1(),
+              //                       errorWidget: (context, url, error) => Icon(
+              //                           Icons.person,
+              //                           size:
+              //                               SizeConfig.imageSizeMultiplier * 7),
+              //                     )
+              //                   : CachedNetworkImage(
+              //                       imageUrl:
+              //                           'https://img.freepik.com/free-photo/village-bungalows-along-nam-song-river-vang-vieng-laos_335224-1252.jpg?t=st=1745551578~exp=1745555178~hmac=24020576c9080278d441b77a07e82b6c2b97718a895fc8bfb6be2ada9afb8694&w=2000',
+              //                       width: SizeConfig.heightMultiplier * 8,
+              //                       height: SizeConfig.heightMultiplier * 8,
+              //                       fit: BoxFit.cover,
+              //                       key: ValueKey(Random().nextInt(1000000)),
+              //                       placeholder: (context, url) =>
+              //                           const LoadingPlatformV1(),
+              //                       errorWidget: (context, url, error) => Icon(
+              //                           Icons.person,
+              //                           size:
+              //                               SizeConfig.imageSizeMultiplier * 7),
+              //                     )),
+              //         )),
+              //   ],
+              // ),
               Container(
                 decoration: ShapeDecoration(
                   shape: DottedBorder(
@@ -117,34 +162,27 @@ class _HeaderProfileState extends ConsumerState<HeaderProfile> {
                     children: [
                       Text(
                         widget.name!,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF0F1721)),
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                       ),
                       const SizedBox(
                         width: 10,
                       ),
                       Text(
                         widget.lastName!,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF0F1721)),
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                       ),
                     ],
                   ),
                   SizedBox(height: SizeConfig.heightMultiplier * 0.5),
                   Text(
                     widget.positionName!,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: Color(0xFF6F747A)),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
                   ),
                 ],
               ),

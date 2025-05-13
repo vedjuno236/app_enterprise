@@ -40,6 +40,7 @@ class _LanguageSwitcherState extends State<LanguageSwitcher> {
 
   void _showLanguagePopover(BuildContext context) {
     showPopover(
+      backgroundColor: Theme.of(context).canvasColor,
       context: context,
       bodyBuilder: (context) => _buildLanguageList(),
       direction: PopoverDirection.bottom,
@@ -63,7 +64,7 @@ class _LanguageSwitcherState extends State<LanguageSwitcher> {
               leading: _getFlagIcon(langCode),
               title: Text(
                 LocalizationService.langs[langCode]!,
-                style: const TextStyle(fontSize: 16),
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
               ),
               onTap: () {
                 setState(() {
@@ -100,7 +101,6 @@ class _LanguageSwitcherState extends State<LanguageSwitcher> {
           // const Icon(Ionicons.language_outline),
           const Icon(
             IonIcons.language,
-      
           ),
         ],
       ),
@@ -118,7 +118,7 @@ class _LanguageSwitcherState extends State<LanguageSwitcher> {
           'assets/icons/la.png',
         );
       default:
-         return Image.asset(
+        return Image.asset(
           'assets/icons/en.png',
         );
     }

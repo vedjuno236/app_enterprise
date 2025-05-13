@@ -3,7 +3,6 @@ import 'package:enterprise/components/constants/image_path.dart';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:enterprise/components/poviders/leave_provider/leave_history_provider/leave_histoy_provider.dart';
-import 'package:enterprise/components/poviders/news_provider/news_provider.dart';
 import 'package:enterprise/components/poviders/notifition_provider/notifition_provider.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
 import 'package:enterprise/components/utils/date_format_utils.dart';
@@ -11,7 +10,6 @@ import 'package:enterprise/components/utils/dialogs.dart';
 import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -23,7 +21,6 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import '../../../components/constants/colors.dart';
 import '../../../components/constants/strings.dart';
 import '../../../components/logger/logger.dart';
-import '../../../components/mock/mock.dart';
 import '../../../components/styles/size_config.dart';
 import '../../widgets/appbar/appbar_widget.dart';
 
@@ -242,7 +239,7 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                               decoration: BoxDecoration(
                                 color: selectedIndex == index
                                     ? kYellowColor
-                                    : kTextWhiteColor,
+                                    : Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               padding: const EdgeInsets.all(10.0),
@@ -330,8 +327,11 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                                           child: Container(
                                             decoration: BoxDecoration(
                                               border: Border.all(
-                                                  color: kGary, width: 1.0),
-                                              color: kTextWhiteColor,
+                                                  color: Theme.of(context)
+                                                      .cardColor,
+                                                  width: 1.0),
+                                              color:
+                                                  Theme.of(context).canvasColor,
                                               borderRadius:
                                                   BorderRadius.circular(20.0),
                                             ),
@@ -398,8 +398,8 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10),
-                                                      color: const Color(
-                                                          0xFFEEEFF7),
+                                                      color: Theme.of(context)
+                                                          .cardColor,
                                                     ),
                                                     child: Padding(
                                                       padding:
@@ -550,13 +550,13 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                                                                       height:
                                                                           5),
                                                                   Text(
-                                                                    '${data.totalDays} ${Strings.txtDay.tr}'
-                                                                        .toString(),
+                                                                    '${(data.totalDays != null) ? (data.totalDays! % 1 == 0 ? data.totalDays!.toInt().toString() : data.totalDays!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
+                                                                        .tr,
                                                                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                                                         fontSize:
                                                                             SizeConfig.textMultiplier *
                                                                                 2,
-                                                                        color: int.parse(data.totalDays.toString().split(' ')[0]) >
+                                                                        color: double.parse(data.totalDays.toString().split(' ')[0]) >
                                                                                 3
                                                                             ? kRedColor
                                                                             : kBlueColor,

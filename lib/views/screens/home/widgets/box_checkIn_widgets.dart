@@ -786,17 +786,11 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
           builder: (context) => AlertCustomDialog(
             title: Text(
               Strings.txtLocationPermissions.tr,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(),
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
             ),
             content: Text(
               Strings.txtLocationPermissionssettings.tr,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(),
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(),
             ),
             onTapOK: () {
               openAppSettings();
@@ -994,14 +988,14 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
     return Container(
       width: double.infinity,
       height: SizeConfig.heightMultiplier * 19.5,
-      decoration: const BoxDecoration(
-        color: kTextWhiteColor,
-        borderRadius: BorderRadius.all(
+      decoration: BoxDecoration(
+        color: Theme.of(context).canvasColor,
+        borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
         boxShadow: [
           BoxShadow(
-            color: kGreyColor1,
+            color: Theme.of(context).cardColor,
             blurRadius: 1.0,
             spreadRadius: 1.0,
           )

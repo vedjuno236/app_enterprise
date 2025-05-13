@@ -153,30 +153,41 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
               height: 300,
               width: 450,
               child: MonthPicker(
-                selectedCellDecoration: const BoxDecoration(
-                  color: kYellowFirstColor,
-                  shape: BoxShape.circle,
-                ),
+                splashRadius: 10,
+                selectedCellDecoration: BoxDecoration(
+                    color: kYellowFirstColor,
+                    borderRadius: BorderRadius.circular(12)
+                    // shape: BoxShape.circle,
+                    ),
                 selectedCellTextStyle: Theme.of(context)
                     .textTheme
-                    .bodySmall!
+                    .bodyMedium!
                     .copyWith(color: kBack87),
                 enabledCellsTextStyle: Theme.of(context)
                     .textTheme
-                    .bodySmall!
+                    .bodyMedium!
                     .copyWith(color: kBack87),
+                enabledCellsDecoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+                ),
                 disabledCellsTextStyle: Theme.of(context)
                     .textTheme
-                    .bodySmall!
-                    .copyWith(color: kGreyColor2),
+                    .bodyMedium!
+                    .copyWith(color: Color(0xFFE4E4E7)),
+                disabledCellsDecoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+                ),
                 currentDateTextStyle: Theme.of(context)
                     .textTheme
-                    .bodySmall!
+                    .bodyMedium!
                     .copyWith(color: kBack87),
                 currentDateDecoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(width: 1, color: kBack87),
-                ),
+                    border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+                    borderRadius: BorderRadius.circular(12)),
                 splashColor: kYellowFirstColor,
                 slidersColor: kBack,
                 centerLeadingDate: true,
@@ -260,7 +271,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
             ),
           ),
         ],
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        // systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: SingleChildScrollView(
         physics: const ClampingScrollPhysics(),
@@ -297,7 +308,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: kTextWhiteColor,
+                  color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Padding(
@@ -383,7 +394,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                       Container(
                         height: SizeConfig.heightMultiplier * 43,
                         decoration: BoxDecoration(
-                          color: const Color(0XFFEDEFF7),
+                          color: Theme.of(context).cardColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Padding(
@@ -538,16 +549,16 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                                                             format(
                                                                 attendanceItem
                                                                     .date),
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .titleLarge!
-                                                                .copyWith(
-                                                                    fontSize:
-                                                                        SizeConfig.textMultiplier *
-                                                                            2,
-                                                                    color:
-                                                                        kBack),
+                                                            style:
+                                                                Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .titleLarge!
+                                                                    .copyWith(
+                                                                      fontSize:
+                                                                          SizeConfig.textMultiplier *
+                                                                              2,
+                                                                    ),
                                                           ),
                                                         ),
                                                         Expanded(
@@ -616,7 +627,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: kTextWhiteColor,
+                              color: Theme.of(context).canvasColor,
                               borderRadius: BorderRadius.circular(20.0),
                               boxShadow: const [
                                 BoxShadow(
@@ -641,8 +652,8 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                                 Text(
                                   'W ${analyticState.currentPageIndex}',
                                   style: TextStyle(
-                                      fontSize: SizeConfig.textMultiplier * 1.8,
-                                      color: kBack87),
+                                    fontSize: SizeConfig.textMultiplier * 1.8,
+                                  ),
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.arrow_forward_ios),
@@ -734,7 +745,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                   }
                   return Container(
                     decoration: BoxDecoration(
-                      color: kTextWhiteColor,
+                      color: Theme.of(context).canvasColor,
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: InkWell(
@@ -770,7 +781,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                                   fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(
-                          '${(data.total != null) ? (data.total! % 1 == 0 ? data.total!.toInt().toString() : data.total!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
+                          '${(data.used != null) ? (data.used! % 1 == 0 ? data.used!.toInt().toString() : data.used!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
                               .tr,
                           style:
                               Theme.of(context).textTheme.titleSmall!.copyWith(
@@ -815,7 +826,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
               Container(
                   height: SizeConfig.heightMultiplier * 35,
                   decoration: BoxDecoration(
-                    color: kTextWhiteColor,
+                    color: Theme.of(context).canvasColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Padding(

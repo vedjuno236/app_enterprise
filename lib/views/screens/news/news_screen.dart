@@ -290,6 +290,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
     final newsProvider = ref.watch(stateNewsProvider);
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         elevation: 0,
@@ -366,7 +367,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                                         top: 10, right: 15),
                                     padding: const EdgeInsets.all(8.0),
                                     decoration: BoxDecoration(
-                                      color: kTextWhiteColor,
+                                      color: Theme.of(context).cardColor,
                                       borderRadius: BorderRadius.circular(50),
                                       border: Border.all(
                                         color: isSelected
@@ -482,7 +483,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(8.0),
-                                          color: kTextWhiteColor,
+                                          color: Theme.of(context).canvasColor,
                                           // boxShadow: const [
                                           //   BoxShadow(
                                           //     color: Colors.black12,
@@ -538,7 +539,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodyMedium!
-                                                  .copyWith(color: kGreyColor2),
+                                                  .copyWith(),
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 3,
                                             ),
@@ -569,7 +570,6 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                                                           .textTheme
                                                           .bodyMedium!
                                                           .copyWith(
-                                                              color: kBack,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold),
@@ -744,7 +744,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                     .titleLarge!
                     .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
               ),
-              dropdownColor: kTextWhiteColor,
+              dropdownColor: Theme.of(context).canvasColor,
               value: ref.watch(stateNewsProvider).dropdown,
               onChanged: (int? newValue) {
                 ref.read(stateNewsProvider).dropdown = newValue;
@@ -861,12 +861,16 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                       linkController.clear();
                     },
                     style: ElevatedButton.styleFrom(
-                      side: const BorderSide(color: kYellowFirstColor),
+                      side:  BorderSide(color:   Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100),
                       ),
-                      backgroundColor: kYellowFirstColor,
+                      backgroundColor:   Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
                     ),
                     child: isLoadingC
                         ? Row(

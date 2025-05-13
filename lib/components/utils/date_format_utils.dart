@@ -63,7 +63,10 @@ class DateFormatUtil {
     final formatter = DateFormat('dd-MMMM', locale ?? currentLocale);
     return formatter.format(date);
   }
-
+ static String formatedm(DateTime date, String? locale) {
+    final formatter = DateFormat('EEE, dd MMMM', locale ?? currentLocale);
+    return formatter.format(date);
+  }
   static String formatddMMy(DateTime date, {String? locale}) {
     final formatter = DateFormat.yMMMMd(locale ?? currentLocale);
     return formatter.format(date);

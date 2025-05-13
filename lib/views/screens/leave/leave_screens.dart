@@ -182,11 +182,8 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      'ວັນລາພັກຂອງເຈົ້າໝົດແລ້ວ',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(color: Color(0xFF474747)),
+                      'ວັນລາພັກຂອງທ່ານບໍ່ພຽງພໍ',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -271,7 +268,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
         : Colors.blueAccent;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F7FA),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         elevation: 0,
         flexibleSpace: const AppbarWidget(),
@@ -354,7 +351,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
                           decoration: BoxDecoration(
-                            color: kTextWhiteColor,
+                            color: Theme.of(context).canvasColor,
                             border: Border.all(color: kYellowColor),
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -542,7 +539,8 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                                       ? kYellowColor
                                                       : kGary,
                                                 ),
-                                                color: kTextWhiteColor,
+                                                color: Theme.of(context)
+                                                    .canvasColor,
                                                 borderRadius:
                                                     BorderRadius.circular(15),
                                               ),
@@ -713,7 +711,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                               DateTime.now().add(const Duration(days: 30)),
                           endDate: endDate,
                           startDate: startDate,
-                          backgroundColor: Colors.white,
+                          backgroundColor: Theme.of(context).cardColor,
                           primaryColor: const Color(0xFF283050),
                           onApplyClick: (start, end) {
                             setState(() {
@@ -748,11 +746,11 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                               ? Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
-                                  .copyWith(color: Color(0xFF37474F))
+                                  .copyWith()
                               : Theme.of(context)
                                   .textTheme
                                   .bodyLarge!
-                                  .copyWith(color: kGreyColor2),
+                                  .copyWith(),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return null;
@@ -1094,12 +1092,11 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                           ? Theme.of(context)
                                               .textTheme
                                               .bodyLarge!
-                                              .copyWith(
-                                                  color: Color(0xFF37474F))
+                                              .copyWith()
                                           : Theme.of(context)
                                               .textTheme
                                               .bodyLarge!
-                                              .copyWith(color: kGreyColor2),
+                                              .copyWith(),
                                       controller:
                                           leaveNotifier.startTimeController,
                                     ),
@@ -1413,12 +1410,11 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                           ? Theme.of(context)
                                               .textTheme
                                               .bodyLarge!
-                                              .copyWith(
-                                                  color: Color(0xFF37474F))
+                                              .copyWith()
                                           : Theme.of(context)
                                               .textTheme
                                               .bodyLarge!
-                                              .copyWith(color: kGreyColor2),
+                                              .copyWith(),
                                       controller:
                                           leaveNotifier.endTimeController,
                                     ),
@@ -1461,6 +1457,8 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                       maxLines: 5,
                       hintText: Strings.txtPLeaseEnter.tr,
                       controller: leaveNotifier.accordingController,
+                      hintStyle:
+                          Theme.of(context).textTheme.bodyLarge!.copyWith(),
                     )
                         .animate()
                         .fadeIn(duration: 500.ms, delay: 500.ms)
@@ -1514,7 +1512,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                   : null,
                               width: double.infinity,
                               decoration: ShapeDecoration(
-                                color: kTextWhiteColor,
+                                color: Theme.of(context).canvasColor,
                                 shape: DashedBorder(
                                   color: kGreyColor2,
                                   borderRadius: BorderRadius.circular(15),

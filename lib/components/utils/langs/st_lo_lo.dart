@@ -79,7 +79,7 @@ const Map<String, String> lo = {
   "Payslips": "ເງີນເດືອນ",
   "Calendar": "ປະຕິທີນ",
   "Request OT": "ຂໍໂອທີ",
-"Events": "ກິດຈະກໍາ",
+  "Events": "ກິດຈະກໍາ",
   // atten
   "You": "ເຈົ້າ",
 //
@@ -155,8 +155,8 @@ const Map<String, String> lo = {
   "Requests": "ຮ້ອງຂໍລາຍລະອຽດ",
 
   "Loading": "ກໍາລັງສົ່ງ....",
-  "Available": "ວັນລາພັກທັງໝົດ",
-  "Leave Used": "ວັນທີລາພັກ",
+  "Available": "ມື້ລາພັກທີຍັງເຫຼືອ",
+  "Leave Used": "ມື້ທີໃຊ້ໄປແລ້ວ",
   "Leave Date": "ລາພັກວັນທີ",
   "Total Leave": "ວັນລາພັກທັງໝົດ",
   "Please enter the correct password": "ກະລຸາປ້ອນລະຫັດຜ່ານໃຫ້ຖືກຕ້ອງ",

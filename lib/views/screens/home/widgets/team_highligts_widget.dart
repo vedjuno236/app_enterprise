@@ -33,39 +33,38 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
     });
     EnterpriseAPIService()
         .callNotification(
-      token: sharedPrefs.getStringNow(KeyShared.keyToken),
-      start_date: formattedNow,
-      end_date: formattedNow,
-    )
+          token: sharedPrefs.getStringNow(KeyShared.keyToken),
+          start_date: formattedNow,
+          end_date: formattedNow,
+        )
         .then((value) {
-      ref.watch(stateNotifitionProvider).setNotificationModel(value: value);
-      logger.d(value);
-    }).catchError((onError) {
-      // errorDialog(
-      //   context: context,
-      //   onError: onError,
-      // );
-    }).whenComplete(() => setState(() {
+          ref.watch(teamHighlightsProvider).setNotificationModel(value: value);
+          logger.d(value);
+        })
+        .catchError((onError) {})
+        .whenComplete(() => setState(() {
               isLoading = false;
             }));
   }
+
   @override
   void initState() {
     super.initState();
     fetchNotificationApi();
   }
+
   @override
   Widget build(BuildContext context) {
-    final notiProvider = ref.watch(stateNotifitionProvider);
+    final notiProvider = ref.watch(teamHighlightsProvider);
     final notificationData = notiProvider.getNotificationModel?.data ?? [];
     return Container(
       width: double.infinity,
       height: SizeConfig.heightMultiplier * 20,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: Theme.of(context).canvasColor,
         boxShadow: [
           BoxShadow(
-            color: Color(0xFFF3F3F3),
+            color: Theme.of(context).cardColor,
             blurRadius: 1.0,
             spreadRadius: 1.0,
           ),
@@ -178,12 +177,11 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
                                   .textTheme
                                   .titleLarge!
                                   .copyWith(
-                                      fontSize: SizeConfig.textMultiplier * 1.9,
-                                      color: kTextGrey),
+                                    fontSize: SizeConfig.textMultiplier * 1.9,
+                                  ),
                             ),
-                            const Icon(
+                            Icon(
                               Icons.arrow_right,
-                              color: kGreyBGColor,
                             )
                           ],
                         ))

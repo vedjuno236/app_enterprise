@@ -111,7 +111,7 @@ class _PoliciesScreensState extends ConsumerState<PoliciesScreens> {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: kBack),
+        // iconTheme: const IconThemeData(color: kBack),
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: const AppbarWidget(),
@@ -124,7 +124,7 @@ class _PoliciesScreensState extends ConsumerState<PoliciesScreens> {
             delay: 500.ms,
             duration: 500.ms,
             curve: Curves.easeInOutCubic),
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        // systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
@@ -163,14 +163,14 @@ class _PoliciesScreensState extends ConsumerState<PoliciesScreens> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      boxShadow: const [
+                      boxShadow: [
                         BoxShadow(
-                          color: kTextWhiteColor,
+                          color: Theme.of(context).canvasColor,
                           offset: Offset(0, 1),
                           blurRadius: 2.0,
                         ),
                       ],
-                      color: kTextWhiteColor,
+                      color: Theme.of(context).canvasColor,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
@@ -179,7 +179,7 @@ class _PoliciesScreensState extends ConsumerState<PoliciesScreens> {
                         SizedBox(height: SizeConfig.heightMultiplier * 1),
                         CircleAvatar(
                           radius: 40,
-                          backgroundColor: const Color(0xFFF3F5FA),
+                          backgroundColor: kTextWhiteColor,
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: CachedNetworkImage(

@@ -101,7 +101,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final loginProvider = ref.watch(stateLoginProvider);
     return Scaffold(
-      backgroundColor: kTextWhiteColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: true,
       body: CustomProgressHUD(
         key: UniqueKey(),
@@ -179,7 +179,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ],
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: kTextWhiteColor,
+                          fillColor: Theme.of(context).canvasColor,
                           focusColor: kTextWhiteColor,
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
@@ -205,7 +205,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           hintStyle:
                               Theme.of(context).textTheme.titleSmall!.copyWith(
                                     fontSize: SizeConfig.textMultiplier * 1.8,
-                                    color: kBack.withOpacity(0.4),
                                   ),
                           prefixIcon: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -272,7 +271,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         controller: passwordController,
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: kTextWhiteColor,
+                          fillColor: Theme.of(context).canvasColor,
                           focusColor: kTextWhiteColor,
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
@@ -293,7 +292,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           hintStyle:
                               Theme.of(context).textTheme.titleSmall!.copyWith(
                                     fontSize: SizeConfig.textMultiplier * 1.8,
-                                    color: kBack.withOpacity(0.4),
                                   ),
                           prefixIcon: Padding(
                             padding: const EdgeInsets.symmetric(

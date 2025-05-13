@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/poviders/policy_provider/policy_provider.dart';
+import 'package:enterprise/views/widgets/appbar/appbar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
@@ -41,66 +43,82 @@ class _PoliciesPdfScreenState extends ConsumerState<PoliciesPdfScreen> {
     final policyProvider = ref.watch(statePolicyProvider);
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: kBack),
+        // iconTheme: const IconThemeData(color: kBack),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: kYellowGradientAppbarColors,
-            ),
-          ),
-        ),
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        flexibleSpace: const AppbarWidget(),
         title: Text(
-          "${widget.typeName} ${Strings.txtPolicy.tr} ".toLowerCase(),
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                fontSize: SizeConfig.textMultiplier * 2,
-              ),
-        ),
-        actions: [
-          GestureDetector(
-            onTap: () {},
-            child: Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: const BoxDecoration(
-                      color: kTextBack,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Image.asset(ImagePath.iconComment),
-                  ),
-                  Positioned(
-                    right: 0,
-                    top: -4,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: kRedColor,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Text(
-                        '',
-                        style: TextStyle(
-                          color: kYellowFirstColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+          Strings.txtPolicy.tr,
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+        ).animate().scaleXY(
+            begin: 0,
+            end: 1,
+            delay: 500.ms,
+            duration: 500.ms,
+            curve: Curves.easeInOutCubic),
+        // systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
+      // appBar: AppBar(
+      //   iconTheme: const IconThemeData(color: kBack),
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      //   flexibleSpace: Container(
+      //     decoration: BoxDecoration(
+      //       gradient: LinearGradient(
+      //         begin: Alignment.topLeft,
+      //         end: Alignment.bottomRight,
+      //         colors: kYellowGradientAppbarColors,
+      //       ),
+      //     ),
+      //   ),
+      //   // systemOverlayStyle: SystemUiOverlayStyle.dark,
+      //   title: Text(
+      //     "${widget.typeName} ${Strings.txtPolicy.tr} ".toLowerCase(),
+      //     style: Theme.of(context).textTheme.titleLarge!.copyWith(
+      //           fontSize: SizeConfig.textMultiplier * 2,
+      //         ),
+      //   ),
+      //   actions: [
+      //     GestureDetector(
+      //       onTap: () {},
+      //       child: Padding(
+      //         padding: const EdgeInsets.only(right: 20),
+      //         child: Stack(
+      //           clipBehavior: Clip.none,
+      //           children: [
+      //             Container(
+      //               padding: const EdgeInsets.all(10),
+      //               decoration: const BoxDecoration(
+      //                 color: kTextBack,
+      //                 shape: BoxShape.circle,
+      //               ),
+      //               child: Image.asset(ImagePath.iconComment),
+      //             ),
+      //             Positioned(
+      //               right: 0,
+      //               top: -4,
+      //               child: Container(
+      //                 padding: const EdgeInsets.all(4),
+      //                 decoration: const BoxDecoration(
+      //                   color: kRedColor,
+      //                   shape: BoxShape.circle,
+      //                 ),
+      //                 child: const Text(
+      //                   '',
+      //                   style: TextStyle(
+      //                     color: kYellowFirstColor,
+      //                     fontSize: 12,
+      //                     fontWeight: FontWeight.bold,
+      //                   ),
+      //                 ),
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //     ),
+      //   ],
+      // ),
       body: policyProvider.getPolicyModel == null
           ? const Center(
               child: CupertinoActivityIndicator(
