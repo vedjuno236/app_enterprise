@@ -1,3 +1,4 @@
+import 'package:enterprise/components/constants/colors.dart';
 import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/utils/date_format_utils.dart';
 import 'package:enterprise/views/widgets/custom_date_range_picker/custom_calendar.dart.dart';
@@ -110,52 +111,69 @@ class CustomDateRangePickerState extends State<CustomDateRangePicker>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      const SizedBox(
-                        height: 20,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 13, vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'ຈາກວັນທີ',
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                  Text(
+                                    startDate != null
+                                        ? DateFormatUtil.formatedm(
+                                            startDate!, null)
+                                        : '',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 40,
+                              width: 1,
+                              color: kYellowColor.withOpacity(0.4),
+                            ),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'ຫາວັນທີ',
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                  Text(
+                                    endDate != null
+                                        ? DateFormatUtil.formatedm(
+                                            endDate!, null)
+                                        : '',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                      // Row(
-                      //   children: <Widget>[
-                      //     Expanded(
-                      //       child: Column(
-                      //         mainAxisAlignment: MainAxisAlignment.center,
-                      //         crossAxisAlignment: CrossAxisAlignment.center,
-                      //         children: <Widget>[
-                      //           Text(
-                      //             'ຈາກວັນທີ',
-                      //             textAlign: TextAlign.left,
-                      //             style: Theme.of(context).textTheme.bodyLarge,
-                      //           ),
-                      //           Text(
-                      //             startDate != null
-                      //                 ? DateFormatUtil.formatedm(
-                      //                     startDate!, null)
-                      //                 : '-------- ',
-                      //             style: Theme.of(context).textTheme.bodyMedium,
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //     Expanded(
-                      //       child: Column(
-                      //         mainAxisAlignment: MainAxisAlignment.center,
-                      //         crossAxisAlignment: CrossAxisAlignment.center,
-                      //         children: <Widget>[
-                      //           Text(
-                      //             'ຫາວັນທີ',
-                      //             textAlign: TextAlign.left,
-                      //             style: Theme.of(context).textTheme.bodyLarge,
-                      //           ),
-                      //           Text(
-                      //             endDate != null
-                      //                 ? DateFormatUtil.formatedm(endDate!, null)
-                      //                 : '-------- ',
-                      //             style: Theme.of(context).textTheme.bodyMedium,
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     )
-                      //   ],
-                      // ),
+                      Divider(
+                        height: 1,
+                        color: kYellowColor.withOpacity(0.4),
+                      ),
+                     
                       CustomCalendar(
                         minimumDate: widget.minimumDate,
                         maximumDate: widget.maximumDate,
@@ -235,31 +253,16 @@ class CustomDateRangePickerState extends State<CustomDateRangePicker>
                                     Color(0xFFFDC604),
                                   ),
                                 ),
-                                // onPressed: () {
-                                // try {
-                                //   widget.onApplyClick(startDate!, endDate!);
-                                //   Navigator.pop(context);
-                                // } catch (_) {}
-
-                                // },
                                 onPressed: () {
                                   try {
-                                    // print(
-                                    //     'Before apply - startDate: $startDate, endDate: $endDate');
-
                                     if (startDate != null) {
                                       widget.onApplyClick(
                                           startDate!, endDate ?? startDate!);
                                     }
 
-                                    // print(
-                                    //     'After apply - startDate: $startDate, endDate: $endDate');
                                     Navigator.pop(context);
-                                  } catch (e) {
-                                    // print('Error in date selection: $e');
-                                  }
+                                  } catch (e) {}
                                 },
-
                                 child: Center(
                                   child: Text(
                                     Strings.txtOkay.tr,

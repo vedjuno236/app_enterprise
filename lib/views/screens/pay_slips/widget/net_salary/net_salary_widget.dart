@@ -136,7 +136,7 @@ class _NetSalaryWidgetState extends ConsumerState<NetSalaryWidget> {
       width: double.infinity,
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-          color: kTextWhiteColor,
+          color: Theme.of(context).canvasColor,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: kYellowColor,

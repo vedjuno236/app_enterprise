@@ -22,7 +22,7 @@ class AppbarWidget extends ConsumerWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: darkTheme.darkTheme
-                  ? [Colors.black12, Colors.black26, Colors.black]
+                  ? [Colors.black12, Colors.black26,Colors.black]
                   : kYellowGradientAppbarColors,
             ),
           ),

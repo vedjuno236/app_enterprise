@@ -22,7 +22,8 @@ class _DeductionsWidgetState extends ConsumerState<DeductionsWidget> {
       width: double.infinity,
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(20)),
+          color: Theme.of(context).canvasColor,
+          borderRadius: BorderRadius.circular(20)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

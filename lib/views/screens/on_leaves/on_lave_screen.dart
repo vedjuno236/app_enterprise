@@ -2,9 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/image_path.dart';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
-import 'package:enterprise/components/poviders/leave_provider/leave_history_provider/leave_histoy_provider.dart';
 import 'package:enterprise/components/poviders/leave_provider/leave_onLeave_provider/leave_onleave_provider.dart';
-import 'package:enterprise/components/poviders/notifition_provider/notifition_provider.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
 import 'package:enterprise/components/utils/date_format_utils.dart';
 import 'package:enterprise/components/utils/dialogs.dart';
@@ -13,14 +11,12 @@ import 'package:enterprise/views/widgets/date_month_year/shared/month_picker.dar
 import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-
 import '../../../components/constants/colors.dart';
 import '../../../components/constants/strings.dart';
 import '../../../components/logger/logger.dart';
@@ -210,16 +206,12 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
               selectedCellDecoration: BoxDecoration(
                   color: kYellowFirstColor,
                   borderRadius: BorderRadius.circular(12)),
-              selectedCellTextStyle: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: kBack87),
-              enabledCellsTextStyle: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: kBack87),
+              selectedCellTextStyle:
+                  Theme.of(context).textTheme.bodyMedium!.copyWith(),
+              enabledCellsTextStyle:
+                  Theme.of(context).textTheme.bodyMedium!.copyWith(),
               enabledCellsDecoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).canvasColor,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
               ),
@@ -228,7 +220,7 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                   .bodyMedium!
                   .copyWith(color: Color(0xFFE4E4E7)),
               disabledCellsDecoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).canvasColor.withOpacity(0.4),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
               ),
@@ -301,7 +293,7 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
             text: Strings.txtAllLeave.tr,
             style: Theme.of(context).textTheme.titleMedium!.copyWith(),
           ),
-          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          // systemOverlayStyle: SystemUiOverlayStyle.dark,
           actions: [
             Text(leaveHistoryNotifier.selectedMonth == null
                 ? ''

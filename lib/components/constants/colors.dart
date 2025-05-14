@@ -15,6 +15,22 @@ const MaterialColor kPrimaryColor = MaterialColor(
     900: Color.fromRGBO(245, 108, 21, 1),
   },
 );
+const MaterialColor kThreePrimaryColor = MaterialColor(
+  _kThreePrimaryColor,
+  <int, Color>{
+    50: Color.fromRGBO(55, 71, 79, 0.1),
+    100: Color.fromRGBO(55, 71, 79, 0.2),
+    200: Color.fromRGBO(55, 71, 79, 0.3),
+    300: Color.fromRGBO(55, 71, 79, 0.4),
+    400: Color.fromRGBO(55, 71, 79, 0.5),
+    500: Color(_kThreePrimaryColor),
+    600: Color.fromRGBO(55, 71, 79, 0.7),
+    700: Color.fromRGBO(55, 71, 79, 0.8),
+    800: Color.fromRGBO(55, 71, 79, 0.9),
+    900: Color.fromRGBO(55, 71, 79, 1),
+  },
+);
+const int _kThreePrimaryColor = 0xFF37474F;
 const int _kPrimaryColor = 0xFFF56C15;
 const kBack87 = Colors.black87;
 const Color orangeColor = Color(0xFFFD8D4F);

@@ -63,7 +63,7 @@ class _EventsScreensState extends ConsumerState<EventsScreens> {
                             margin: const EdgeInsets.only(top: 10, right: 15),
                             padding: const EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
-                              color: kTextWhiteColor,
+                              color: Theme.of(context).canvasColor,
                               borderRadius: BorderRadius.circular(50),
                               border: Border.all(
                                 color: eventProvider.selectedIndexEvent ==
@@ -85,7 +85,7 @@ class _EventsScreensState extends ConsumerState<EventsScreens> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium!
-                                      .copyWith(color: kBack87),
+                                      .copyWith(),
                                 ),
                               ],
                             ),
@@ -119,7 +119,7 @@ class _EventsScreensState extends ConsumerState<EventsScreens> {
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge!
-                                .copyWith(color: kGreyColor2)),
+                                .copyWith()),
                         const Icon(Icons.arrow_right)
                       ],
                     ),
@@ -155,11 +155,11 @@ class _EventsScreensState extends ConsumerState<EventsScreens> {
                       child: Container(
                         margin: EdgeInsets.only(bottom: 10),
                         width: double.infinity,
-                        decoration: const BoxDecoration(
-                          color: kTextWhiteColor,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).canvasColor,
                           boxShadow: [
                             BoxShadow(
-                              color: Color(0xFFF3F3F3),
+                              color: Theme.of(context).cardColor,
                               blurRadius: 1.0,
                               spreadRadius: 1.0,
                             ),
@@ -309,7 +309,8 @@ class _EventsScreensState extends ConsumerState<EventsScreens> {
                                           child: CircleAvatar(
                                             radius:
                                                 SizeConfig.heightMultiplier * 3,
-                                            backgroundColor: Colors.white,
+                                            backgroundColor:
+                                                Theme.of(context).canvasColor,
                                             child: CircleAvatar(
                                               radius:
                                                   SizeConfig.heightMultiplier *

@@ -189,108 +189,71 @@ class CustomCalendarState extends State<CustomCalendar> {
         const SizedBox(
           height: 10,
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 13),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: kGreyBGColor)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'ຈາກວັນທີ',
-                        textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Text(
-                        startDate != null
-                            ? DateFormatUtil.formatedm(startDate!, null)
-                            : '',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: Container(
-                  height: 50,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: kGreyBGColor)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'ຫາວັນທີ',
-                        textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Text(
-                        endDate != null
-                            ? DateFormatUtil.formatedm(endDate!, null)
-                            : '',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                ),
-              )
-              // Expanded(
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     crossAxisAlignment: CrossAxisAlignment.center,
-              //     children: <Widget>[
-              //       Text(
-              //         'ຈາກວັນທີ',
-              //         textAlign: TextAlign.left,
-              //         style: Theme.of(context).textTheme.bodyLarge,
-              //       ),
-              //       Text(
-              //         startDate != null
-              //             ? DateFormatUtil.formatedm(startDate!, null)
-              //             : '-------- ',
-              //         style: Theme.of(context).textTheme.bodyMedium,
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // Expanded(
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     crossAxisAlignment: CrossAxisAlignment.center,
-              //     children: <Widget>[
-              //       Text(
-              //         'ຫາວັນທີ',
-              //         textAlign: TextAlign.left,
-              //         style: Theme.of(context).textTheme.bodyLarge,
-              //       ),
-              //       Text(
-              //         endDate != null
-              //             ? DateFormatUtil.formatedm(endDate!, null)
-              //             : '-------- ',
-              //         style: Theme.of(context).textTheme.bodyMedium,
-              //       ),
-              //     ],
-              //   ),
-              // )
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 13),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       Expanded(
+        //         child: Container(
+        //           height: 50,
+        //           decoration: BoxDecoration(
+        //               color: Theme.of(context).cardColor,
+        //               borderRadius: BorderRadius.circular(10),
+        //               border: Border.all(color: kGreyBGColor)),
+        //           child: Column(
+        //             mainAxisAlignment: MainAxisAlignment.center,
+        //             crossAxisAlignment: CrossAxisAlignment.center,
+        //             children: <Widget>[
+        //               Text(
+        //                 'ຈາກວັນທີ',
+        //                 textAlign: TextAlign.left,
+        //                 style: Theme.of(context).textTheme.bodyLarge,
+        //               ),
+        //               Text(
+        //                 startDate != null
+        //                     ? DateFormatUtil.formatedm(startDate!, null)
+        //                     : '--------',
+        //                 style: Theme.of(context).textTheme.bodyMedium,
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       ),
+        //       const SizedBox(
+        //         width: 10,
+        //       ),
+        //       Expanded(
+        //         child: Container(
+        //           height: 50,
+        //           width: double.infinity,
+        //           decoration: BoxDecoration(
+        //               color: Theme.of(context).cardColor,
+        //               borderRadius: BorderRadius.circular(10),
+        //               border: Border.all(color: kGreyBGColor)),
+        //           child: Column(
+        //             mainAxisAlignment: MainAxisAlignment.center,
+        //             crossAxisAlignment: CrossAxisAlignment.center,
+        //             children: <Widget>[
+        //               Text(
+        //                 'ຫາວັນທີ',
+        //                 textAlign: TextAlign.left,
+        //                 style: Theme.of(context).textTheme.bodyLarge,
+        //               ),
+        //               Text(
+        //                 endDate != null
+        //                     ? DateFormatUtil.formatedm(endDate!, null)
+        //                     : '--------',
+        //                 style: Theme.of(context).textTheme.bodyMedium,
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       )
+
+        //     ],
+        //   ),
+        // ),
         const SizedBox(
           height: 10,
         ),
@@ -320,10 +283,6 @@ class CustomCalendarState extends State<CustomCalendar> {
           child: Center(
             child: Text(
               DateFormat('EEE', currentLocale).format(dateList[i]),
-              // style: const TextStyle(
-              //     fontSize: 15,
-              //     fontWeight: FontWeight.w500,
-              //     color: Color(0xFF7B8199)),
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
             ),
           ),

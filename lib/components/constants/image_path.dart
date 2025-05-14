@@ -52,7 +52,7 @@ class ImagePath {
   static const String iconReport = "assets/icons/report.png";
   static const String iconJob = "assets/icons/job.png";
   static const String iconMain = "assets/icons/main.png";
-  static const String iconComment = "assets/icons/comments.png";
+  static const String iconComment = "assets/icons/message.png";
   static const String iconDownload = "assets/icons/download.png";
   static const String iconLike = "assets/icons/like.png";
 

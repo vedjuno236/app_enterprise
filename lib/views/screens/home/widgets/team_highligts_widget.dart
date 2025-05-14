@@ -40,7 +40,6 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
         )
         .then((value) {
           ref.watch(teamHighlightsProvider).setNotificationModel(value: value);
-          logger.d(value);
         })
         .catchError((onError) {})
         .whenComplete(() => setState(() {

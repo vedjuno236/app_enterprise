@@ -85,6 +85,7 @@ dependencies:
   rive_animated_icon: ^2.0.5
   rive: ^0.13.20
   camera: ^0.11.1
+  pdfx: ^2.9.1
 
 flutter_launcher_icons:
   android: "launcher_icon"

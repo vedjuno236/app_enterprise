@@ -22,7 +22,6 @@ class NotifitionProvider with ChangeNotifier {
   DateTime? _startDate;
   DateTime? _endDate;
 
-  // Getters
   DateTime? get selectedMonth => _selectedMonth;
   String get selectedMonthText => _selectedMonthText;
   DateTime? get startDate => _startDate;

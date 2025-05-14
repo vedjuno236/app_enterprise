@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
@@ -9,7 +8,6 @@ import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
 import 'package:enterprise/views/widgets/text_input/custom_text_filed.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -131,12 +129,10 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                     .textTheme
                     .bodyMedium!
                     .copyWith(color: kBack87),
-                enabledCellsTextStyle: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: kBack87),
+                enabledCellsTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(),
                 enabledCellsDecoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
                 ),
@@ -145,7 +141,7 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                     .bodyMedium!
                     .copyWith(color: Color(0xFFE4E4E7)),
                 disabledCellsDecoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
                 ),
@@ -200,12 +196,14 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
     final selectedIndex = leaveHistoryNotifier.selectedIndex;
     final dataAPI = leaveHistoryNotifier;
 
-    int totalLeaveDays = 0;
-    // if (dataAPI.getallLeaveHistoryModel?.data != null) {
-    //   totalLeaveDays = dataAPI.getallLeaveHistoryModel!.data!
-    //       .where((item) => item.status == "APPROVED")
-    //       .fold(0, (sum, item) => sum + (item.totalDays ?? 0));
-    // }
+    double totalLeaveDays = 0.0;
+    if (dataAPI.getallLeaveHistoryModel?.data != null &&
+        dataAPI.getallLeaveHistoryModel!.data!.isNotEmpty) {
+      totalLeaveDays = dataAPI.getallLeaveHistoryModel!.data!
+          .where((item) => item.status == "APPROVED")
+          .fold<double>(
+              0.0, (sum, item) => sum + (item.totalDays?.toDouble() ?? 0.0));
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -695,25 +693,13 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
       backgroundColor: Theme.of(context).canvasColor,
       builder: (BuildContext context) {
         return FractionallySizedBox(
-            heightFactor: 0.5,
-            // initialChildSize: 0.6,
-            // minChildSize: 0.3,
-            // maxChildSize: 0.6,
-            // builder: (context, scrollController) {
-            // var dataStatus =
-            //     getItemColorAndIcon(leaveData.keyWord.toString());
-            // Color colorStatus = dataStatus['color'];
-            // String txt = dataStatus['txt'];
-            // var dataColor = getCheckStatus(leaveData.status.toString());
-            // var dataText = getCheckStatusUser(leaveData.status.toString());
-            // Color colorButton = dataColor['color'];
-            // String txtButton = dataText['txt'];
-
+            heightFactor: 0.6,
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Theme.of(context).canvasColor,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(16)),
               ),
               child: SingleChildScrollView(
                 // controller: scrollController,
@@ -850,7 +836,7 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                           leaveData.approvedBy!.isNotEmpty) ...[
                         Container(
                           decoration: BoxDecoration(
-                            color: kTextWhiteColor,
+                            color: Theme.of(context).canvasColor,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Padding(
@@ -859,7 +845,6 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 ...leaveData.approvedBy!.map((approver) {
-                                  // Determine status text and color
                                   final statusText =
                                       approver.status == "APPROVED"
                                           ? Strings.txtApproved.tr
@@ -867,12 +852,12 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                                               ? Strings.txtRejected.tr
                                               : Strings.txtWaiting.tr;
 
-                                  final statusColor = approver.status ==
-                                          "APPROVED"
-                                      ? Colors.green
-                                      : approver.status == "REJECTED"
-                                          ? Colors.red
-                                          : Colors.orange; // Color for PENDING
+                                  final statusColor =
+                                      approver.status == "APPROVED"
+                                          ? Colors.green
+                                          : approver.status == "REJECTED"
+                                              ? Colors.red
+                                              : Colors.orange;
 
                                   final updatedAt = leaveData.updatedAt != null
                                       ? DateFormatUtil.formatddMMy(

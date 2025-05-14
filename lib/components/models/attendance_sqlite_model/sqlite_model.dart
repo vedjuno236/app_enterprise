@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class SQLiteModel {
   final int? id;

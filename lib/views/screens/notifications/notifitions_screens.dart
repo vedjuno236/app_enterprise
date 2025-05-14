@@ -1551,6 +1551,7 @@ class _NotifitionsNewScreensState
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         builder: (BuildContext context) {
+          
           return DraggableScrollableSheet(
               initialChildSize: 0.9,
               minChildSize: 0.3,
@@ -1566,7 +1567,7 @@ class _NotifitionsNewScreensState
                   decoration: BoxDecoration(
                     color: Theme.of(context).canvasColor,
                     borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(16)),
+                     const    BorderRadius.vertical(top: Radius.circular(16)),
                   ),
                   child: SingleChildScrollView(
                     controller: scrollController,

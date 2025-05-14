@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'package:enterprise/components/constants/key_shared.dart';
-import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/poviders/location_provider/location_provider.dart';
 import 'package:enterprise/components/router/router.dart';
 import 'package:enterprise/components/utils/dialogs.dart';
 import 'package:enterprise/components/utils/dio_exceptions.dart';
 import 'package:enterprise/views/screens/home/widgets/box_checkIn_widgets.dart';
-import 'package:enterprise/views/screens/home/widgets/coming_events_widget.dart';
 import 'package:enterprise/views/screens/home/widgets/function_widget.dart';
 import 'package:enterprise/views/screens/home/widgets/headerProfile_widget.dart';
 import 'package:enterprise/views/screens/home/widgets/team_highligts_widget.dart';
@@ -49,8 +47,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         .callUserInfos(token: sharedPrefs.getStringNow(KeyShared.keyToken))
         .then((value) {
       ref.watch(stateUserProvider).setUserModel(value: value);
-
-      logger.d(value);
     }).catchError((onError) {
       errorDialog(
         context: context,
@@ -337,36 +333,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           const TeamHighlightsWidget(),
                         ] else
                           const SizedBox.shrink(),
-                        SizedBox(height: SizeConfig.heightMultiplier * 2),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              Strings.txtEvents.tr,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .copyWith(
-                                      fontSize: SizeConfig.textMultiplier * 2),
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  Strings.txtSeeAll.tr,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge!
-                                      .copyWith(
-                                          fontSize:
-                                              SizeConfig.textMultiplier * 2),
-                                ),
-                                const Icon(Icons.arrow_right)
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: SizeConfig.heightMultiplier * 2),
-                        const ComingEventsWidget(),
+                        // SizedBox(height: SizeConfig.heightMultiplier * 2),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     Text(
+                        //       Strings.txtEvents.tr,
+                        //       style: Theme.of(context)
+                        //           .textTheme
+                        //           .titleLarge!
+                        //           .copyWith(
+                        //               fontSize: SizeConfig.textMultiplier * 2),
+                        //     ),
+                        //     Row(
+                        //       children: [
+                        //         Text(
+                        //           Strings.txtSeeAll.tr,
+                        //           style: Theme.of(context)
+                        //               .textTheme
+                        //               .titleLarge!
+                        //               .copyWith(
+                        //                   fontSize:
+                        //                       SizeConfig.textMultiplier * 2),
+                        //         ),
+                        //         const Icon(Icons.arrow_right)
+                        //       ],
+                        //     ),
+                        //   ],
+                        // ),
+                        // SizedBox(height: SizeConfig.heightMultiplier * 2),
+                        // const ComingEventsWidget(),
                         // SizedBox(height: SizeConfig.heightMultiplier * 2),
                         // if (roleName == "HR")
                         //   const HomeHrScreen()

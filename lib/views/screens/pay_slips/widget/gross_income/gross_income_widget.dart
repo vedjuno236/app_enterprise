@@ -31,7 +31,7 @@ class _GrossIncomeWidgetState extends ConsumerState<GrossIncomeWidget> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).canvasColor,
         borderRadius: BorderRadius.circular(20),
       ),
       padding: EdgeInsets.only(

@@ -33,9 +33,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Your camera is needed to capture photos.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Your location is needed to show your position on the map.</string>
+	<string>We need your location to verify your check-in.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location is needed to show your position on the map.</string>
+	<string>We need your location to verify your check-in.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Your microphone is needed for audio recording.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

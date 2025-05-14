@@ -179,7 +179,7 @@ class _PoliciesScreensState extends ConsumerState<PoliciesScreens> {
                         SizedBox(height: SizeConfig.heightMultiplier * 1),
                         CircleAvatar(
                           radius: 40,
-                          backgroundColor: kTextWhiteColor,
+                          backgroundColor: kGary,
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: CachedNetworkImage(

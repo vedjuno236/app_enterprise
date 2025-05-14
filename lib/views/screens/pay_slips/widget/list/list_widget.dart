@@ -42,7 +42,7 @@ class ListWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).canvasColor,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(),
@@ -63,15 +63,11 @@ class ListWidget extends StatelessWidget {
         ),
         title: Text(
           title,
-          style:
-              Theme.of(context).textTheme.bodyLarge!.copyWith(color: kBack87),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
         ),
         subtitle: Text(
           description,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium!
-              .copyWith(color: kTextGrey),
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
         ),
         trailing: Column(
           crossAxisAlignment: CrossAxisAlignment.end,

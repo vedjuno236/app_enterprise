@@ -40,7 +40,6 @@ class _BarChart extends StatelessWidget {
               ),
             );
           },
-          
         ),
       );
 

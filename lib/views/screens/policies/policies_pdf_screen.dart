@@ -1,18 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:enterprise/components/constants/colors.dart';
 import 'package:enterprise/components/poviders/policy_provider/policy_provider.dart';
+import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/views/widgets/appbar/appbar_widget.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
+import 'package:pdfx/pdfx.dart';
 
-import '../../../components/constants/colors.dart';
 import '../../../components/constants/image_path.dart';
 import '../../../components/constants/strings.dart';
 import '../../../components/services/api_service/enterprise_service.dart';
-import '../../../components/styles/size_config.dart';
+import 'package:flutter/services.dart' show NetworkAssetBundle, Uint8List;
 
 class PoliciesPdfScreen extends ConsumerStatefulWidget {
   final int? typeID;
@@ -49,7 +51,7 @@ class _PoliciesPdfScreenState extends ConsumerState<PoliciesPdfScreen> {
         flexibleSpace: const AppbarWidget(),
         title: Text(
           Strings.txtPolicy.tr,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(),
         ).animate().scaleXY(
             begin: 0,
             end: 1,
@@ -58,67 +60,6 @@ class _PoliciesPdfScreenState extends ConsumerState<PoliciesPdfScreen> {
             curve: Curves.easeInOutCubic),
         // systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
-      // appBar: AppBar(
-      //   iconTheme: const IconThemeData(color: kBack),
-      //   backgroundColor: Colors.transparent,
-      //   elevation: 0,
-      //   flexibleSpace: Container(
-      //     decoration: BoxDecoration(
-      //       gradient: LinearGradient(
-      //         begin: Alignment.topLeft,
-      //         end: Alignment.bottomRight,
-      //         colors: kYellowGradientAppbarColors,
-      //       ),
-      //     ),
-      //   ),
-      //   // systemOverlayStyle: SystemUiOverlayStyle.dark,
-      //   title: Text(
-      //     "${widget.typeName} ${Strings.txtPolicy.tr} ".toLowerCase(),
-      //     style: Theme.of(context).textTheme.titleLarge!.copyWith(
-      //           fontSize: SizeConfig.textMultiplier * 2,
-      //         ),
-      //   ),
-      //   actions: [
-      //     GestureDetector(
-      //       onTap: () {},
-      //       child: Padding(
-      //         padding: const EdgeInsets.only(right: 20),
-      //         child: Stack(
-      //           clipBehavior: Clip.none,
-      //           children: [
-      //             Container(
-      //               padding: const EdgeInsets.all(10),
-      //               decoration: const BoxDecoration(
-      //                 color: kTextBack,
-      //                 shape: BoxShape.circle,
-      //               ),
-      //               child: Image.asset(ImagePath.iconComment),
-      //             ),
-      //             Positioned(
-      //               right: 0,
-      //               top: -4,
-      //               child: Container(
-      //                 padding: const EdgeInsets.all(4),
-      //                 decoration: const BoxDecoration(
-      //                   color: kRedColor,
-      //                   shape: BoxShape.circle,
-      //                 ),
-      //                 child: const Text(
-      //                   '',
-      //                   style: TextStyle(
-      //                     color: kYellowFirstColor,
-      //                     fontSize: 12,
-      //                     fontWeight: FontWeight.bold,
-      //                   ),
-      //                 ),
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
       body: policyProvider.getPolicyModel == null
           ? const Center(
               child: CupertinoActivityIndicator(
@@ -132,72 +73,126 @@ class _PoliciesPdfScreenState extends ConsumerState<PoliciesPdfScreen> {
                   itemCount: policyProvider.getPolicyModel!.data!.length,
                   itemBuilder: (context, index) {
                     final policy = policyProvider.getPolicyModel!.data![index];
+                    final fileUrl = policy.policyFile!;
+                    final fileExtension = fileUrl.split('.').last.toLowerCase();
 
                     return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CachedNetworkImage(
-                          imageUrl: policy.policyFile!,
-                          fit: BoxFit.cover,
-                        )
+                        if (fileExtension == 'pdf') ...[
+                          SizedBox(
+                            height: SizeConfig.heightMultiplier * 100,
+                            child: FutureBuilder<Uint8List>(
+                              future: NetworkAssetBundle(Uri.parse(fileUrl))
+                                  .load(fileUrl)
+                                  .then((byteData) =>
+                                      byteData.buffer.asUint8List()),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                      child: LoadingPlatformV2(
+                                    size: 100,
+                                  ));
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                      child: Text(
+                                    'ບໍ່ມີຂໍ້ມູນ',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ));
+                                } else {
+                                  final bytes = snapshot.data!;
+                                  final document = PdfDocument.openData(bytes);
+                                  final controller =
+                                      PdfControllerPinch(document: document);
+
+                                  return PdfViewPinch(controller: controller);
+                                }
+                              },
+                            ),
+                          ),
+                        ] else if (['jpg', 'jpeg', 'png', 'webp']
+                            .contains(fileExtension)) ...[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                10,
+                              ),
+                              child: CachedNetworkImage(
+                                imageUrl: fileUrl,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              ),
+                            ),
+                          ),
+                        ] else ...[
+                          Center(
+                              child: Text(
+                            'ບໍ່ມີຂໍ້ມູນ',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ))
+                        ],
                       ],
                     );
-                  },
-                ),
+                  }),
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed, // Ensures proper alignment
+        // backgroundColor: const Color(0xFFF1F1F1),
+        backgroundColor: Theme.of(context).cardColor,
+
+        type: BottomNavigationBarType.fixed,
+
+        unselectedLabelStyle: TextStyle(
+          fontSize: SizeConfig.textMultiplier * 1.8,
+        ),
+        selectedLabelStyle: TextStyle(
+          fontSize: SizeConfig.textMultiplier * 1,
+          fontWeight: FontWeight.bold,
+        ),
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: GestureDetector(
-              onTap: () {},
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                // Centers the content
-                children: [
-                  Image.asset(
-                    ImagePath.iconLike,
-                    width: 20,
-                    height: 20,
-                  ),
-                  SizedBox(height: 5), // Space between icon and label
-                  Text('Like'), // Add label text
-                ],
-              ),
-            ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
             icon: Column(
-              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  ImagePath.iconComment,
-                  width: 20,
-                  height: 20,
+                  ImagePath.iconLike,
+                  color: Theme.of(context).iconTheme.color,
+                  height: SizeConfig.imageSizeMultiplier * 6,
+                  width: SizeConfig.imageSizeMultiplier * 6,
                 ),
-                SizedBox(height: 5),
-                Text('Comment'), // Add label text
               ],
             ),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: GestureDetector(
-              onTap: () {},
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    ImagePath.iconDownload,
-                    width: 20,
-                    height: 20,
-                  ),
-                  const SizedBox(height: 5),
-                  const Text('Download'), // Add label text
-                ],
-              ),
+            icon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  ImagePath.iconComment,
+                  color: Theme.of(context).iconTheme.color,
+                  height: SizeConfig.imageSizeMultiplier * 6,
+                  width: SizeConfig.imageSizeMultiplier * 6,
+                ),
+              ],
+            ),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  ImagePath.iconDownload,
+                  color: Theme.of(context).iconTheme.color,
+                  height: SizeConfig.imageSizeMultiplier * 6,
+                  width: SizeConfig.imageSizeMultiplier * 6,
+                ),
+              ],
             ),
             label: '',
           ),
