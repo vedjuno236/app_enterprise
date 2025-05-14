@@ -108,15 +108,15 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
 
     // Check if a leave type is selected
     if (leaveProvider.selectedLeaveType == null) {
-      Fluttertoast.showToast(
-        msg: Strings.txtSelectLeave.tr,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: kRedColor,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+      // Fluttertoast.showToast(
+      //   msg: Strings.txtSelectLeave.tr,
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.CENTER,
+      //   timeInSecForIosWeb: 1,
+      //   backgroundColor: kRedColor,
+      //   textColor: Colors.white,
+      //   fontSize: 16.0,
+      // );
 
       return;
     }
@@ -125,15 +125,15 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
         .firstWhereOrNull((e) => e.keyWord == leaveProvider.selectedLeaveType);
 
     if (selectedLeaveType == null) {
-      Fluttertoast.showToast(
-        msg: Strings.txtSelectLeave.tr,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: kRedColor,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+      // Fluttertoast.showToast(
+      //   msg: Strings.txtSelectLeave.tr,
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.CENTER,
+      //   timeInSecForIosWeb: 1,
+      //   backgroundColor: kRedColor,
+      //   textColor: Colors.white,
+      //   fontSize: 16.0,
+      // );
 
       return;
     }
@@ -256,6 +256,8 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
           );
         });
   }
+
+  bool _validate = false;
 
   AppState state = AppState.free;
   @override
@@ -751,6 +753,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                   .textTheme
                                   .bodyLarge!
                                   .copyWith(),
+                          errorText: _validate ? "ກະລຸນາເລືອກວັນທີກ່ອນ" : null,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return null;
@@ -1587,8 +1590,29 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
             onTap: () async {
+              if (leaveProvider.selectedLeaveType == null) {
+                Fluttertoast.showToast(
+                  msg: Strings.txtSelectLeave.tr,
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: kRedColor,
+                  textColor: Colors.white,
+                  fontSize: 16.0,
+                );
+
+                return;
+              }
+              if (startDate == null || endDate == null) {
+                setState(() {
+                  _validate = true;
+                });
+                return;
+              }
+
               setState(() {
                 isLoading = true;
+                _validate = false;
               });
               await submitForm(ref);
               setState(() {
@@ -1598,7 +1622,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
               leaveNotifier.endTimeController.clear();
               leaveNotifier.accordingController.clear();
               leaveProvider.clearImage();
-              leaveProvider.selectedLeaveType = null;
+              // leaveProvider.selectedLeaveType = null;
             },
             child: Container(
               width: SizeConfig.widthMultiplier * 100,

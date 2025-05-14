@@ -18,15 +18,12 @@ import 'package:enterprise/views/widgets/appbar/appbar_widget.dart';
 import 'package:enterprise/views/widgets/date_month_year/shared/month_picker.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -53,40 +50,50 @@ class _NotifitionsNewScreensState
   bool isLoadingLeave = false;
 
   Future fetchNotificationApi() async {
-    // ຍ້ອນຫລັງ 10 วัน
-    DateTime now = DateTime.now();
-    DateTime twoWeeksAgo = now.subtract(const Duration(days: 10));
+    final dateProvider = ref.read(stateNotifitionProvider);
+    DateTime? startDate = dateProvider.startDate;
+    DateTime? endDate = dateProvider.endDate;
 
-    final lastDayOfWeek =
-        now.add(Duration(days: DateTime.daysPerWeek - now.weekday));
-    String thisweek = DateFormat('yyyy-MM-dd').format(lastDayOfWeek);
-    final nextWeekEnd = lastDayOfWeek.add(const Duration(days: 7));
-    logger.d(thisweek);
+    String formattedStartDate;
+    String formattedEndDate;
+    if (startDate == null || endDate == null) {
+      DateTime now = DateTime.now();
+      DateTime twoWeeksAgo = now.subtract(const Duration(days: 10));
+      final lastDayOfWeek =
+          now.add(Duration(days: DateTime.daysPerWeek - now.weekday));
+      final nextWeekEnd = lastDayOfWeek.add(const Duration(days: 7));
 
-    String formattedTwoWeeksAgo = DateFormat('yyyy-MM-dd').format(twoWeeksAgo);
-    String nextweek = DateFormat('yyyy-MM-dd').format(nextWeekEnd);
+      formattedStartDate = DateFormat('yyyy-MM-dd').format(twoWeeksAgo);
+      formattedEndDate = DateFormat('yyyy-MM-dd').format(nextWeekEnd);
+    } else {
+      formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate);
+      formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate);
+    }
 
     setState(() {
       isLoading = true;
     });
 
-    EnterpriseAPIService()
-        .callNotification(
-      token: sharedPrefs.getStringNow(KeyShared.keyToken),
-      start_date: formattedTwoWeeksAgo,
-      end_date: nextweek,
-    )
-        .then((value) {
-      ref.watch(stateNotifitionProvider).setNotificationModel(value: value);
-      // logger.d(value);
-    }).catchError((onError) {
+    try {
+      final value = await EnterpriseAPIService().callNotification(
+        token: sharedPrefs.getStringNow(KeyShared.keyToken),
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+      );
+
+      ref
+          .read(stateNotifitionProvider.notifier)
+          .setNotificationModel(value: value);
+    } catch (onError) {
       errorDialog(
         context: context,
         onError: onError,
       );
-    }).whenComplete(() => setState(() {
-              isLoading = false;
-            }));
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   Future fetchAllLeaveApi() async {
@@ -123,11 +130,19 @@ class _NotifitionsNewScreensState
   @override
   void initState() {
     super.initState();
-    fetchAllLeaveApi();
-    fetchNotificationApi();
+    Future.microtask(() {
+      ref.read(stateNotifitionProvider).selectedMonth = DateTime.now();
+
+      fetchAllLeaveApi();
+      fetchNotificationApi();
+    });
   }
 
-  DateTime selectedMonth = DateTime.now();
+  @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
+  }
 
   Future showDateDialog(
     BuildContext context,
@@ -135,6 +150,9 @@ class _NotifitionsNewScreensState
   ) async {
     final dateProvider = ref.read(stateNotifitionProvider);
     DateTime initialDate = dateProvider.selectedMonth ?? DateTime.now();
+    DateTime? selectedMonth = DateTime.now();
+    DateTime now = DateTime.now();
+    DateTime maxDate = DateTime(now.year, now.month + 1, 0);
 
     showDialog(
       context: context,
@@ -142,7 +160,7 @@ class _NotifitionsNewScreensState
         return AlertDialog(
           elevation: 2,
           shadowColor: kYellowFirstColor,
-          backgroundColor: kTextWhiteColor,
+          backgroundColor: Theme.of(context).canvasColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
@@ -150,41 +168,48 @@ class _NotifitionsNewScreensState
             height: 300,
             width: 450,
             child: MonthPicker(
-              selectedCellDecoration: const BoxDecoration(
-                color: kYellowFirstColor,
-                shape: BoxShape.circle,
-              ),
+              splashRadius: 10,
+              selectedCellDecoration: BoxDecoration(
+                  color: kYellowFirstColor,
+                  borderRadius: BorderRadius.circular(12)),
               selectedCellTextStyle: Theme.of(context)
                   .textTheme
-                  .bodySmall!
+                  .bodyMedium!
                   .copyWith(color: kBack87),
               enabledCellsTextStyle: Theme.of(context)
                   .textTheme
-                  .bodySmall!
+                  .bodyMedium!
                   .copyWith(color: kBack87),
+              enabledCellsDecoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+              ),
               disabledCellsTextStyle: Theme.of(context)
                   .textTheme
-                  .bodySmall!
-                  .copyWith(color: kGreyColor2),
+                  .bodyMedium!
+                  .copyWith(color: Color(0xFFE4E4E7)),
+              disabledCellsDecoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+              ),
               currentDateTextStyle: Theme.of(context)
                   .textTheme
-                  .bodySmall!
+                  .bodyMedium!
                   .copyWith(color: kBack87),
               currentDateDecoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(width: 1, color: kBack87),
-              ),
+                  border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+                  borderRadius: BorderRadius.circular(12)),
               splashColor: kYellowFirstColor,
               slidersColor: kBack,
               centerLeadingDate: true,
               minDate: DateTime(2000),
-              maxDate: DateTime(2030),
+              maxDate: maxDate,
               currentDate: initialDate,
               selectedDate: initialDate,
               onDateSelected: (month) {
-                setState(() {
-                  selectedMonth = month;
-                });
+                selectedMonth = month;
               },
             ),
           ),
@@ -203,9 +228,17 @@ class _NotifitionsNewScreensState
                 backgroundColor: kYellowFirstColor,
               ),
               onPressed: () {
-                ref.read(stateNotifitionProvider.notifier).selectedMonth =
-                    selectedMonth;
-
+                if (selectedMonth != null) {
+                  ref.read(stateNotifitionProvider.notifier).selectedMonth =
+                      selectedMonth;
+                  logger.d(
+                    "Start Date: ${ref.read(stateNotifitionProvider).startDate}, "
+                    "End Date: ${ref.read(stateNotifitionProvider).endDate}",
+                  );
+                  fetchNotificationApi();
+                } else {
+                  logger.d("No month selected");
+                }
                 context.pop();
               },
               child: Text(Strings.txtOkay.tr),
@@ -278,7 +311,7 @@ class _NotifitionsNewScreensState
                           fontSize: SizeConfig.textMultiplier * 1.9,
                           color: const Color(0xFF99A1BE),
                         ),
-                    text: "Approvals",
+                    text: Strings.txtApprovals.tr,
                     children: [
                       TextSpan(
                         text: '($totalLeaveDaysHR requests)',
@@ -293,7 +326,8 @@ class _NotifitionsNewScreensState
                       .scale(duration: 600.ms, alignment: Alignment.centerLeft),
                   const SizedBox(height: 20),
                   notiProvider.getNotificationModel == null
-                      ? Expanded(child: Center(child: _buildShimmerItem()))
+                      ? Expanded(
+                          child: Center(child: _buildShimmerItem(context)))
                       : notiProvider.getNotificationModel!.data!.isEmpty
                           ? Center(
                               child: Image.asset(ImagePath.imgIconCreateAcc))
@@ -369,15 +403,6 @@ class _NotifitionsNewScreensState
                                                 Stack(
                                                   clipBehavior: Clip.none,
                                                   children: [
-                                                    // CircleAvatar(
-                                                    //   radius: SizeConfig
-                                                    //           .imageSizeMultiplier *
-                                                    //       9.5,
-                                                    //   backgroundImage:
-                                                    //       NetworkImage(
-                                                    //           data.profile ??
-                                                    //               ''),
-                                                    // ),
                                                     ClipOval(
                                                       child: CachedNetworkImage(
                                                         imageUrl: data.profile !=
@@ -759,7 +784,8 @@ class _NotifitionsNewScreensState
                       curve: Curves.easeInOutCubic),
                   const SizedBox(height: 10),
                   dataAPI.getallLeaveHistoryModel == null
-                      ? Expanded(child: Center(child: _buildShimmerItem()))
+                      ? Expanded(
+                          child: Center(child: _buildShimmerItem(context)))
                       : dataAPI.getallLeaveHistoryModel!.data!.isEmpty ?? true
                           ? Center(
                               child: Image.asset(ImagePath.imgIconCreateAcc))
@@ -1098,7 +1124,7 @@ class _NotifitionsNewScreensState
     return showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: Colors.transparent,
         builder: (BuildContext context) {
           return DraggableScrollableSheet(
               initialChildSize: 0.9,
@@ -1523,7 +1549,7 @@ class _NotifitionsNewScreensState
     return showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: Colors.transparent,
         builder: (BuildContext context) {
           return DraggableScrollableSheet(
               initialChildSize: 0.9,
@@ -2644,7 +2670,7 @@ class _NotifitionsNewScreensState
   }
 }
 
-Widget _buildShimmerItem() {
+Widget _buildShimmerItem(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
     child: SingleChildScrollView(
@@ -2657,7 +2683,7 @@ Widget _buildShimmerItem() {
                 width: double.infinity,
                 height: SizeConfig.heightMultiplier * 10,
                 decoration: BoxDecoration(
-                  color: kGary,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -2666,7 +2692,7 @@ Widget _buildShimmerItem() {
                 width: double.infinity,
                 height: SizeConfig.heightMultiplier * 10,
                 decoration: BoxDecoration(
-                  color: kGary,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -2675,7 +2701,7 @@ Widget _buildShimmerItem() {
                 width: double.infinity,
                 height: SizeConfig.heightMultiplier * 10,
                 decoration: BoxDecoration(
-                  color: kGary,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -2684,7 +2710,7 @@ Widget _buildShimmerItem() {
                 width: double.infinity,
                 height: SizeConfig.heightMultiplier * 10,
                 decoration: BoxDecoration(
-                  color: kGary,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -2693,7 +2719,7 @@ Widget _buildShimmerItem() {
                 width: double.infinity,
                 height: SizeConfig.heightMultiplier * 10,
                 decoration: BoxDecoration(
-                  color: kGary,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -2702,7 +2728,7 @@ Widget _buildShimmerItem() {
                 width: double.infinity,
                 height: SizeConfig.heightMultiplier * 10,
                 decoration: BoxDecoration(
-                  color: kGary,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -2711,7 +2737,7 @@ Widget _buildShimmerItem() {
                 width: double.infinity,
                 height: SizeConfig.heightMultiplier * 10,
                 decoration: BoxDecoration(
-                  color: kGary,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -2720,7 +2746,7 @@ Widget _buildShimmerItem() {
                 width: double.infinity,
                 height: SizeConfig.heightMultiplier * 10,
                 decoration: BoxDecoration(
-                  color: kGary,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -2729,7 +2755,7 @@ Widget _buildShimmerItem() {
                 width: double.infinity,
                 height: SizeConfig.heightMultiplier * 10,
                 decoration: BoxDecoration(
-                  color: kGary,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),

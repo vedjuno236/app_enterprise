@@ -10,12 +10,6 @@ final stateNotifitionProvider =
 });
 
 class NotifitionProvider with ChangeNotifier {
-  int? _selectedIndex;
-  int? get selectedIndex => _selectedIndex;
-  set selectedIndex(int? value) {
-    _selectedIndex = value;
-    notifyListeners();
-  }
   NotificationModel? _notificationModel;
   NotificationModel? get getNotificationModel => _notificationModel;
   Future setNotificationModel({value}) async {
@@ -23,36 +17,26 @@ class NotifitionProvider with ChangeNotifier {
     notifyListeners();
   }
 
-   DateTime? _selectedMonth;
-
+  DateTime? _selectedMonth;
   String _selectedMonthText = Strings.txtThisMonth;
+  DateTime? _startDate;
+  DateTime? _endDate;
 
   // Getters
   DateTime? get selectedMonth => _selectedMonth;
-
   String get selectedMonthText => _selectedMonthText;
+  DateTime? get startDate => _startDate;
+  DateTime? get endDate => _endDate;
 
-  // Setters
   set selectedMonth(DateTime? month) {
-    _selectedMonth = month;
-    // _selectedMonthText = DateFormat.MMMM().format(month!);
-    _selectedMonthText = DateFormatUtil.formatM(month!);
-    notifyListeners();
+    if (month != null) {
+      _selectedMonth = month;
+      _selectedMonthText = DateFormatUtil.formatM(month);
+      _startDate = DateTime(month.year, month.month, 1);
+      _endDate =
+          DateTime(month.year, month.month + 1, 1).subtract(Duration(days: 1));
+      notifyListeners();
+    }
   }
 }
 
-
-
-final teamHighlightsProvider = ChangeNotifierProvider<TeamHighlightsNotifier>((ref) {
-  return TeamHighlightsNotifier();
-});
-
-class TeamHighlightsNotifier with ChangeNotifier {
-  NotificationModel? _notificationModel;
-  NotificationModel? get getNotificationModel => _notificationModel;
-
-  Future<void> setNotificationModel({required dynamic value}) async {
-    _notificationModel = NotificationModel.fromJson(value);
-    notifyListeners();
-  }
-}

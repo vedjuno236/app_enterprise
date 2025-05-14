@@ -3,11 +3,13 @@ import 'package:enterprise/components/constants/image_path.dart';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:enterprise/components/poviders/leave_provider/leave_history_provider/leave_histoy_provider.dart';
+import 'package:enterprise/components/poviders/leave_provider/leave_onLeave_provider/leave_onleave_provider.dart';
 import 'package:enterprise/components/poviders/notifition_provider/notifition_provider.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
 import 'package:enterprise/components/utils/date_format_utils.dart';
 import 'package:enterprise/components/utils/dialogs.dart';
 import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
+import 'package:enterprise/views/widgets/date_month_year/shared/month_picker.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -78,7 +81,7 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
       end_date: endDate,
     )
         .then((value) {
-      ref.watch(stateNotifitionProvider).setNotificationModel(value: value);
+      ref.watch(onLeaveProvider).setNotificationModel(value: value);
       logger.d(value);
     }).catchError((onError) {
       errorDialog(
@@ -94,10 +97,16 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
   void initState() {
     super.initState();
     initializeDates();
-    final initialIndex = ref.read(leaveHistoryProvider).selectedIndexleave;
+    final initialIndex = ref.read(onLeaveProvider).selectedIndexleave;
     final startDate = categories[initialIndex]['startDate']!;
     final endDate = categories[initialIndex]['endDate']!;
     fetchNotificationApi(startDate: startDate, endDate: endDate);
+  }
+
+  @override
+  void dispose() {
+    // ref.read(onLeaveProvider.notifier).resetSelectedMonth();
+    super.dispose();
   }
 
   void initializeDates() {
@@ -173,10 +182,115 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
     ];
   }
 
+  Future showDateDialog(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final dateProvider = ref.read(onLeaveProvider);
+    DateTime initialDate = dateProvider.selectedMonth ?? DateTime.now();
+    DateTime? selectedMonth = DateTime.now();
+    DateTime now = DateTime.now();
+    DateTime maxDate = DateTime(now.year, now.month + 1, 0);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          elevation: 2,
+          shadowColor: kYellowFirstColor,
+          backgroundColor: Theme.of(context).canvasColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          content: SizedBox(
+            height: 300,
+            width: 450,
+            child: MonthPicker(
+              splashRadius: 10,
+              selectedCellDecoration: BoxDecoration(
+                  color: kYellowFirstColor,
+                  borderRadius: BorderRadius.circular(12)),
+              selectedCellTextStyle: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(color: kBack87),
+              enabledCellsTextStyle: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(color: kBack87),
+              enabledCellsDecoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+              ),
+              disabledCellsTextStyle: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(color: Color(0xFFE4E4E7)),
+              disabledCellsDecoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+              ),
+              currentDateTextStyle: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(color: kBack87),
+              currentDateDecoration: BoxDecoration(
+                  border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+                  borderRadius: BorderRadius.circular(12)),
+              splashColor: kYellowFirstColor,
+              slidersColor: kBack,
+              centerLeadingDate: true,
+              minDate: DateTime(2000),
+              maxDate: maxDate,
+              currentDate: initialDate,
+              selectedDate: initialDate,
+              onDateSelected: (month) {
+                selectedMonth = month;
+              },
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () => context.pop(),
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                backgroundColor: kGary,
+              ),
+              child: Text(Strings.txtCancel.tr),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                backgroundColor: kYellowFirstColor,
+              ),
+              onPressed: () {
+                if (selectedMonth != null) {
+                  final provider = ref.read(onLeaveProvider.notifier);
+                  provider.selectedMonth = selectedMonth;
+
+                  fetchNotificationApi(
+                    startDate:
+                        DateFormat('yyyy-MM-dd').format(provider.startDate),
+                    endDate: DateFormat('yyyy-MM-dd').format(provider.endDate),
+                  );
+                  provider.clearSelectedIndex();
+                } else {}
+                context.pop();
+              },
+              child: Text(Strings.txtOkay.tr),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget build(BuildContext context) {
-    final leaveHistoryNotifier = ref.watch(leaveHistoryProvider);
+    final leaveHistoryNotifier = ref.watch(onLeaveProvider);
     final selectedIndex = leaveHistoryNotifier.selectedIndexleave;
-    final dataAPI = ref.watch(stateNotifitionProvider);
+    final dataAPI = ref.watch(onLeaveProvider);
 
     return Scaffold(
         appBar: AppBar(
@@ -189,13 +303,21 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
           ),
           systemOverlayStyle: SystemUiOverlayStyle.dark,
           actions: [
+            Text(leaveHistoryNotifier.selectedMonth == null
+                ? ''
+                : leaveHistoryNotifier.selectedMonthText),
+            const SizedBox(
+              width: 10,
+            ),
             Padding(
               padding: const EdgeInsets.only(right: 20),
               child: Column(
                 mainAxisSize: MainAxisSize.min, // Minimize Column height
                 children: [
                   GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        showDateDialog(context, ref);
+                      },
                       child: CircleAvatar(
                           radius: 20,
                           backgroundColor: kTextWhiteColor,
@@ -228,7 +350,7 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                           child: InkWell(
                             onTap: () {
                               ref
-                                  .read(leaveHistoryProvider.notifier)
+                                  .read(onLeaveProvider.notifier)
                                   .updateSelectedIndexOnleave(index);
                               fetchNotificationApi(
                                   startDate: item['startDate'],

@@ -148,7 +148,7 @@ class AlertSuccessDialog extends StatelessWidget {
                 height: SizeConfig.heightMultiplier * 4,
                 child: Center(
                   child: Text(
-                    Strings.txtOkay,
+                    Strings.txtOkay.tr,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontSize: SizeConfig.textMultiplier * 1.9,
                         ),

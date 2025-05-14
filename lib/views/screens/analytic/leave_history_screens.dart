@@ -104,6 +104,8 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
   void showDatePickerDialog(BuildContext context, bool isMonthPicker) {
     final dateProvider = ref.read(leaveHistoryProvider);
     DateTime initialDate = dateProvider.selectedMonth ?? DateTime.now();
+    DateTime now = DateTime.now();
+    DateTime maxDate = DateTime(now.year, now.month + 1, 0);
 
     showDialog(
       context: context,
@@ -111,7 +113,7 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
         return AlertDialog(
           elevation: 2,
           shadowColor: kYellowFirstColor,
-          backgroundColor: kTextWhiteColor,
+          backgroundColor: Theme.of(context).canvasColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
@@ -119,36 +121,48 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
               height: 300,
               width: 450,
               child: MonthPicker(
-                selectedCellDecoration: const BoxDecoration(
-                  color: kYellowFirstColor,
-                  shape: BoxShape.circle,
-                ),
+                splashRadius: 10,
+                selectedCellDecoration: BoxDecoration(
+                    color: kYellowFirstColor,
+                    borderRadius: BorderRadius.circular(12)
+                    // shape: BoxShape.circle,
+                    ),
                 selectedCellTextStyle: Theme.of(context)
                     .textTheme
-                    .labelSmall!
-                    .copyWith(color: kTextWhiteColor),
+                    .bodyMedium!
+                    .copyWith(color: kBack87),
                 enabledCellsTextStyle: Theme.of(context)
                     .textTheme
-                    .labelSmall!
+                    .bodyMedium!
                     .copyWith(color: kBack87),
+                enabledCellsDecoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+                ),
                 disabledCellsTextStyle: Theme.of(context)
                     .textTheme
-                    .labelSmall!
-                    .copyWith(color: kGary),
+                    .bodyMedium!
+                    .copyWith(color: Color(0xFFE4E4E7)),
+                disabledCellsDecoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+                ),
                 currentDateTextStyle: Theme.of(context)
                     .textTheme
-                    .labelSmall!
-                    .copyWith(color: kYellowColor),
+                    .bodyMedium!
+                    .copyWith(color: kBack87),
                 currentDateDecoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(width: 1, color: kYellowColor),
-                ),
+                    border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+                    borderRadius: BorderRadius.circular(12)),
                 splashColor: kYellowFirstColor,
                 slidersColor: kBack,
                 centerLeadingDate: true,
                 minDate: DateTime(2000),
-                maxDate: DateTime(2100),
-                initialDate: initialDate,
+                maxDate: maxDate,
+                currentDate: initialDate,
+                selectedDate: initialDate,
                 onDateSelected: (month) {
                   ref.read(stateAnalyticProvider.notifier).selectedMonth =
                       month;

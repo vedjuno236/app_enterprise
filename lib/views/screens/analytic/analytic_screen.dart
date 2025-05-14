@@ -145,7 +145,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
           return AlertDialog(
             elevation: 2,
             shadowColor: kYellowFirstColor,
-            backgroundColor: kTextWhiteColor,
+            backgroundColor: Theme.of(context).canvasColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0),
             ),
@@ -163,12 +163,10 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                     .textTheme
                     .bodyMedium!
                     .copyWith(color: kBack87),
-                enabledCellsTextStyle: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: kBack87),
+                enabledCellsTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(),
                 enabledCellsDecoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
                 ),

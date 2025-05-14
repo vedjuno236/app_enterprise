@@ -29,21 +29,9 @@ class LeaveHistoryProvider with ChangeNotifier {
     }
   }
 
-  int selectedIndexOnleave = 0;
 
-  int get selectedIndexleave => selectedIndexOnleave;
 
-  void updateSelectedIndexOnleave(int index) {
-    selectedIndexOnleave = index;
 
-    notifyListeners();
-  }
-
-  void clearSelectedIndex() {
-    selectedIndexV = 0;
-    selectedIndexOnleave = 0;
-    notifyListeners();
-  }
 
   DateTime? _selectedMonth;
 
