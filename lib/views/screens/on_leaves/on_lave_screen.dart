@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/image_path.dart';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
+import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/poviders/leave_provider/leave_onLeave_provider/leave_onleave_provider.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
 import 'package:enterprise/components/utils/date_format_utils.dart';
@@ -187,6 +188,7 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
     DateTime? selectedMonth = DateTime.now();
     DateTime now = DateTime.now();
     DateTime maxDate = DateTime(now.year, now.month + 1, 0);
+    final darkTheme = ref.watch(darkThemeProviderProvider);
 
     showDialog(
       context: context,
@@ -248,14 +250,15 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
               onPressed: () => context.pop(),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-                backgroundColor: kGary,
+                backgroundColor:
+                    darkTheme.darkTheme ? kGreyBGColor.withAlpha(50) : kGary,
               ),
               child: Text(Strings.txtCancel.tr),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-                backgroundColor: kYellowFirstColor,
+                backgroundColor: darkTheme.darkTheme ? kBack : kYellowColor,
               ),
               onPressed: () {
                 if (selectedMonth != null) {

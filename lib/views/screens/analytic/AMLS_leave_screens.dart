@@ -5,6 +5,7 @@ import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:enterprise/components/logger/logger.dart';
+import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/poviders/leave_provider/leave_history_provider/leave_histoy_provider.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
 import 'package:enterprise/components/styles/size_config.dart';
@@ -90,6 +91,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
     DateTime initialDate = dateProvider.selectedMonth ?? DateTime.now();
     DateTime now = DateTime.now();
     DateTime maxDate = DateTime(now.year, now.month + 1, 0);
+    final darkTheme = ref.watch(darkThemeProviderProvider);
 
     showDialog(
       context: context,
@@ -154,14 +156,15 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
               onPressed: () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-                backgroundColor: kGary,
+                backgroundColor:
+                    darkTheme.darkTheme ? kGreyBGColor.withAlpha(50) : kGary,
               ),
               child: Text(Strings.txtCancel.tr),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-                backgroundColor: kYellowFirstColor,
+                backgroundColor: darkTheme.darkTheme ? kBack : kYellowColor,
               ),
               onPressed: () {
                 ref.read(leaveHistoryProvider.notifier).selectedMonth =

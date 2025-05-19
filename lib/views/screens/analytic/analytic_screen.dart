@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/logger/logger.dart';
+import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:flutter/material.dart';
@@ -139,6 +140,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
 
       DateTime now = DateTime.now();
       DateTime maxDate = DateTime(now.year, now.month + 1, 0);
+      final darkTheme = ref.watch(darkThemeProviderProvider);
 
       showDialog(
         context: context,
@@ -206,14 +208,15 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                 onPressed: () => context.pop(),
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
-                  backgroundColor: kGary,
+                  backgroundColor:
+                      darkTheme.darkTheme ? kGreyBGColor.withAlpha(50) : kGary,
                 ),
                 child: Text(Strings.txtCancel.tr),
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
-                  backgroundColor: kYellowFirstColor,
+                  backgroundColor: darkTheme.darkTheme ? kBack : kYellowColor,
                 ),
                 onPressed: () {
                   ref.read(stateAnalyticProvider.notifier).selectedMonth =

@@ -5,6 +5,7 @@ import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:enterprise/components/logger/logger.dart';
+import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/poviders/leave_provider/leave_history_provider/leave_histoy_provider.dart';
 import 'package:enterprise/components/poviders/notifition_provider/notification_user_provider.dart';
 import 'package:enterprise/components/poviders/notifition_provider/notifition_provider.dart';
@@ -166,6 +167,7 @@ class _NotifitionsNewScreensState
     DateTime? selectedMonth = DateTime.now();
     DateTime now = DateTime.now();
     DateTime maxDate = DateTime(now.year, now.month + 1, 0);
+    final darkTheme = ref.watch(darkThemeProviderProvider);
 
     showDialog(
       context: context,
@@ -185,16 +187,12 @@ class _NotifitionsNewScreensState
               selectedCellDecoration: BoxDecoration(
                   color: kYellowFirstColor,
                   borderRadius: BorderRadius.circular(12)),
-              selectedCellTextStyle: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: kBack87),
-              enabledCellsTextStyle: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: kBack87),
+              selectedCellTextStyle:
+                  Theme.of(context).textTheme.bodyMedium!.copyWith(),
+              enabledCellsTextStyle:
+                  Theme.of(context).textTheme.bodyMedium!.copyWith(),
               enabledCellsDecoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).canvasColor,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
               ),
@@ -203,7 +201,7 @@ class _NotifitionsNewScreensState
                   .bodyMedium!
                   .copyWith(color: Color(0xFFE4E4E7)),
               disabledCellsDecoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).canvasColor.withOpacity(0.4),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
               ),
@@ -231,14 +229,15 @@ class _NotifitionsNewScreensState
               onPressed: () => context.pop(),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-                backgroundColor: kGary,
+                backgroundColor:
+                    darkTheme.darkTheme ? kGreyBGColor.withAlpha(50) : kGary,
               ),
               child: Text(Strings.txtCancel.tr),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-                backgroundColor: kYellowFirstColor,
+                backgroundColor: darkTheme.darkTheme ? kBack : kYellowColor,
               ),
               onPressed: () {
                 if (selectedMonth != null) {
@@ -276,6 +275,7 @@ class _NotifitionsNewScreensState
       totalLeaveDaysUser =
           notiProverUser.getNotificationUserModel!.data!.length;
     }
+    final darkTheme = ref.watch(darkThemeProviderProvider);
 
     String? role = sharedPrefs.getStringNow(KeyShared.keyRole);
     return Scaffold(
@@ -293,39 +293,20 @@ class _NotifitionsNewScreensState
                   onTap: () {
                     showDateDialog(context, ref);
                   },
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.only(right: 20),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
                           IonIcons.ellipsis_vertical,
-                          color: kBack,
+                          color: darkTheme.darkTheme ? kTextWhiteColor : kBack,
                         ),
                       ],
                     ),
                   ),
                 ),
               ],
-              // if (role == "EMPLOYEE") ...[
-              //   GestureDetector(
-              //     onTap: () {
-              //       showDatePickerDialog(context);
-              //     },
-              //     child: const Padding(
-              //       padding: EdgeInsets.only(right: 20),
-              //       child: Column(
-              //         mainAxisSize: MainAxisSize.min,
-              //         children: [
-              //           Icon(
-              //             IonIcons.ellipsis_vertical,
-              //             color: kBack,
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ]
             ]),
         body: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -2014,6 +1995,7 @@ class _NotifitionsNewScreensState
 
   Future<dynamic> widgetBottomSheetFormHR(
       BuildContext context, dynamic leaveData) {
+    final darkTheme = ref.watch(darkThemeProviderProvider);
     TextEditingController description = TextEditingController();
 
     return showModalBottomSheet(
@@ -2214,12 +2196,20 @@ class _NotifitionsNewScreensState
                                       });
                                 },
                                 style: OutlinedButton.styleFrom(
-                                    side: const BorderSide(
-                                        color: kYellowFirstColor),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    backgroundColor: kYellowFirstColor),
+                                  // side: const BorderSide(
+                                  //     color: kYellowFirstColor),
+                                  side: BorderSide(
+                                    color: darkTheme.darkTheme
+                                        ? kBack
+                                        : kYellowColor,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  backgroundColor: darkTheme.darkTheme
+                                      ? kBack
+                                      : kYellowColor,
+                                ),
                                 child: Text(
                                   Strings.txtApprov.tr,
                                   style: Theme.of(context)
@@ -2308,6 +2298,8 @@ class _NotifitionsNewScreensState
                                               SizedBox(
                                                 width: double.infinity,
                                                 child: TextField(
+                                                  style: const TextStyle(
+                                                      color: Colors.black),
                                                   controller: description,
                                                   maxLines: 3,
                                                   decoration: InputDecoration(
@@ -2419,11 +2411,17 @@ class _NotifitionsNewScreensState
                                   );
                                 },
                                 style: OutlinedButton.styleFrom(
-                                    side: const BorderSide(color: kGreyBGColor),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    backgroundColor: kGary),
+                                  side: BorderSide(
+                                    color:
+                                        darkTheme.darkTheme ? kBack87 : kGary,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  backgroundColor: darkTheme.darkTheme
+                                      ? kGreyBGColor.withAlpha(50)
+                                      : kGary,
+                                ),
                                 child: Text(
                                   Strings.txtReject.tr,
                                   style: Theme.of(context)
@@ -2756,7 +2754,7 @@ Map<String, dynamic> getCheckStatus(String title) {
       };
     case "REJECTED":
       return {
-        'color': const Color(0xFFF95555),
+        'color': const Color(0xFFF28C84),
         'txt': "Rejected",
       };
 
