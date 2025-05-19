@@ -11,6 +11,8 @@ import 'package:enterprise/components/router/router.dart';
 import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/components/utils/dio_exceptions.dart';
 import 'package:enterprise/views/screens/auth/translate.dart';
+import 'package:enterprise/views/screens/settings/setting_screen.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_login.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +22,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lottie/lottie.dart';
+import 'package:widgets_easier/widgets_easier.dart';
 import '../../../components/constants/key_shared.dart';
 import '../../../components/constants/strings.dart';
 import '../../../components/helpers/shared_prefs.dart';
@@ -319,735 +322,719 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final darkTheme = ref.watch(darkThemeProviderProvider);
     return Scaffold(
       // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
-        child: Builder(builder: (context) {
-          final user = userProvider.getUserModel;
-          if (user == null) {
-            return Center(
-              child: _buildLoadingNull(),
-            );
-          }
+      body: CustomProgressHUD(
+        inAsyncCall: isLoadingInfo,
+        key: UniqueKey(),
+        child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          child: Builder(builder: (context) {
+            final user = userProvider.getUserModel;
+            if (user == null) {
+              return Center(
+                child: _buildLoadingNull(),
+              );
+            }
 
-          if (user!.data == null) {
-            return _buildLoadingNull();
-          }
-          return Stack(
-            alignment: Alignment.center,
-            children: [
-              Column(
-                children: [
-                  widgetBackground(context),
-                  Container(
-                    margin: const EdgeInsets.only(top: 75),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 35, horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    userData!.firstName.toString(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .copyWith(
-                                          fontSize:
-                                              SizeConfig.textMultiplier * 3,
-                                        ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    userData!.lastName.toString(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .copyWith(
-                                          fontSize:
-                                              SizeConfig.textMultiplier * 3,
-                                        ),
-                                  )
-                                      .animate()
-                                      .slideY(
-                                          duration: 900.ms,
-                                          curve: Curves.easeOutCubic)
-                                      .fadeIn(),
-                                  SizedBox(
-                                      width: SizeConfig.widthMultiplier * 1),
-                                  const CircleAvatar(
-                                    radius: 8,
-                                    backgroundColor: kBlueColor,
-                                    child: Icon(
-                                      Icons.check,
-                                      color: kTextWhiteColor,
-                                      size: 13,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: SizeConfig.heightMultiplier * 1),
-                              Text(
-                                userData.positionName.toString(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .copyWith(
-                                        fontSize: SizeConfig.textMultiplier * 2,
-                                        color: Theme.of(context)
-                                            .primaryColorLight),
-                              )
-                                  .animate()
-                                  .slideY(
-                                      duration: 900.ms,
-                                      curve: Curves.easeOutCubic)
-                                  .fadeIn(),
-                              SizedBox(height: SizeConfig.heightMultiplier * 1),
-                              InkWell(
-                                  onTap: () {
-                                    context.push(PageName.editProfileRoute);
-                                  },
-                                  child: Container(
-                                    height: SizeConfig.heightMultiplier * 5,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                      // color: submitButtonColor,
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        const Icon(Icons.edit),
-                                        SizedBox(
-                                            width:
-                                                SizeConfig.widthMultiplier * 1),
-                                        Text(
-                                          Strings.txtEditProfile.tr,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge!
-                                              .copyWith(
-                                                  fontSize: SizeConfig
-                                                          .textMultiplier *
-                                                      2),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                      .animate()
-                                      .fadeIn(duration: 500.ms, delay: 500.ms)
-                                      .shimmer(
-                                          blendMode: BlendMode.srcOver,
-                                          color: kGary)
-                                      .move(
-                                          begin: Offset(-16, 0),
-                                          curve: Curves.easeOutQuad)),
-                              SizedBox(height: SizeConfig.heightMultiplier * 1),
-                              GestureDetector(
-                                  onTap: () {
-                                    context.push(PageName.rankingRoute);
-                                  },
-                                  child: Container(
-                                    height: SizeConfig.heightMultiplier * 10,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).canvasColor,
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: rankingData.map((rank) {
-                                          Widget image;
-
-                                          String labelText;
-
-                                          if (rank['type'] == 'diamonds') {
-                                            image = Image.asset(
-                                                ImagePath.iconDiamonds);
-
-                                            labelText = 'Your Diamonds';
-                                          } else {
-                                            image = Image.asset(
-                                                ImagePath.iconLeave);
-
-                                            labelText = 'Your Hearts';
-                                          }
-
-                                          return Row(
-                                            children: [
-                                              CircleAvatar(
-                                                radius: SizeConfig
-                                                        .heightMultiplier *
-                                                    2.5,
-                                                backgroundColor:
-                                                    kGary.withOpacity(0.5),
-                                                child: image,
-                                              ),
-                                              SizedBox(
-                                                  width: SizeConfig
-                                                          .widthMultiplier *
-                                                      1),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    labelText,
-                                                    style:
-                                                        TextStyle(fontSize: 14),
-                                                  ),
-                                                  Text(
-                                                    rank['number'],
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleLarge!
-                                                        .copyWith(
-                                                            fontSize: SizeConfig
-                                                                    .textMultiplier *
-                                                                1.7),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  )
-                                      .animate()
-                                      .fadeIn(duration: 500.ms, delay: 500.ms)
-                                      .shimmer(
-                                          blendMode: BlendMode.srcOver,
-                                          color: kGary)
-                                      .move(
-                                          begin: Offset(-16, 0),
-                                          curve: Curves.easeOutQuad)),
-                            ],
-                          ),
-                          SizedBox(height: SizeConfig.heightMultiplier * 1),
-                          Text(
-                            Strings.txtAboutMe,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 1.8),
-                          )
-                              .animate()
-                              .fadeIn(duration: 500.ms, delay: 500.ms)
-                              .move(
-                                  begin: Offset(-16, 0),
-                                  curve: Curves.easeOutQuad),
-                          SizedBox(height: SizeConfig.heightMultiplier * 1),
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).canvasColor,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(
-                                'Respects and positive energyRespects\nCodeing',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                      fontSize: SizeConfig.textMultiplier * 1.8,
-                                    ),
-                                textAlign: TextAlign.left,
-                              ),
-                            ),
-                          )
-                              .animate()
-                              .fadeIn(duration: 500.ms, delay: 500.ms)
-                              .move(
-                                  begin: Offset(-16, 0),
-                                  curve: Curves.easeOutQuad),
-                          SizedBox(height: SizeConfig.heightMultiplier * 1),
-                          Text(
-                            Strings.txtInformation,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(
-                                  fontSize: SizeConfig.textMultiplier * 2,
-                                ),
-                          )
-                              .animate()
-                              .fadeIn(duration: 500.ms, delay: 500.ms)
-                              .move(
-                                  begin: Offset(-16, 0),
-                                  curve: Curves.easeOutQuad),
-                          SizedBox(height: SizeConfig.heightMultiplier * 1),
-                          // widgetInformation(context, userData)
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).canvasColor,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Image.asset(ImagePath.iconWork),
-                                      SizedBox(
-                                        width: SizeConfig.widthMultiplier * 2,
-                                      ),
-                                      Text(
-                                        'NCC',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium!
-                                            .copyWith(
-                                              fontSize:
-                                                  SizeConfig.textMultiplier *
-                                                      1.8,
-                                            ),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                      height: SizeConfig.heightMultiplier * 1),
-                                  Row(
-                                    children: [
-                                      Image.asset(ImagePath.iconLives),
-                                      SizedBox(
-                                        width: SizeConfig.widthMultiplier * 2,
-                                      ),
-                                      Text.rich(
-                                        TextSpan(
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge!
-                                              .copyWith(
-                                                fontSize:
-                                                    SizeConfig.textMultiplier *
-                                                        1.9,
-                                              ),
-                                          text: '${Strings.txtLivesIn.tr} ',
-                                          children: [
-                                            TextSpan(
-                                              text: userData.village.toString(),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleLarge!
-                                                  .copyWith(
-                                                      fontSize: SizeConfig
-                                                              .textMultiplier *
-                                                          1.9,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                      height: SizeConfig.heightMultiplier * 1),
-                                  Row(
-                                    children: [
-                                      Image.asset(ImagePath.iconDepart),
-                                      SizedBox(
-                                        width: SizeConfig.widthMultiplier * 2,
-                                      ),
-                                      Text.rich(
-                                        TextSpan(
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge!
-                                              .copyWith(
-                                                fontSize:
-                                                    SizeConfig.textMultiplier *
-                                                        1.9,
-                                              ),
-                                          text: '${Strings.txtDep.tr} ',
-                                          children: [
-                                            TextSpan(
-                                              text: userData.departmentName
-                                                  .toString(),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleLarge!
-                                                  .copyWith(
-                                                      fontSize: SizeConfig
-                                                              .textMultiplier *
-                                                          1.9,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                      height: SizeConfig.heightMultiplier * 1),
-                                  Row(
-                                    children: [
-                                      Image.asset(ImagePath.iconStart),
-                                      SizedBox(
-                                        width: SizeConfig.widthMultiplier * 2,
-                                      ),
-                                      Text.rich(
-                                        TextSpan(
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge!
-                                              .copyWith(
-                                                fontSize:
-                                                    SizeConfig.textMultiplier *
-                                                        1.9,
-                                              ),
-                                          text: '${Strings.txtSartWork.tr} ',
-                                          children: [
-                                            TextSpan(
-                                              text: DateFormatUtil.formatA(
-                                                  DateTime.parse(
-                                                      userData.workStartDate!)),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleLarge!
-                                                  .copyWith(
-                                                      fontSize: SizeConfig
-                                                              .textMultiplier *
-                                                          1.9,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                              .animate()
-                              .fadeIn(duration: 500.ms, delay: 500.ms)
-                              .move(
-                                  begin: Offset(-16, 0),
-                                  curve: Curves.easeOutQuad),
-                          SizedBox(height: SizeConfig.heightMultiplier * 1),
-                          Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Award(5)",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .copyWith(
-                                            fontSize:
-                                                SizeConfig.textMultiplier * 2),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      buildShowAwardModalBottomSheet(context);
-                                    },
-                                    child: Text(
-                                      "See all",
+            if (user!.data == null) {
+              return _buildLoadingNull();
+            }
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                Column(
+                  children: [
+                    widgetBackground(context),
+                    Container(
+                      margin: const EdgeInsets.only(top: 75),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 35, horizontal: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      userData!.firstName.toString(),
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleLarge!
                                           .copyWith(
-                                              fontSize:
-                                                  SizeConfig.textMultiplier *
-                                                      2),
+                                            fontSize:
+                                                SizeConfig.textMultiplier * 3,
+                                          ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: SizeConfig.heightMultiplier * 1),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: SizedBox(
-                                      height: SizeConfig.heightMultiplier *
-                                          15, // Adjust size as needed
-                                      child: ListView.builder(
-                                        padding: EdgeInsets.zero,
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: wardData.length,
-                                        itemBuilder: (context, index) {
-                                          return Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 16.0),
-                                            child: Column(
-                                              children: [
-                                                Image.asset(
-                                                  wardData[index]['icons']
-                                                      .toString(),
-                                                  width: 90,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                                const SizedBox(height: 8),
-                                                Expanded(
-                                                  child: Text(
-                                                    wardData[index]['name']
-                                                        .toString(),
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyMedium!
-                                                        .copyWith(),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
+                                    const SizedBox(
+                                      width: 10,
                                     ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            "Passion & Skills",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 2),
-                          ),
-                          SizedBox(height: SizeConfig.heightMultiplier * 1),
-                          Wrap(
-                            spacing: 10,
-                            runSpacing: 10,
-                            children: skillsData.map((skill) {
-                              return Container(
-                                margin: const EdgeInsets.only(top: 10),
-                                padding: const EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.circular(50),
-                                  border: Border.all(
-                                    color: Theme.of(context).cardColor,
-                                    width: 1.0,
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
+                                    Text(
+                                      userData!.lastName.toString(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge!
+                                          .copyWith(
+                                            fontSize:
+                                                SizeConfig.textMultiplier * 3,
+                                          ),
+                                    )
+                                        .animate()
+                                        .slideY(
+                                            duration: 900.ms,
+                                            curve: Curves.easeOutCubic)
+                                        .fadeIn(),
                                     SizedBox(
                                         width: SizeConfig.widthMultiplier * 1),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          skill['name'],
-                                          overflow: TextOverflow.ellipsis,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(),
-                                        ),
-                                      ],
-                                    )
+                                    const CircleAvatar(
+                                      radius: 8,
+                                      backgroundColor: kBlueColor,
+                                      child: Icon(
+                                        Icons.check,
+                                        color: kTextWhiteColor,
+                                        size: 13,
+                                      ),
+                                    ),
                                   ],
                                 ),
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 13),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const LanguageSwitcher(),
-                        Switch.adaptive(
-                          value: darkTheme.darkTheme,
-                          onChanged: (value) {
-                            darkTheme.darkTheme = value;
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SizedBox(
-                      height: 48,
-                      child: OutlinedButton(
-                        onPressed: () {
-                          ref
-                              .read(stateBottomBarProvider.notifier)
-                              .resetState();
+                                SizedBox(
+                                    height: SizeConfig.heightMultiplier * 1),
+                                Text(
+                                  userData.positionName.toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge!
+                                      .copyWith(
+                                          fontSize:
+                                              SizeConfig.textMultiplier * 2,
+                                          color: Theme.of(context)
+                                              .primaryColorLight),
+                                )
+                                    .animate()
+                                    .slideY(
+                                        duration: 900.ms,
+                                        curve: Curves.easeOutCubic)
+                                    .fadeIn(),
+                                SizedBox(
+                                    height: SizeConfig.heightMultiplier * 1),
+                                Divider(
+                                  color: kGreyBGColor.withAlpha(80),
+                                  height: 1,
+                                )
+                                // InkWell(
+                                //     onTap: () {
+                                //       context.push(PageName.editProfileRoute);
+                                //     },
+                                //     child: Container(
+                                //       height: SizeConfig.heightMultiplier * 5,
+                                //       width: double.infinity,
+                                //       decoration: BoxDecoration(
+                                //         color: Theme.of(context)
+                                //             .colorScheme
+                                //             .onPrimary,
+                                //         // color: submitButtonColor,
+                                //         borderRadius: BorderRadius.circular(50),
+                                //       ),
+                                //       child: Row(
+                                //         mainAxisAlignment:
+                                //             MainAxisAlignment.center,
+                                //         crossAxisAlignment:
+                                //             CrossAxisAlignment.center,
+                                //         children: [
+                                //           const Icon(Icons.edit),
+                                //           SizedBox(
+                                //               width:
+                                //                   SizeConfig.widthMultiplier *
+                                //                       1),
+                                //           Text(
+                                //             Strings.txtEditProfile.tr,
+                                //             style: Theme.of(context)
+                                //                 .textTheme
+                                //                 .titleLarge!
+                                //                 .copyWith(
+                                //                     fontSize: SizeConfig
+                                //                             .textMultiplier *
+                                //                         2),
+                                //           ),
+                                //         ],
+                                //       ),
+                                //     )
+                                //         .animate()
+                                //         .fadeIn(duration: 500.ms, delay: 500.ms)
+                                //         .shimmer(
+                                //             blendMode: BlendMode.srcOver,
+                                //             color: kGary)
+                                //         .move(
+                                //             begin: Offset(-16, 0),
+                                //             curve: Curves.easeOutQuad)),
 
-                          if (sharedPrefs.getStringNow(KeyShared.keyToken) !=
-                              null) {
-                            sharedPrefs.remove(KeyShared.keyToken);
-                            sharedPrefs.remove(KeyShared.keyUserId);
-                            sharedPrefs.remove(KeyShared.keyRole);
+                                // SizedBox(
+                                //     height: SizeConfig.heightMultiplier * 1),
+                                // GestureDetector(
+                                //     onTap: () {
+                                //       context.push(PageName.rankingRoute);
+                                //     },
+                                //     child: Container(
+                                //       height: SizeConfig.heightMultiplier * 10,
+                                //       decoration: BoxDecoration(
+                                //         color: Theme.of(context).canvasColor,
+                                //         borderRadius: BorderRadius.circular(16),
+                                //       ),
+                                //       child: Padding(
+                                //         padding: const EdgeInsets.all(10.0),
+                                //         child: Row(
+                                //           mainAxisAlignment:
+                                //               MainAxisAlignment.spaceBetween,
+                                //           children: rankingData.map((rank) {
+                                //             Widget image;
 
-                            context.go(PageName.login);
-                          }
-                        },
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: Theme.of(context).canvasColor,
-                          side: BorderSide(
-                            color: Theme.of(context).canvasColor,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset('assets/images/log_out.png'),
-                            const SizedBox(
-                              width: 10,
+                                //             String labelText;
+
+                                //             if (rank['type'] == 'diamonds') {
+                                //               image = Image.asset(
+                                //                   ImagePath.iconDiamonds);
+
+                                //               labelText = 'Your Diamonds';
+                                //             } else {
+                                //               image = Image.asset(
+                                //                   ImagePath.iconLeave);
+
+                                //               labelText = 'Your Hearts';
+                                //             }
+
+                                //             return Row(
+                                //               children: [
+                                //                 CircleAvatar(
+                                //                   radius: SizeConfig
+                                //                           .heightMultiplier *
+                                //                       2.5,
+                                //                   backgroundColor:
+                                //                       kGary.withOpacity(0.5),
+                                //                   child: image,
+                                //                 ),
+                                //                 SizedBox(
+                                //                     width: SizeConfig
+                                //                             .widthMultiplier *
+                                //                         1),
+                                //                 Column(
+                                //                   crossAxisAlignment:
+                                //                       CrossAxisAlignment.start,
+                                //                   mainAxisAlignment:
+                                //                       MainAxisAlignment.center,
+                                //                   children: [
+                                //                     Text(
+                                //                       labelText,
+                                //                       style: TextStyle(
+                                //                           fontSize: 14),
+                                //                     ),
+                                //                     Text(
+                                //                       rank['number'],
+                                //                       style: Theme.of(context)
+                                //                           .textTheme
+                                //                           .titleLarge!
+                                //                           .copyWith(
+                                //                               fontSize: SizeConfig
+                                //                                       .textMultiplier *
+                                //                                   1.7),
+                                //                     ),
+                                //                   ],
+                                //                 ),
+                                //               ],
+                                //             );
+                                //           }).toList(),
+                                //         ),
+                                //       ),
+                                //     )
+                                //         .animate()
+                                //         .fadeIn(duration: 500.ms, delay: 500.ms)
+                                //         .shimmer(
+                                //             blendMode: BlendMode.srcOver,
+                                //             color: kGary)
+                                //         .move(
+                                //             begin: Offset(-16, 0),
+                                //             curve: Curves.easeOutQuad)),
+                              ],
                             ),
+                            // SizedBox(height: SizeConfig.heightMultiplier * 1),
+                            // Text(
+                            //   Strings.txtAboutMe,
+                            //   style: Theme.of(context)
+                            //       .textTheme
+                            //       .titleLarge!
+                            //       .copyWith(
+                            //           fontSize:
+                            //               SizeConfig.textMultiplier * 1.8),
+                            // )
+                            //     .animate()
+                            //     .fadeIn(duration: 500.ms, delay: 500.ms)
+                            //     .move(
+                            //         begin: Offset(-16, 0),
+                            //         curve: Curves.easeOutQuad),
+                            // SizedBox(height: SizeConfig.heightMultiplier * 1),
+                            // Container(
+                            //   width: double.infinity,
+                            //   decoration: BoxDecoration(
+                            //     color: Theme.of(context).canvasColor,
+                            //     borderRadius: BorderRadius.circular(16),
+                            //   ),
+                            //   child: Padding(
+                            //     padding: const EdgeInsets.all(16.0),
+                            //     child: Text(
+                            //       'Respects and positive energyRespects\nCodeing',
+                            //       style: Theme.of(context)
+                            //           .textTheme
+                            //           .titleMedium!
+                            //           .copyWith(
+                            //             fontSize:
+                            //                 SizeConfig.textMultiplier * 1.8,
+                            //           ),
+                            //       textAlign: TextAlign.left,
+                            //     ),
+                            //   ),
+                            // )
+                            //     .animate()
+                            //     .fadeIn(duration: 500.ms, delay: 500.ms)
+                            //     .move(
+                            //         begin: Offset(-16, 0),
+                            //         curve: Curves.easeOutQuad),
+                            SizedBox(height: SizeConfig.heightMultiplier * 1),
                             Text(
-                              Strings.txtLogout,
+                              Strings.txtInformation.tr,
                               style: Theme.of(context)
                                   .textTheme
-                                  .titleMedium!
-                                  .copyWith(),
+                                  .titleLarge!
+                                  .copyWith(
+                                    fontSize: SizeConfig.textMultiplier * 2,
+                                  ),
+                            )
+                                .animate()
+                                .fadeIn(duration: 500.ms, delay: 500.ms)
+                                .move(
+                                    begin: Offset(-16, 0),
+                                    curve: Curves.easeOutQuad),
+                            SizedBox(height: SizeConfig.heightMultiplier * 1),
+                            // widgetInformation(context, userData)
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).canvasColor,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Image.asset(ImagePath.iconWork),
+                                        SizedBox(
+                                          width: SizeConfig.widthMultiplier * 2,
+                                        ),
+                                        Text(
+                                          'NCC',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                fontSize:
+                                                    SizeConfig.textMultiplier *
+                                                        1.8,
+                                              ),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            SizeConfig.heightMultiplier * 1),
+                                    Row(
+                                      children: [
+                                        Image.asset(ImagePath.iconLives),
+                                        SizedBox(
+                                          width: SizeConfig.widthMultiplier * 2,
+                                        ),
+                                        Text.rich(
+                                          TextSpan(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge!
+                                                .copyWith(
+                                                  fontSize: SizeConfig
+                                                          .textMultiplier *
+                                                      1.9,
+                                                ),
+                                            text: '${Strings.txtLivesIn.tr} ',
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    userData.village.toString(),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge!
+                                                    .copyWith(
+                                                        fontSize: SizeConfig
+                                                                .textMultiplier *
+                                                            1.9,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            SizeConfig.heightMultiplier * 1),
+                                    Row(
+                                      children: [
+                                        Image.asset(ImagePath.iconDepart),
+                                        SizedBox(
+                                          width: SizeConfig.widthMultiplier * 2,
+                                        ),
+                                        Text.rich(
+                                          TextSpan(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge!
+                                                .copyWith(
+                                                  fontSize: SizeConfig
+                                                          .textMultiplier *
+                                                      1.9,
+                                                ),
+                                            text: '${Strings.txtDep.tr} ',
+                                            children: [
+                                              TextSpan(
+                                                text: userData.departmentName
+                                                    .toString(),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge!
+                                                    .copyWith(
+                                                        fontSize: SizeConfig
+                                                                .textMultiplier *
+                                                            1.9,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            SizeConfig.heightMultiplier * 1),
+                                    Row(
+                                      children: [
+                                        Image.asset(ImagePath.iconStart),
+                                        SizedBox(
+                                          width: SizeConfig.widthMultiplier * 2,
+                                        ),
+                                        Text.rich(
+                                          TextSpan(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge!
+                                                .copyWith(
+                                                  fontSize: SizeConfig
+                                                          .textMultiplier *
+                                                      1.9,
+                                                ),
+                                            text: '${Strings.txtSartWork.tr} ',
+                                            children: [
+                                              TextSpan(
+                                                text: DateFormatUtil.formatA(
+                                                    DateTime.parse(userData
+                                                        .workStartDate!)),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge!
+                                                    .copyWith(
+                                                        fontSize: SizeConfig
+                                                                .textMultiplier *
+                                                            1.9,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                                .animate()
+                                .fadeIn(duration: 500.ms, delay: 500.ms)
+                                .move(
+                                    begin: Offset(-16, 0),
+                                    curve: Curves.easeOutQuad),
+                            SizedBox(height: SizeConfig.heightMultiplier * 1),
+                            Column(
+                              children: [
+                                // Row(
+                                //   mainAxisAlignment:
+                                //       MainAxisAlignment.spaceBetween,
+                                //   children: [
+                                //     Text(
+                                //       "Award(5)",
+                                //       style: Theme.of(context)
+                                //           .textTheme
+                                //           .titleLarge!
+                                //           .copyWith(
+                                //               fontSize:
+                                //                   SizeConfig.textMultiplier *
+                                //                       2),
+                                //     ),
+                                //     InkWell(
+                                //       onTap: () {
+                                //         buildShowAwardModalBottomSheet(context);
+                                //       },
+                                //       child: Text(
+                                //         "See all",
+                                //         style: Theme.of(context)
+                                //             .textTheme
+                                //             .titleLarge!
+                                //             .copyWith(
+                                //                 fontSize:
+                                //                     SizeConfig.textMultiplier *
+                                //                         2),
+                                //       ),
+                                //     ),
+                                //   ],
+                                // ),
+                                // SizedBox(
+                                //     height: SizeConfig.heightMultiplier * 1),
+                                // Row(
+                                //   children: [
+                                //     Expanded(
+                                //       child: SizedBox(
+                                //         height: SizeConfig.heightMultiplier *
+                                //             15, // Adjust size as needed
+                                //         child: ListView.builder(
+                                //           padding: EdgeInsets.zero,
+                                //           scrollDirection: Axis.horizontal,
+                                //           itemCount: wardData.length,
+                                //           itemBuilder: (context, index) {
+                                //             return Padding(
+                                //               padding: const EdgeInsets.only(
+                                //                   right: 16.0),
+                                //               child: Column(
+                                //                 children: [
+                                //                   Image.asset(
+                                //                     wardData[index]['icons']
+                                //                         .toString(),
+                                //                     width: 90,
+                                //                     fit: BoxFit.cover,
+                                //                   ),
+                                //                   const SizedBox(height: 8),
+                                //                   Expanded(
+                                //                     child: Text(
+                                //                       wardData[index]['name']
+                                //                           .toString(),
+                                //                       style: Theme.of(context)
+                                //                           .textTheme
+                                //                           .bodyMedium!
+                                //                           .copyWith(),
+                                //                     ),
+                                //                   )
+                                //                 ],
+                                //               ),
+                                //             );
+                                //           },
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   ],
+                                // )
+                              ],
                             ),
+                            const SizedBox(height: 10),
+                            // Text(
+                            //   "Passion & Skills",
+                            //   style: Theme.of(context)
+                            //       .textTheme
+                            //       .titleLarge!
+                            //       .copyWith(
+                            //           fontSize: SizeConfig.textMultiplier * 2),
+                            // ),
+                            // SizedBox(height: SizeConfig.heightMultiplier * 1),
+                            // Wrap(
+                            //   spacing: 10,
+                            //   runSpacing: 10,
+                            //   children: skillsData.map((skill) {
+                            //     return Container(
+                            //       margin: const EdgeInsets.only(top: 10),
+                            //       padding: const EdgeInsets.all(8.0),
+                            //       decoration: BoxDecoration(
+                            //         color: Theme.of(context).cardColor,
+                            //         borderRadius: BorderRadius.circular(50),
+                            //         border: Border.all(
+                            //           color: Theme.of(context).cardColor,
+                            //           width: 1.0,
+                            //         ),
+                            //       ),
+                            //       child: Row(
+                            //         mainAxisSize: MainAxisSize.min,
+                            //         children: [
+                            //           SizedBox(
+                            //               width:
+                            //                   SizeConfig.widthMultiplier * 1),
+                            //           Row(
+                            //             children: [
+                            //               Text(
+                            //                 skill['name'],
+                            //                 overflow: TextOverflow.ellipsis,
+                            //                 style: Theme.of(context)
+                            //                     .textTheme
+                            //                     .bodyMedium!
+                            //                     .copyWith(),
+                            //               ),
+                            //             ],
+                            //           )
+                            //         ],
+                            //       ),
+                            //     );
+                            //   }).toList(),
+                            // ),
                           ],
                         ),
                       ),
                     ),
-                  )
-                ],
-              ),
-              Positioned(
-                top: 120,
-                child: Container(
-                  margin: const EdgeInsets.all(10),
-                  child: CircleAvatar(
-                    backgroundColor: kTextWhiteColor,
-                    radius: 81,
-                    child: _imageFile != null && _croppedFile != null
-                        ? Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              CircleAvatar(
-                                radius: 75,
-                                backgroundImage: FileImage(
-                                  File(_croppedFile?.path ?? _imageFile!.path),
-                                ),
-                                onBackgroundImageError: (_, __) => const Icon(
-                                  Icons.error,
-                                  size: 30,
-                                ),
-                              ),
-                              Positioned(
-                                left: -5,
-                                child: CustomPaint(
-                                  size: const Size(158, 149),
-                                  painter: ArcPainter(avatarRadius: 80),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 16.0,
-                                right: -20,
-                                child: InkWell(
-                                  onTap: () {
-                                    bottomSheetPushContainer(
-                                      context: context,
-                                      constantsSize: 1,
-                                      child: buttonChooseImageProfile(context),
-                                    );
-                                  },
-                                  child: const CircleAvatar(
-                                    backgroundColor: kTextWhiteColor,
-                                    radius: 19,
-                                    child: CircleAvatar(
-                                      backgroundColor: kGary,
-                                      radius: 18,
-                                      child: Icon(Icons.camera_alt),
+                  ],
+                ),
+                Positioned(
+                  top: 120,
+                  child: Container(
+                    width: 162,
+                    height: 162,
+                    decoration: ShapeDecoration(
+                      shape: DottedBorder(
+                        dotSize: 9,
+                        dotSpacing: 8,
+                        borderRadius: BorderRadius.circular(
+                            81), // Match CircleAvatar radius
+                        gradient: LinearGradient(
+                          colors: headerProfileColor,
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(7.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          bottomSheetPushContainer(
+                            context: context,
+                            constantsSize: 1,
+                            child: buttonChooseImageProfile(context),
+                          );
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: kTextWhiteColor,
+                          radius: 70,
+                          child: _imageFile != null && _croppedFile != null
+                              ? Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 67,
+                                      backgroundImage: FileImage(
+                                        File(_croppedFile?.path ??
+                                            _imageFile!.path),
+                                      ),
+                                      onBackgroundImageError: (_, __) =>
+                                          const Icon(
+                                        Icons.error,
+                                        size: 30,
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        : Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: kTextWhiteColor,
-                                radius: 74,
-                                backgroundImage: CachedNetworkImageProvider(
-                                    userData!.profile.toString()),
-                              ).animate().scaleXY(
-                                  begin: 0,
-                                  end: 1,
-                                  delay: 500.ms,
-                                  duration: 500.ms,
-                                  curve: Curves.easeInOutCubic),
-                              Positioned(
-                                left: -5,
-                                child: CustomPaint(
-                                  size: const Size(158, 149),
-                                  painter: ArcPainter(avatarRadius: 80),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 5,
-                                right: -22,
-                                child: InkWell(
-                                  onTap: () {
-                                    bottomSheetPushContainer(
-                                      context: context,
-                                      child: buttonChooseImageProfile(context),
-                                    );
-                                  },
-                                  child: const CircleAvatar(
-                                    backgroundColor: kTextWhiteColor,
-                                    radius: 25,
-                                    child: CircleAvatar(
-                                      backgroundColor: kGary,
-                                      radius: 22,
-                                      child: Icon(Icons.camera_alt),
+                                    Positioned(
+                                      bottom: 16.0,
+                                      right: -20,
+                                      child: InkWell(
+                                        onTap: () {
+                                          bottomSheetPushContainer(
+                                            context: context,
+                                            constantsSize: 1,
+                                            child: buttonChooseImageProfile(
+                                                context),
+                                          );
+                                        },
+                                        child: const CircleAvatar(
+                                          backgroundColor: kTextWhiteColor,
+                                          radius: 20,
+                                          child: CircleAvatar(
+                                            backgroundColor: kGary,
+                                            radius: 18,
+                                            child: Icon(
+                                              Icons.camera_alt,
+                                              color: kBack,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
+                                )
+                              : Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 67,
+                                      foregroundImage:
+                                          CachedNetworkImageProvider(
+                                              userData!.profile.toString()),
+                                    ).animate().scaleXY(
+                                          begin: 0,
+                                          end: 1,
+                                          delay: 500.ms,
+                                          duration: 500.ms,
+                                          curve: Curves.easeInOutCubic,
+                                        ),
+                                    Positioned(
+                                      bottom: 5,
+                                      right: -22,
+                                      child: InkWell(
+                                        onTap: () {
+                                          bottomSheetPushContainer(
+                                            context: context,
+                                            child: buttonChooseImageProfile(
+                                                context),
+                                          );
+                                        },
+                                        child: const CircleAvatar(
+                                          backgroundColor: kTextWhiteColor,
+                                          radius: 25,
+                                          child: CircleAvatar(
+                                            backgroundColor: kGary,
+                                            radius: 22,
+                                            child: Icon(
+                                              Icons.camera_alt,
+                                              color: kBack,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          );
-        }),
+              ],
+            );
+          }),
+        ),
       ),
     );
   }
@@ -1128,7 +1115,40 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       child: CircleAvatar(
                         backgroundColor: kGary,
                         radius: SizeConfig.heightMultiplier * 1.8,
-                        child: const Icon(Icons.camera_alt),
+                        child: const Icon(
+                          Icons.camera_alt,
+                          color: kBack,
+                        ),
+                      ),
+                    ).animate().scaleXY(
+                        begin: 0,
+                        end: 1,
+                        delay: 500.ms,
+                        duration: 500.ms,
+                        curve: Curves.easeInOutCubic),
+                  ),
+                ),
+                Positioned(
+                  bottom: 110.0,
+                  right: 16.0,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SettingScreen()),
+                      );
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: kTextWhiteColor,
+                      radius: 19,
+                      child: CircleAvatar(
+                        backgroundColor: kGary,
+                        radius: SizeConfig.heightMultiplier * 1.8,
+                        child: Icon(
+                          Bootstrap.gear,
+                          color: kBack,
+                        ),
                       ),
                     ).animate().scaleXY(
                         begin: 0,

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:enterprise/components/constants/key_shared.dart';
+import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/poviders/location_provider/location_provider.dart';
 import 'package:enterprise/components/router/router.dart';
@@ -141,7 +142,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final roleName = userProvider.getUserModel?.data?.role?.name;
     final darkTheme = ref.watch(darkThemeProviderProvider);
 
+    bool isLoading = false;
+
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+
+      // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [

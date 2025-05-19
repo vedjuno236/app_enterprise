@@ -18,10 +18,7 @@ class _LanguageSwitcherState extends State<LanguageSwitcher> {
   String? _selectedLanguageCode;
 
   @override
-  // void initState() {
-  //   _loadSavedLanguage();
-  //   super.initState();
-  // }
+ 
   @override
   void initState() {
     super.initState();

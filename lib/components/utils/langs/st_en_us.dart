@@ -68,6 +68,7 @@ const Map<String, String> en = {
   "Sick Leave": "Sick Leave",
   "Lakit  Leave": "Lakit  Leave",
   "Maternity Leave": 'Maternity Leave',
+  "Information": "Information",
   // leave
   "Apply Leave": "Apply Leave",
   "History": 'History',
@@ -101,6 +102,8 @@ const Map<String, String> en = {
   "Payslips": "Payslips",
   "Calendar": "Calendar",
   "Request OT": "Request OT",
+    "From the date": "From the date",
+    "To the date": "To the date",
 
   /// on leave
   "Tomorrow": "Tomorrow",
@@ -108,4 +111,14 @@ const Map<String, String> en = {
   "Next Week": "Next Week",
   "After Next Week": "After Next Week",
   "Next Month": "Next Month",
+
+  /// setting
+  "System settings": " System settings",
+  "Content and display": " Content and display",
+  "Language": " Language",
+  "Display screen": "Display screen",
+  "Login": "Login",
+  "Logout": "Logout",
+  "Light Mode": "Light Mode",
+  "Dark Mode": "Dark Mode",
 };

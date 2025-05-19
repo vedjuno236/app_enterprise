@@ -5,6 +5,7 @@ import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:enterprise/components/logger/logger.dart';
+import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/poviders/login_providers/login_provider.dart';
 import 'package:enterprise/components/router/router.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
@@ -56,6 +57,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       final response = await EnterpriseAPIService().loginAPI(
         phone: '20${phoneController.text}',
         password: passwordController.text,
+        deviceToken: deviceToken,
       );
       if (response != null && response['status'] == true) {
         sharedPrefs.setStringNow(KeyShared.keyToken, response['access_token']);
@@ -99,6 +101,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final darkTheme = ref.watch(darkThemeProviderProvider);
+
     final loginProvider = ref.watch(stateLoginProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -369,16 +373,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: (selectedNumber == null ||
-                      phoneController.text.isEmpty ||
-                      selectedNumber == "+856 30")
+                      selectedNumber == "+856 30" ||
+                      phoneController.text.isEmpty)
                   ? (phoneController.text.length < 7 ||
                           phoneController.text.contains(RegExp(r'[^\d-]')))
-                      ? kYellowFirstColor.withOpacity(.5)
-                      : kYellowFirstColor
+                      ? darkTheme.darkTheme
+                          ? kBack
+                          : kYellowFirstColor.withOpacity(.5)
+                      : darkTheme.darkTheme
+                          ? kBack
+                          : kYellowFirstColor // Corrected this line
                   : (phoneController.text.length < 8 ||
-                          phoneController.text.contains(RegExp(r'[^\d-]')))
-                      ? kYellowFirstColor.withOpacity(.5)
-                      : kYellowFirstColor,
+                          phoneController.text.contains(RegExp(
+                              r'[^\d-]'))) // Removed the redundant else if
+                      ? darkTheme.darkTheme
+                          ? kBack
+                          : kYellowFirstColor.withOpacity(.5)
+                      : darkTheme.darkTheme
+                          ? kBack
+                          : kYellowFirstColor, // corrected this line
               borderRadius: BorderRadius.circular(30),
             ),
             child: Center(

@@ -104,15 +104,18 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(16.0),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.0),
-                              color: Theme.of(context).canvasColor,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Theme.of(context).canvasColor,
-                                  blurRadius: 1.0,
-                                ),
-                              ],
-                            ),
+                                borderRadius: BorderRadius.circular(16.0),
+                                color: Theme.of(context).canvasColor,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context).cardColor,
+                                    blurRadius: 2.0,
+                                  ),
+                                ],
+                                border: Border.all(
+                                    color: Theme.of(context).cardColor,
+                                    width: 1,
+                                    style: BorderStyle.solid)),
                             child: Column(
                               children: [
                                 Row(
@@ -200,10 +203,7 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
                                             ),
                                             const SizedBox(height: 8),
                                             Text(
-                                              // leave.total.toString(),
-                                              // '${(leave.total != null) ? (leave.total! % 1 == 0 ? leave.total!.toInt().toString() : leave.total!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
-                                              //     .tr,
-                                              '${(leave.total != null && leave.used != null) ? (leave.total! - leave.used! % 1 == 0 ? (leave.total! - leave.used!).toInt().toString() : (leave.total! - leave.used!).toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
+                                              '${(leave.unUsed != null) ? (leave.unUsed! % 1 == 0 ? leave.unUsed!.toInt().toString() : leave.unUsed!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
                                                   .tr,
                                               style: Theme.of(context)
                                                   .textTheme
@@ -327,27 +327,27 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
             .titleLarge!
             .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
       ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min, // Minimize Column height
-            children: [
-              GestureDetector(
-                onTap: () {},
-                // child: const Icon(
-                //   Ionicons.ellipsis_vertical_outline,
-                //   color: kBack,
-                // ),
-                child: const Icon(
-                  IonIcons.ellipsis_vertical,
-                  color: kBack,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+      // actions: [
+      //   Padding(
+      //     padding: const EdgeInsets.only(right: 20),
+      //     child: Column(
+      //       mainAxisSize: MainAxisSize.min, // Minimize Column height
+      //       children: [
+      //         GestureDetector(
+      //           onTap: () {},
+      //           // child: const Icon(
+      //           //   Ionicons.ellipsis_vertical_outline,
+      //           //   color: kBack,
+      //           // ),
+      //           // child: const Icon(
+      //           //   IonIcons.ellipsis_vertical,
+      //           //   color: kBack,
+      //           // ),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ],
     );
   }
 }

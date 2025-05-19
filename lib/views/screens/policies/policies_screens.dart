@@ -117,7 +117,7 @@ class _PoliciesScreensState extends ConsumerState<PoliciesScreens> {
         flexibleSpace: const AppbarWidget(),
         title: Text(
           Strings.txtPolicy.tr,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(),
         ).animate().scaleXY(
             begin: 0,
             end: 1,

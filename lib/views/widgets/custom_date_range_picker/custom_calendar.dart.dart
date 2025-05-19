@@ -1,4 +1,7 @@
 import 'package:enterprise/components/constants/colors.dart';
+import 'package:enterprise/components/constants/image_path.dart';
+import 'package:enterprise/components/constants/strings.dart';
+import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/components/utils/date_format_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -187,73 +190,111 @@ class CustomCalendarState extends State<CustomCalendar> {
           ),
         ),
         const SizedBox(
-          height: 10,
+          height: 5,
         ),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 13),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       Expanded(
-        //         child: Container(
-        //           height: 50,
-        //           decoration: BoxDecoration(
-        //               color: Theme.of(context).cardColor,
-        //               borderRadius: BorderRadius.circular(10),
-        //               border: Border.all(color: kGreyBGColor)),
-        //           child: Column(
-        //             mainAxisAlignment: MainAxisAlignment.center,
-        //             crossAxisAlignment: CrossAxisAlignment.center,
-        //             children: <Widget>[
-        //               Text(
-        //                 'ຈາກວັນທີ',
-        //                 textAlign: TextAlign.left,
-        //                 style: Theme.of(context).textTheme.bodyLarge,
-        //               ),
-        //               Text(
-        //                 startDate != null
-        //                     ? DateFormatUtil.formatedm(startDate!, null)
-        //                     : '--------',
-        //                 style: Theme.of(context).textTheme.bodyMedium,
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       ),
-        //       const SizedBox(
-        //         width: 10,
-        //       ),
-        //       Expanded(
-        //         child: Container(
-        //           height: 50,
-        //           width: double.infinity,
-        //           decoration: BoxDecoration(
-        //               color: Theme.of(context).cardColor,
-        //               borderRadius: BorderRadius.circular(10),
-        //               border: Border.all(color: kGreyBGColor)),
-        //           child: Column(
-        //             mainAxisAlignment: MainAxisAlignment.center,
-        //             crossAxisAlignment: CrossAxisAlignment.center,
-        //             children: <Widget>[
-        //               Text(
-        //                 'ຫາວັນທີ',
-        //                 textAlign: TextAlign.left,
-        //                 style: Theme.of(context).textTheme.bodyLarge,
-        //               ),
-        //               Text(
-        //                 endDate != null
-        //                     ? DateFormatUtil.formatedm(endDate!, null)
-        //                     : '--------',
-        //                 style: Theme.of(context).textTheme.bodyMedium,
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       )
-
-        //     ],
-        //   ),
-        // ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    TextFormField(
+                      enabled: false,
+                      decoration: InputDecoration(
+                        labelText: startDate != null
+                            ? DateFormatUtil.formatC(startDate!)
+                            : Strings.txtFromDate.tr,
+                        // labelText: Strings.txtFromDate.tr,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        labelStyle: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(
+                                fontSize: SizeConfig.textMultiplier * 1.5),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: kGary, width: 0.5),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: kGary, width: 0.5),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: kGary, width: 0.5),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        prefixIcon: Image.asset(
+                          ImagePath.iconCalendar,
+                          color: Color(0xFF23A26D),
+                        ),
+                        fillColor: Theme.of(context).canvasColor,
+                        filled: true,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    TextFormField(
+                      enabled: false,
+                      decoration: InputDecoration(
+                       
+                        labelText: endDate != null
+                            ? DateFormatUtil.formatC(endDate!)
+                            : startDate != null
+                                ? DateFormatUtil.formatC(startDate!)
+                                : Strings.txtToDate.tr,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        labelStyle: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(
+                                fontSize: SizeConfig.textMultiplier * 1.5),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: kGary, width: 1),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: kGary, width: 0.5),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: kGary, width: 1),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        prefixIcon: Image.asset(
+                          ImagePath.iconCalendar,
+                          color: Color(0xFFCE1126),
+                        ),
+                        fillColor: Theme.of(context).canvasColor,
+                        filled: true,
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
         const SizedBox(
           height: 10,
         ),
@@ -393,12 +434,6 @@ class CustomCalendarState extends State<CustomCalendar> {
                                 : Colors.transparent,
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(32.0)),
-                            // border: Border.all(
-                            //   color: getIsItStartAndEndDate(date)
-                            //       ? Colors.white
-                            //       : Colors.transparent,
-                            //   width: 2,
-                            // ),
                             border: _isCurrentDate(date)
                                 ? Border.all(
                                     color: kGary,
@@ -419,42 +454,32 @@ class CustomCalendarState extends State<CustomCalendar> {
                             child: Text(
                               '${date.day}',
                               style: TextStyle(
-                                  color: getIsItStartAndEndDate(date)
-                                      ? Theme.of(context).primaryColorLight
-                                      : currentMonthDate.month == date.month
-                                          ? Theme.of(context).primaryColorLight
-                                          : Colors.grey.withOpacity(0.6),
-                                  fontSize:
-                                      MediaQuery.of(context).size.width > 360
-                                          ? 18
-                                          : 16,
-                                  fontWeight: getIsItStartAndEndDate(date)
-                                      ? FontWeight.bold
-                                      : FontWeight.normal),
+                                color: _isCurrentDate(date)
+                                    ? kBack
+                                    : date.isBefore(DateTime.now())
+                                        ? kGreyColor2
+                                        : getIsItStartAndEndDate(date)
+                                            ? Theme.of(context)
+                                                .primaryColorLight
+                                            : currentMonthDate.month ==
+                                                    date.month
+                                                ? Theme.of(context)
+                                                    .primaryColorLight
+                                                : kG,
+                                fontSize:
+                                    MediaQuery.of(context).size.width > 360
+                                        ? 18
+                                        : 16,
+                                fontWeight: getIsItStartAndEndDate(date)
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  // Positioned(
-                  //   bottom: 9,
-                  //   right: 0,
-                  //   left: 0,
-                  //   child: Container(
-                  //     height: 6,
-                  //     width: 6,
-                  //     decoration: BoxDecoration(
-                  //         color: DateTime.now().day == date.day &&
-                  //                 DateTime.now().month == date.month &&
-                  //                 DateTime.now().year == date.year
-                  //             ? getIsInRange(date)
-                  //                 ? Colors.white
-                  //                 : kYellowColor
-                  //             : Colors.transparent,
-                  //         shape: BoxShape.circle),
-                  //   ),
-                  // ),
                 ],
               ),
             ),

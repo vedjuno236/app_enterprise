@@ -315,9 +315,7 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                               Map<String, dynamic> showLocation(
                                   String keyWord, String? recordTitle) {
                                 if (keyWord == "REMOTE") {
-                                  return {
-                                    'text': recordTitle ?? 'ນອກຫ້ອງການ'
-                                  }; // If recordTitle is null, default to 'ນອກຫ້ອງການ'
+                                  return {'text': recordTitle ?? 'ນອກຫ້ອງການ'};
                                 } else if (keyWord == "OFFICE") {
                                   return {'text': 'ຫ້ອງການ'};
                                 }
@@ -516,9 +514,7 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodyLarge
-                                                      ?.copyWith(
-                                                        color: kTextGrey,
-                                                      ),
+                                                      ?.copyWith(),
                                                 ),
                                                 const Spacer(),
                                                 Text(
@@ -559,8 +555,17 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                                                           .symmetric(
                                                           vertical: 5.0),
                                                       decoration: BoxDecoration(
-                                                        color: const Color(
-                                                            0xFFF5F6FA),
+                                                        color: record.type ==
+                                                                "REMOTE"
+                                                            ? const Color(
+                                                                    0xFF605BFF)
+                                                                .withAlpha(50)
+                                                            : record.type ==
+                                                                    "OFFICE"
+                                                                ? const Color(
+                                                                    0xFFF5F6FA)
+                                                                : const Color(
+                                                                    0xFFF5F6FA),
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10),
@@ -574,10 +579,21 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                                                                 .all(5.0),
                                                         child: Row(
                                                           children: [
-                                                            const Icon(
+                                                            Icon(
                                                               FontAwesome
                                                                   .location_dot_solid,
                                                               size: 15,
+                                                              color: record
+                                                                          .type ==
+                                                                      "REMOTE"
+                                                                  ? const Color(
+                                                                      0xFF605BFF)
+                                                                  : record.type ==
+                                                                          "OFFICE"
+                                                                      ? const Color(
+                                                                          0xFFF5F6FA)
+                                                                      : const Color(
+                                                                          0xFFF5F6FA),
                                                             ),
                                                             const SizedBox(
                                                               width: 15,
@@ -594,7 +610,16 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                                                                       context)
                                                                   .textTheme
                                                                   .bodyMedium
-                                                                  ?.copyWith(),
+                                                                  ?.copyWith(
+                                                                    color: record.type ==
+                                                                            "REMOTE"
+                                                                        ? const Color(
+                                                                            0xFF605BFF)
+                                                                        : record.type ==
+                                                                                "OFFICE"
+                                                                            ? Colors.green
+                                                                            : Colors.black,
+                                                                  ),
                                                             ),
                                                           ],
                                                         ),

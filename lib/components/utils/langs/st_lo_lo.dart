@@ -9,6 +9,7 @@ const Map<String, String> lo = {
   "Home": "ໜ້າຫຼັກ",
   "Analytic": "ລາຍງານ",
   "News": "ຂ່າວສານ",
+  "Information": "ຂໍ້ມູນ",
 
   "Announcement": "ຂ່າວສານຕ່າງໆ",
   "Profile": "ໂປຣຟາຍ",
@@ -73,6 +74,9 @@ const Map<String, String> lo = {
   "All Leave": "ການລາພັກທັງໝົດ",
   "You take leavesBy": "ທ່ານລາພັກທັງໝົດ",
   "All Notifications": "ການແຈ້ງເຕືອນທັງໝົດ",
+
+  "From the date": "ວັນທີເລີ່ມຕົ້ນ",
+  "To the date": "ວັນທີສີ້ນສຸດ",
   // fun
   "Applyeave": "ລາພັກ",
   "Policy": "ກົດລະບຽບ",
@@ -182,5 +186,15 @@ const Map<String, String> lo = {
   ///profile
   "Lives In": " ອາໄສຢູ່",
   "Department": " ພະແນກ",
-  "Sart Working": " ວັນທີເລີ່ມວຽກ"
+  "Sart Working": " ວັນທີເລີ່ມວຽກ",
+
+  /// setting
+  "System settings": " ຕັ້ງຄ່າລະບົບ",
+  "Content and display": " ເນື້ອຫາ ແລະ ການສະແດງຜົນ",
+  "Language": " ພາສາ",
+  "Display screen": "ຈໍສະແດງຜົນ",
+  "Login": "ການເຂົ້າສູ່ລະບົບ",
+  "Logout": "ອອກຈາກລະບົບ",
+  "Light Mode": "ໂໝດແຈ້ງ",
+  "Dark Mode": "ໂໝດມືດ",
 };

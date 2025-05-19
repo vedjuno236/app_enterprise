@@ -99,22 +99,13 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
   }
 
   Future<void> submitForm(WidgetRef ref) async {
+    setState(() {
+      isLoading = true;
+    });
     final userProvider = ref.watch(stateUserProvider);
     final leaveNotifier = ref.read(leaveNotifierProvider.notifier);
     final leaveProvider = ref.watch(stateLeaveProvider);
-
-    // Check if a leave type is selected
     if (leaveProvider.selectedLeaveType == null) {
-      // Fluttertoast.showToast(
-      //   msg: Strings.txtSelectLeave.tr,
-      //   toastLength: Toast.LENGTH_SHORT,
-      //   gravity: ToastGravity.CENTER,
-      //   timeInSecForIosWeb: 1,
-      //   backgroundColor: kRedColor,
-      //   textColor: Colors.white,
-      //   fontSize: 16.0,
-      // );
-
       return;
     }
 
@@ -122,16 +113,6 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
         .firstWhereOrNull((e) => e.keyWord == leaveProvider.selectedLeaveType);
 
     if (selectedLeaveType == null) {
-      // Fluttertoast.showToast(
-      //   msg: Strings.txtSelectLeave.tr,
-      //   toastLength: Toast.LENGTH_SHORT,
-      //   gravity: ToastGravity.CENTER,
-      //   timeInSecForIosWeb: 1,
-      //   backgroundColor: kRedColor,
-      //   textColor: Colors.white,
-      //   fontSize: 16.0,
-      // );
-
       return;
     }
 
@@ -172,14 +153,14 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'ບໍ່ສາມາດລາພັກໄດ້'.tr,
+                      'ຂໍອະໄພ'.tr,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      'ວັນລາພັກຂອງທ່ານບໍ່ພຽງພໍ',
+                      'ວັນລາພັກຂອງທ່ານໝົດແລ້ວ',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
                       textAlign: TextAlign.center,
                     ),
@@ -263,8 +244,13 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
     final leaveProvider = ref.watch(stateLeaveProvider);
     final leaveNotifier = ref.read(leaveNotifierProvider.notifier);
     final color = leaveProvider.selectedLeaveType != null
-        ? getItemColor(leaveProvider.selectedLeaveType!)['color'] as Color
+        ? getItemColorAndText(leaveProvider.selectedLeaveType!)['color']
+            as Color
         : Colors.blueAccent;
+
+    final txt = leaveProvider.selectedLeaveType != null
+        ? getItemColorAndText(leaveProvider.selectedLeaveType!)['txt'] as String
+        : '';
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -273,7 +259,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
         flexibleSpace: const AppbarWidget(),
         title: AnimatedTextAppBarWidget(
           text: Strings.txtLeave.tr,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(),
         ),
         actions: [
           GestureDetector(
@@ -408,15 +394,28 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                                   const SizedBox(
                                                     width: 10,
                                                   ),
+                                                  // Text(
+                                                  //   leaveTypeProvider
+                                                  //       .getLeaveTypeModel!
+                                                  //       .data!
+                                                  //       .firstWhere((e) =>
+                                                  //           e.keyWord ==
+                                                  //           leaveProvider
+                                                  //               .selectedLeaveType)
+                                                  //       .typeName!,
+                                                  //   style: Theme.of(context)
+                                                  //       .textTheme
+                                                  //       .titleMedium,
+                                                  // ),
                                                   Text(
-                                                    leaveTypeProvider
-                                                        .getLeaveTypeModel!
-                                                        .data!
-                                                        .firstWhere((e) =>
-                                                            e.keyWord ==
-                                                            leaveProvider
-                                                                .selectedLeaveType)
-                                                        .typeName!,
+                                                    leaveProvider
+                                                                .selectedLeaveType !=
+                                                            null
+                                                        ? getItemColorAndText(
+                                                                leaveProvider
+                                                                    .selectedLeaveType!)[
+                                                            'txt'] as String
+                                                        : 'No selection',
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .titleMedium,
@@ -424,46 +423,100 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                                   const SizedBox(width: 10),
                                                   Row(
                                                     children: [
+                                                      //                      Text(
+                                                      // '${(widget.data.used != null) ? (widget.data.used! % 1 == 0 ? widget.data.used!.toInt().toString() : widget.data.used!.toStringAsFixed(1)) : '-'} '
+                                                      //     .tr,
                                                       Text(
-                                                        leaveTypeProvider
-                                                            .getLeaveTypeModel!
-                                                            .data!
-                                                            .firstWhere((e) =>
-                                                                e.keyWord ==
-                                                                leaveProvider
-                                                                    .selectedLeaveType)
-                                                            .used
-                                                            .toString(),
+                                                        () {
+                                                          final dataList =
+                                                              leaveTypeProvider
+                                                                  .getLeaveTypeModel
+                                                                  ?.data;
+                                                          final leaveType = () {
+                                                            try {
+                                                              return dataList
+                                                                  ?.firstWhere(
+                                                                (e) =>
+                                                                    e.keyWord ==
+                                                                    leaveProvider
+                                                                        .selectedLeaveType,
+                                                              );
+                                                            } catch (_) {
+                                                              return null;
+                                                            }
+                                                          }();
+
+                                                          final used =
+                                                              leaveType?.used;
+
+                                                          if (used == null)
+                                                            return '0';
+
+                                                          return used % 1 == 0
+                                                              ? used
+                                                                  .toInt()
+                                                                  .toString()
+                                                              : used
+                                                                  .toStringAsFixed(
+                                                                      1);
+                                                        }(),
                                                         style: Theme.of(context)
                                                             .textTheme
                                                             .titleSmall!
                                                             .copyWith(
-                                                                fontSize: SizeConfig
-                                                                        .textMultiplier *
-                                                                    1.9,
-                                                                color:
-                                                                    kRedColor),
+                                                              fontSize: SizeConfig
+                                                                      .textMultiplier *
+                                                                  1.9,
+                                                              color: kRedColor,
+                                                            ),
                                                       ),
+
                                                       Text('/'),
+
                                                       Text(
-                                                        leaveTypeProvider
-                                                            .getLeaveTypeModel!
-                                                            .data!
-                                                            .firstWhere((e) =>
-                                                                e.keyWord ==
-                                                                leaveProvider
-                                                                    .selectedLeaveType)
-                                                            .total
-                                                            .toString(),
+                                                        () {
+                                                          final dataList =
+                                                              leaveTypeProvider
+                                                                  .getLeaveTypeModel
+                                                                  ?.data;
+                                                          final leaveType = () {
+                                                            try {
+                                                              return dataList
+                                                                  ?.firstWhere(
+                                                                (e) =>
+                                                                    e.keyWord ==
+                                                                    leaveProvider
+                                                                        .selectedLeaveType,
+                                                              );
+                                                            } catch (_) {
+                                                              return null;
+                                                            }
+                                                          }();
+
+                                                          final total =
+                                                              leaveType?.total;
+
+                                                          if (total == null)
+                                                            return '0';
+
+                                                          return total % 1 == 0
+                                                              ? total
+                                                                  .toInt()
+                                                                  .toString()
+                                                              : total
+                                                                  .toStringAsFixed(
+                                                                      1);
+                                                        }(),
                                                         style: Theme.of(context)
                                                             .textTheme
                                                             .titleSmall!
                                                             .copyWith(
-                                                                fontSize: SizeConfig
-                                                                        .textMultiplier *
-                                                                    1.9,
-                                                                color: const Color(
-                                                                    0xFF23A26D)),
+                                                              fontSize: SizeConfig
+                                                                      .textMultiplier *
+                                                                  1.9,
+                                                              color: Color(
+                                                                  0xFF23A26D),
+                                                            ),
                                                       ),
                                                     ],
                                                   )
@@ -515,9 +568,13 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                       itemBuilder: (context, index) {
                                         final data = leaveTypeProvider
                                             .getLeaveTypeModel!.data![index];
-                                        var dataColor = getItemColor(
+                                        logger.d(data.total);
+                                        var dataColor = getItemColorAndText(
                                             data.keyWord.toString());
                                         Color color = dataColor['color'];
+                                        var dataText = getItemColorAndText(
+                                            data.keyWord.toString());
+                                        String txt = dataColor['txt'];
                                         return InkWell(
                                           onTap: () {
                                             ref.read(
@@ -578,7 +635,8 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                                         const SizedBox(
                                                             width: 0),
                                                         Text(
-                                                          data.typeName!,
+                                                          txt,
+                                                          // data.typeName!,
                                                           style:
                                                               Theme.of(context)
                                                                   .textTheme
@@ -704,8 +762,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                         showCustomDateRangePicker(
                           context,
                           dismissible: true,
-                          minimumDate:
-                              DateTime.now().subtract(const Duration(days: 30)),
+                          minimumDate: DateTime.now(),
                           maximumDate:
                               DateTime.now().add(const Duration(days: 30)),
                           endDate: endDate,
@@ -1586,77 +1643,82 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
-            onTap: () async {
-              if (leaveProvider.selectedLeaveType == null) {
-                Fluttertoast.showToast(
-                  msg: Strings.txtSelectLeave.tr,
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: kRedColor,
-                  textColor: Colors.white,
-                  fontSize: 16.0,
-                );
+          onTap: isLoading
+              ? null
+              : () async {
+                  setState(() {
+                    isLoading = true;
+                  });
 
-                return;
-              }
-              if (startDate == null || endDate == null) {
-                setState(() {
-                  _validate = true;
-                });
-                return;
-              }
+                  try {
+                    if (leaveProvider.selectedLeaveType == null) {
+                      Fluttertoast.showToast(
+                        msg: Strings.txtSelectLeave.tr,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: kRedColor,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                      return;
+                    }
 
-              setState(() {
-                isLoading = true;
-                _validate = false;
-              });
-              await submitForm(ref);
-              setState(() {
-                isLoading = false;
-              });
-              leaveNotifier.startTimeController.clear();
-              leaveNotifier.endTimeController.clear();
-              leaveNotifier.accordingController.clear();
-              leaveProvider.clearImage();
-              // leaveProvider.selectedLeaveType = null;
-            },
-            child: Container(
-              width: SizeConfig.widthMultiplier * 100,
-              height: SizeConfig.heightMultiplier * 6,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: startDate != null && endDate != null
-                    ? kYellowFirstColor
-                    : kGreyBGColor,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: isLoading
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          Strings.txtLoading.tr,
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 2,
-                                    color: kBack,
-                                  ),
-                        ),
-                      ],
-                    )
-                  : Center(
-                      child: Text(
-                        Strings.txtSubmitForm.tr,
+                    if (startDate == null || endDate == null) {
+                      setState(() {
+                        _validate = true;
+                      });
+                      return;
+                    }
+
+                    await submitForm(ref).whenComplete(() {
+                      leaveNotifier.startTimeController.clear();
+                      leaveNotifier.endTimeController.clear();
+                      leaveNotifier.accordingController.clear();
+                      leaveProvider.clearImage();
+                    });
+                  } finally {
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }
+                },
+          child: Container(
+            width: SizeConfig.widthMultiplier * 100,
+            height: SizeConfig.heightMultiplier * 6,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: startDate != null && endDate != null
+                  ? kYellowFirstColor
+                  : kGreyBGColor,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: isLoading
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        Strings.txtLoading.tr,
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              fontSize: SizeConfig.textMultiplier * 2.5,
+                              fontSize: SizeConfig.textMultiplier * 2,
+                              color: kBack,
                             ),
                       ),
+                    ],
+                  )
+                : Center(
+                    child: Text(
+                      Strings.txtSubmitForm.tr,
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            fontSize: SizeConfig.textMultiplier * 2.5,
+                          ),
                     ),
-            )
-                .animate()
-                .fadeIn(duration: 500.ms, delay: 500.ms)
-                .move(begin: const Offset(-16, 0), curve: Curves.easeOutQuad)),
+                  ),
+          )
+              .animate()
+              .fadeIn(duration: 500.ms, delay: 500.ms)
+              .move(begin: const Offset(-16, 0), curve: Curves.easeOutQuad),
+        ),
       ),
     );
   }
@@ -1717,24 +1779,16 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
     }
   }
 
-  Map<String, dynamic> getItemColor(String keyword) {
-    switch (keyword) {
+  Map<String, dynamic> getItemColorAndText(String keywrd) {
+    switch (keywrd) {
       case "ANNUAL":
-        return {
-          'color': Color(0xFF3085FE),
-        };
+        return {'color': Color(0xFF3085FE), 'txt': Strings.txtAnnual.tr};
       case "LAKIT":
-        return {
-          'color': Color(0xFFF45B69),
-        };
+        return {'color': Color(0xFFF45B69), 'txt': Strings.txtLakit.tr};
       case "SICK":
-        return {
-          'color': Color(0xFFF59E0B),
-        };
+        return {'color': Color(0xFFF59E0B), 'txt': Strings.txtSick.tr};
       case "MATERNITY":
-        return {
-          'color': Color(0xFF23A26D),
-        };
+        return {'color': Color(0xFF23A26D), 'txt': Strings.txtMaternity.tr};
 
       default:
         return {

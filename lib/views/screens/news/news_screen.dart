@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'dart:io';
 
@@ -297,7 +298,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
         flexibleSpace: const AppbarWidget(),
         title: AnimatedTextAppBarWidget(
           text: Strings.txtNews.tr,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(),
         ),
         actions: [
           Padding(
@@ -861,16 +862,14 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                       linkController.clear();
                     },
                     style: ElevatedButton.styleFrom(
-                      side:  BorderSide(color:   Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100),
                       ),
-                      backgroundColor:   Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
+                      backgroundColor: Theme.of(context).colorScheme.onPrimary,
                     ),
                     child: isLoadingC
                         ? Row(

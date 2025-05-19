@@ -154,6 +154,9 @@ class _HeaderProfileState extends ConsumerState<HeaderProfile> {
                   ),
                 ),
               ),
+            
+            
+            
               SizedBox(width: SizeConfig.widthMultiplier * 2),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -40,8 +40,10 @@ class Data {
   String? reason;
   String? document;
   String? status;
-  int? total;
-  int? used;
+  double? total;
+  double? used;
+  double? unUsed;
+  List<ApprovedBy>? approvedBy;
   String? createdAt;
   String? updatedAt;
 
@@ -63,6 +65,8 @@ class Data {
       this.status,
       this.total,
       this.used,
+      this.unUsed,
+      this.approvedBy,
       this.createdAt,
       this.updatedAt});
 
@@ -78,15 +82,23 @@ class Data {
     logo = json['logo'];
     startDate = json['start_date'];
     endDate = json['end_date'];
-    totalDays = json['total_days'] is num
-        ? (json['total_days'] as num).toDouble()
-        : 0.0;
+    // totalDays = json['total_days'];
+    totalDays = json['total_days'] is num ? (json['total_days'] as num).toDouble() : 0.0;
+
 
     reason = json['reason'];
     document = json['document'];
     status = json['status'];
-    total = json['total'];
-    used = json['used'];
+
+    total = json['total'] is num ? (json['total'] as num).toDouble() : 0.0;
+    used = json['used'] is num ? (json['used'] as num).toDouble() : 0.0;
+    unUsed = json['un_used'] is num ? (json['un_used'] as num).toDouble() : 0.0;
+    if (json['approved_by'] != null) {
+      approvedBy = <ApprovedBy>[];
+      json['approved_by'].forEach((v) {
+        approvedBy!.add(new ApprovedBy.fromJson(v));
+      });
+    }
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -110,8 +122,53 @@ class Data {
     data['status'] = this.status;
     data['total'] = this.total;
     data['used'] = this.used;
+    data['un_used'] = this.unUsed;
+    if (this.approvedBy != null) {
+      data['approved_by'] = this.approvedBy!.map((v) => v.toJson()).toList();
+    }
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    return data;
+  }
+}
+
+class ApprovedBy {
+  int? id;
+  String? username;
+  String? profile;
+  String? departmentName;
+  String? positionName;
+  String? status;
+  String? comment;
+
+  ApprovedBy(
+      {this.id,
+      this.username,
+      this.profile,
+      this.departmentName,
+      this.positionName,
+      this.status,
+      this.comment});
+
+  ApprovedBy.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    username = json['username'];
+    profile = json['profile'];
+    departmentName = json['department_name'];
+    positionName = json['position_name'];
+    status = json['status'];
+    comment = json['comment'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['username'] = this.username;
+    data['profile'] = this.profile;
+    data['department_name'] = this.departmentName;
+    data['position_name'] = this.positionName;
+    data['status'] = this.status;
+    data['comment'] = this.comment;
     return data;
   }
 }

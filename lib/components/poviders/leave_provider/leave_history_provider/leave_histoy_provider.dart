@@ -28,10 +28,6 @@ class LeaveHistoryProvider with ChangeNotifier {
     }
   }
 
-
-
-
-
   DateTime? _selectedMonth;
 
   String _selectedMonthText = Strings.txtThisMonth;

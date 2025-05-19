@@ -81,7 +81,7 @@ class NewsDetailsScreen extends ConsumerWidget {
                       news.title!,
                       style: Theme.of(context)
                           .textTheme
-                          .titleSmall!
+                          .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
                     ).animate().fade(duration: 300.ms).moveX(
                         begin: -50,
@@ -126,7 +126,7 @@ class NewsDetailsScreen extends ConsumerWidget {
                     ),
                     Text(
                       news.description!,
-                      style: Theme.of(context).textTheme.labelLarge!.copyWith(),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
                     ).animate().fade(duration: 1000.ms).moveX(
                         begin: -50,
                         end: 0,

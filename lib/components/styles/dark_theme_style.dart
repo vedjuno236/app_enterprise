@@ -35,6 +35,7 @@ class AppTheme {
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
+
         scaffoldBackgroundColor: const Color(0xff2D2D2E),
         primaryColorDark: Colors.black,
         primaryColorLight: Colors.white,

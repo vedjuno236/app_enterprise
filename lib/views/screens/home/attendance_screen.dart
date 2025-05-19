@@ -201,10 +201,6 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
   void initState() {
     super.initState();
     currentMapType = MapType.normal;
-
-    // getPolyPoints();
-    // setCustomMarkerIcon();
-
     _getCurrentLocation();
   }
 
@@ -220,11 +216,10 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
   final _formKey = GlobalKey<FormState>();
   // final NetworkService _networkService = NetworkService();
   Future<void> clockInOutService() async {
-    // final isConnected = await _networkService.isConnected();
     final attendanceProvider = ref.watch(stateAttendanceProvider);
     final userProvider = ref.watch(stateUserProvider);
 
-    // if (isConnected) {
+ 
     try {
       attendanceProvider.isLoading = true;
       final response = await EnterpriseAPIService().saveAttendanceData(
@@ -260,41 +255,17 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
       }
     } on DioException catch (e) {
       if (context.mounted) {
-        // await _saveToSQLite(
-        //   userId: sharedPrefs.getStringNow(KeyShared.keyUserId),
-        //   type: "REMOTE",
-        //   latitude: _currentPosition!.latitude,
-        //   longitude: _currentPosition!.longitude,
-        //   imagePath: attendanceProvider.selectedImage!.path,
-        //   title: description.text,
-        // ).whenComplete(() => alertSuccessDialog(context));
-        // ignore: use_build_context_synchronously
+        
         errorDialog(context: context, onError: e);
       }
       attendanceProvider.isLoading = false;
     } catch (e) {
       if (context.mounted) {
-        // await _saveToSQLite(
-        //   userId: sharedPrefs.getStringNow(KeyShared.keyUserId),
-        //   type: "REMOTE",
-        //   latitude: _currentPosition!.latitude,
-        //   longitude: _currentPosition!.longitude,
-        //   imagePath: attendanceProvider.selectedImage!.path,
-        //   title: description.text,
-        // ).whenComplete(() => alertSuccessDialog(context));
-        // ignore: use_build_context_synchronously
+     
         errorDialog(context: context, onError: e);
       }
     }
-    // } else {
-    // await _saveToSQLite(
-    //   userId: sharedPrefs.getStringNow(KeyShared.keyUserId),
-    //   type: "REMOTE",
-    //   latitude: _currentPosition!.latitude,
-    //   longitude: _currentPosition!.longitude,
-    //   imagePath: attendanceProvider.selectedImage!.path,
-    //   title: description.text,
-    // ).whenComplete(() => alertSuccessDialog(context));
+   
   }
 
   AppState state = AppState.free;
@@ -377,7 +348,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
       ),
       body: CustomProgressHUD(
         key: UniqueKey(),
-        inAsyncCall: isLoading,
+        inAsyncCall: attendanceProvider.isLoading,
         child: SingleChildScrollView(
           physics: const NeverScrollableScrollPhysics(),
           child: Container(
@@ -738,27 +709,34 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                 height: SizeConfig.heightMultiplier * 5,
                 width: SizeConfig.widthMultiplier * 35,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      if (_imageFile == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(Strings.txtPleaseUpload),
-                          ),
-                        );
-                        return;
-                      }
-                      setState(() {
-                        isLoading = true;
-                      });
+                  onPressed: attendanceProvider.isLoading
+                      ? null
+                      : () async {
+                          if (!attendanceProvider.isLoading) {
+                      
+                              attendanceProvider.isLoading = true;
+                            
+                          }
 
-                      await clockInOutService();
+                          try {
+                            if (_formKey.currentState!.validate()) {
+                              if (_imageFile == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(Strings.txtPleaseUpload),
+                                  ),
+                                );
+                                return;
+                              }
 
-                      setState(() {
-                        isLoading = false;
-                      });
-                    }
-                  },
+                              await clockInOutService();
+                            }
+                          } finally {
+                     
+                              attendanceProvider.isLoading = false;
+                            
+                          }
+                        },
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -766,7 +744,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                     ),
                     backgroundColor: kYellowFirstColor,
                   ),
-                  child: isLoading
+                  child: attendanceProvider.isLoading
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

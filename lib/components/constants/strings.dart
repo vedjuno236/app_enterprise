@@ -271,7 +271,7 @@ class Strings {
   static const String txtPayslips = "Payslips";
   static const String txtCalendar = "Calendar";
   static const String txtRequestOt = "Request OT";
-   static const String txtEvent = "Events";
+  static const String txtEvent = "Events";
 
   /// news
   static const String txtRequestTitle = "Request title ";
@@ -296,6 +296,8 @@ class Strings {
 
   static const String txtReasonNew = "Please give a reason";
   static const String txtReferences = "References";
+   static const String txtFromDate = "From the date";
+     static const String txtToDate =  "To the date";
 
   static const String txtSelectLeaveStart = "--- ກະລຸນາເລືອກເວລາເລີ່ມ ---";
   static const String txtSelectDateStart = "--- ກະລຸນາເລືອກວັນທີເລີ່ມຕົ້ນ ---";
@@ -350,8 +352,17 @@ class Strings {
   static const String txtNextMonth = "Next Month";
 
   //profile
-   static const String txtLivesIn = "Lives In";
-static const String txtDep = "Department";
+  static const String txtLivesIn = "Lives In";
+  static const String txtDep = "Department";
   static const String txtSartWork = "Sart Working";
 
+  // Setting
+
+  static const String txtSystemSettings = "System settings";
+  static const String txtContenDisplay = "Content and display";
+  static const String txtLanguage = "Language";
+   static const String  txtDisplayScreen = "Display screen";
+
+  static const String txtDark = "Dark Mode";
+   static const String  txtLight = "Light Mode";
 }

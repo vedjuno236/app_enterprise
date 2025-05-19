@@ -19,6 +19,15 @@ class DateFormatUtil {
     return formatter.format(date);
   }
 
+  static String formatC(
+    DateTime date,
+  ) {
+    // final formatter = DateFormat.yMd( currentLocale);
+    // return formatter.format(date);
+    final formatter = DateFormat('d-MM-yyyy');
+    return formatter.format(date);
+  }
+
   static String formatD(DateTime date, {String? locale}) {
     final formatter = DateFormat.EEEE(locale ?? currentLocale);
     return formatter.format(date);
@@ -63,10 +72,12 @@ class DateFormatUtil {
     final formatter = DateFormat('dd-MMMM', locale ?? currentLocale);
     return formatter.format(date);
   }
- static String formatedm(DateTime date, String? locale) {
+
+  static String formatedm(DateTime date, String? locale) {
     final formatter = DateFormat('EEE, dd MMMM', locale ?? currentLocale);
     return formatter.format(date);
   }
+
   static String formatddMMy(DateTime date, {String? locale}) {
     final formatter = DateFormat.yMMMMd(locale ?? currentLocale);
     return formatter.format(date);

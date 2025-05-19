@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:flutter/material.dart';
@@ -722,6 +723,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                 itemCount: leaveType.getLeaveTypeModel?.data?.length ?? 0,
                 itemBuilder: (context, index) {
                   final data = leaveType.getLeaveTypeModel?.data?[index];
+                  logger.d(data!.unUsed.toString());
                   var dataColor = getItemColor(leaveType
                       .getLeaveTypeModel!.data![index].keyWord
                       .toString());
@@ -779,7 +781,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                                   fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(
-                          '${(data.used != null) ? (data.used! % 1 == 0 ? data.used!.toInt().toString() : data.used!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
+                          '${(data.unUsed != null) ? (data.unUsed! % 1 == 0 ? data.unUsed!.toInt().toString() : data.unUsed!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
                               .tr,
                           style:
                               Theme.of(context).textTheme.titleSmall!.copyWith(

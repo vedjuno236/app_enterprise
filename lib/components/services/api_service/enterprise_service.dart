@@ -1,10 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:enterprise/components/constants/key_shared.dart';
-import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:enterprise/components/utils/api_path.dart';
-import 'package:http_parser/http_parser.dart';
 
 import '../../logger/logger.dart';
 import '../../utils/api_base.dart';
@@ -23,13 +20,13 @@ class EnterpriseAPIService {
   }
 
   ///Login API
-  Future loginAPI({phone, password}) async {
+  Future loginAPI({phone, password, deviceToken}) async {
     String url = APIPathHelper.getValue(ApiPath.login);
 
     Map body = {
       'phone': phone,
       'password': password,
-      // 'device_token': deviceToken,
+      'device_token': deviceToken,
     };
 
     response = await _dio!.post(url,
@@ -459,17 +456,18 @@ class EnterpriseAPIService {
     }
   }
 
-  Future callAllLeaveHistory({
-    required UserId,
-    required LeaveTypeID,
-    required Status,
-  }) async {
+  Future callAllLeaveHistory(
+      {required UserId,
+      required LeaveTypeID,
+      required Status,
+      required month}) async {
     String url = APIPathHelper.getValue(ApiPath.allLeaveHistory);
 
     Map body = {
       'user_id': UserId,
       'leave_type_id': LeaveTypeID,
       'status': Status,
+      "month": month,
     };
     response = await _dio!.post(
       url,
@@ -519,6 +517,26 @@ class EnterpriseAPIService {
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+    return response.data;
+  }
+
+  Future callNotificationUser({
+    required userid,
+  }) async {
+    String url = APIPathHelper.getValue(ApiPath.notificationUser);
+    Map body = {
+      'user_id': userid,
+    };
+    response = await _dio!.post(
+      url,
+      data: body,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
       ),
     );

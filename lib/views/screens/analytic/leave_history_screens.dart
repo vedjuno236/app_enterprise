@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
+import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
 import 'package:enterprise/components/utils/date_format_utils.dart';
 import 'package:enterprise/components/utils/dialogs.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:intl/intl.dart';
@@ -51,12 +53,15 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
   @override
   void initState() {
     super.initState();
-    sharedPrefs = SharedPrefs();
-    final userIdString = sharedPrefs.getStringNow(KeyShared.keyUserId);
-    userID = int.tryParse(userIdString ?? '0') ?? 0; // Safe parsing
-    final initialIndex = ref.read(leaveHistoryProvider).selectedIndex;
-    final initialStatus = categories[initialIndex]['status']!;
-    fetchAllLeaveApi(status: initialStatus);
+    Future.microtask(() {
+      ref.read(leaveHistoryProvider).selectedMonth = DateTime.now();
+      sharedPrefs = SharedPrefs();
+      final userIdString = sharedPrefs.getStringNow(KeyShared.keyUserId);
+      userID = int.tryParse(userIdString ?? '0') ?? 0; // Safe parsing
+      final initialIndex = ref.read(leaveHistoryProvider).selectedIndex;
+      final initialStatus = categories[initialIndex]['status']!;
+      fetchAllLeaveApi(status: initialStatus);
+    });
   }
 
   @override
@@ -66,6 +71,7 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
   }
 
   Future<void> fetchAllLeaveApi({required String status}) async {
+    String formattedDate = DateFormat('yyyy-MM').format(selectedMonth);
     setState(() {
       isLoadingLeave = true;
       currentStatus = status;
@@ -76,6 +82,7 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
         UserId: userID,
         LeaveTypeID: 0,
         Status: status,
+        month: formattedDate,
       );
       ref
           .read(leaveHistoryProvider.notifier)
@@ -104,6 +111,7 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
     DateTime initialDate = dateProvider.selectedMonth ?? DateTime.now();
     DateTime now = DateTime.now();
     DateTime maxDate = DateTime(now.year, now.month + 1, 0);
+    final darkTheme = ref.watch(darkThemeProviderProvider);
 
     showDialog(
       context: context,
@@ -125,14 +133,12 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                     borderRadius: BorderRadius.circular(12)
                     // shape: BoxShape.circle,
                     ),
-                selectedCellTextStyle: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: kBack87),
+                selectedCellTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(),
                 enabledCellsTextStyle:
                     Theme.of(context).textTheme.bodyMedium!.copyWith(),
                 enabledCellsDecoration: BoxDecoration(
-                  color: Theme.of(context).canvasColor,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
                 ),
@@ -145,10 +151,8 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
                 ),
-                currentDateTextStyle: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: kBack87),
+                currentDateTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(),
                 currentDateDecoration: BoxDecoration(
                     border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
                     borderRadius: BorderRadius.circular(12)),
@@ -160,9 +164,7 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                 currentDate: initialDate,
                 selectedDate: initialDate,
                 onDateSelected: (month) {
-                  ref.read(stateAnalyticProvider.notifier).selectedMonth =
-                      month;
-                  // logger.d(DateFormat.MMMM().format(month));
+                  selectedMonth = month;
                 },
               )),
           actions: [
@@ -170,17 +172,21 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
               onPressed: () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-                backgroundColor: kGary,
+                backgroundColor:
+                    darkTheme.darkTheme ? kGreyBGColor.withAlpha(50) : kGary,
               ),
               child: Text(Strings.txtCancel.tr),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-                backgroundColor: kYellowFirstColor,
+                backgroundColor: darkTheme.darkTheme ? kBack : kYellowColor,
               ),
               onPressed: () {
-                Navigator.pop(context);
+                ref.read(leaveHistoryProvider.notifier).selectedMonth =
+                    selectedMonth;
+                fetchAllLeaveApi(status: currentStatus);
+                context.pop();
               },
               child: Text(Strings.txtOkay.tr),
             ),
@@ -211,16 +217,16 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
         flexibleSpace: const AppbarWidget(),
         title: AnimatedTextAppBarWidget(
           text: Strings.txtAllLeaveHistory.tr,
-          style: Theme.of(context).textTheme.bodyLarge!,
+          style: Theme.of(context).textTheme.titleLarge!,
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: GestureDetector(
-              onTap: () {},
-              child: const Icon(IonIcons.ellipsis_vertical, color: kBack),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(right: 20),
+          //   child: GestureDetector(
+          //     onTap: () {},
+          //     child: const Icon(IonIcons.ellipsis_vertical, color: kBack),
+          //   ),
+          // ),
         ],
       ),
       body: Padding(
@@ -249,12 +255,13 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          '$totalLeaveDays ${Strings.txtDay.tr}',
+                          '${(totalLeaveDays != null) ? (totalLeaveDays! % 1 == 0 ? totalLeaveDays!.toInt().toString() : totalLeaveDays!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
+                              .tr,
                           style:
                               Theme.of(context).textTheme.titleLarge!.copyWith(
                                     fontSize: SizeConfig.textMultiplier * 2.5,
                                   ),
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -275,18 +282,15 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                           child: Row(
                             children: [
                               Text(
-                                DateFormat.MMMM().format(ref
-                                        .watch(leaveHistoryProvider)
-                                        .selectedMonth ??
-                                    DateTime.now()),
-                                style: GoogleFonts.notoSansLao(
-                                  textStyle: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge!
-                                      .copyWith(
-                                        fontSize: SizeConfig.textMultiplier * 2,
-                                      ),
-                                ),
+                                ref
+                                    .watch(leaveHistoryProvider)
+                                    .selectedMonthText,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(
+                                        fontSize:
+                                            SizeConfig.textMultiplier * 2),
                               ),
                               const Icon(Icons.arrow_drop_down),
                             ],
@@ -635,10 +639,9 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                                                                       : 'https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg',
                                                                 ),
                                                               ),
-                                                              if (txtStatus ==
-                                                                  Strings
-                                                                      .txtRejected
-                                                                      .tr)
+                                                              if (approver
+                                                                      .status ==
+                                                                  "REJECTED")
                                                                 Positioned.fill(
                                                                   child:
                                                                       Container(
@@ -690,14 +693,14 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
   return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Theme.of(context).canvasColor,
+      // backgroundColor: Theme.of(context).canvasColor,
       builder: (BuildContext context) {
         return FractionallySizedBox(
             heightFactor: 0.6,
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Theme.of(context).canvasColor,
+                color: Theme.of(context).cardColor,
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(16)),
               ),
@@ -763,18 +766,50 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: CustomTextField(
-                              prefixIcon: Image.asset(ImagePath.iconIn),
-                              hintText:
-                                  '${DateFormatUtil.formatms(DateTime.parse(leaveData.startDate.toString()))} ',
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'ເວລາເລີ່ມຕົ້ນ',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                        fontSize:
+                                            SizeConfig.textMultiplier * 1.9,
+                                      ),
+                                ),
+                                const SizedBox(height: 6),
+                                CustomTextField(
+                                  prefixIcon: Image.asset(ImagePath.iconIn),
+                                  hintText:
+                                      '${DateFormatUtil.formatH(DateTime.parse(leaveData.startDate.toString()))} ',
+                                ),
+                              ],
                             ),
                           ),
                           const SizedBox(width: 8),
                           Expanded(
-                            child: CustomTextField(
-                              prefixIcon: Image.asset(ImagePath.iconOut),
-                              hintText:
-                                  '${DateFormatUtil.formatms(DateTime.parse(leaveData.endDate.toString()))} ',
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'ເວລາເລີ່ມຕົ້ນ',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                        fontSize:
+                                            SizeConfig.textMultiplier * 1.9,
+                                      ),
+                                ),
+                                const SizedBox(height: 6),
+                                CustomTextField(
+                                  prefixIcon: Image.asset(ImagePath.iconOut),
+                                  hintText:
+                                      '${DateFormatUtil.formatH(DateTime.parse(leaveData.endDate.toString()))} ',
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -1091,7 +1126,7 @@ Map<String, dynamic> getCheckStatus(String? title) {
     case "APPROVED":
       return {'color': const Color(0xFF23A26D), 'txt': Strings.txtApproved.tr};
     case "REJECTED":
-      return {'color': const Color(0xFFF45B69), 'txt': Strings.txtRejected.tr};
+      return {'color': const Color(0xFFF95555), 'txt': Strings.txtRejected.tr};
     case "PENDING":
       return {'color': const Color(0xFFF59E0B), 'txt': Strings.txtWaiting.tr};
     default:

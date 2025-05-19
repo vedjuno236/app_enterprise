@@ -108,32 +108,6 @@ class ImagePickerBottomSheet extends StatelessWidget {
     );
   }
 }
-
-//
-//
-
-// Future<void> bottomSheetPushContainer({
-//   BuildContext? context,
-//   Widget? child,
-//   double? constantsSize,
-//   double? height,
-//   bool? isScrollControlled = false,
-// }) {
-//   return showModalBottomSheet(
-//     isScrollControlled: isScrollControlled!,
-//     backgroundColor: Colors.transparent,
-//     context: context!,
-//     builder: (context) => Container(
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         boxShadow: const [BoxShadow(color: kYellowFirstColor, blurRadius: 10)],
-//         borderRadius: BorderRadius.circular(10),
-//       ),
-//       child: child,
-//     ),
-//   );
-// }
-
 Future<void> bottomSheetPushContainer({
   BuildContext? context,
   Widget? child,
