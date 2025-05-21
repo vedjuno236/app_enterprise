@@ -2,14 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:enterprise/components/logger/logger.dart';
-import 'package:enterprise/components/poviders/analytic_provider/analytic_provider.dart';
 import 'package:enterprise/components/poviders/leave_provider/leave_provider.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../components/constants/colors.dart';
@@ -122,7 +120,7 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
                                   children: [
                                     CircleAvatar(
                                       radius:
-                                          SizeConfig.imageSizeMultiplier * 4,
+                                          SizeConfig.imageSizeMultiplier * 4.5,
                                       backgroundColor: color.withOpacity(0.1),
                                       child: CachedNetworkImage(
                                         imageUrl: leave.logo!,
@@ -139,12 +137,14 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          txt,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium,
-                                        ),
+                                        Text(txt,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium!
+                                                .copyWith(
+                                                    fontSize: SizeConfig
+                                                            .textMultiplier *
+                                                        2)),
                                       ],
                                     ),
                                   ],
@@ -197,7 +197,7 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
                                                       .copyWith(
                                                           fontSize: SizeConfig
                                                                   .textMultiplier *
-                                                              1.7),
+                                                              2),
                                                 ),
                                               ],
                                             ),
@@ -211,7 +211,7 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
                                                   .copyWith(
                                                       fontSize: SizeConfig
                                                               .textMultiplier *
-                                                          1.7),
+                                                          2.1),
                                             ),
                                           ],
                                         ),
@@ -259,7 +259,7 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
                                                       .copyWith(
                                                           fontSize: SizeConfig
                                                                   .textMultiplier *
-                                                              1.7),
+                                                              2),
                                                 ),
                                               ],
                                             ),
@@ -274,7 +274,7 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
                                                   .copyWith(
                                                       fontSize: SizeConfig
                                                               .textMultiplier *
-                                                          1.8),
+                                                          2.1),
                                             ),
                                           ],
                                         ),
@@ -320,13 +320,8 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
     return AppBar(
       elevation: 0,
       flexibleSpace: const AppbarWidget(),
-      title: Text(
-        Strings.txtAllLeaveHistory.tr,
-        style: Theme.of(context)
-            .textTheme
-            .titleLarge!
-            .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
-      ),
+      title: Text(Strings.txtAllLeaveHistory.tr,
+          style: Theme.of(context).textTheme.titleLarge!.copyWith()),
       // actions: [
       //   Padding(
       //     padding: const EdgeInsets.only(right: 20),

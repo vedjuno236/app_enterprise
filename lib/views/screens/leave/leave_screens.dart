@@ -191,6 +191,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
   ) {
     return showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return AlertSuccessDialog(
             title: Container(
@@ -211,9 +212,9 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
               children: [
                 Text(
                   Strings.txtSuccessFully.tr,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontSize: SizeConfig.textMultiplier * 2.2,
+                      fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -221,7 +222,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge
-                      ?.copyWith(color: Color(0xFF474747)),
+                      ?.copyWith(fontSize: SizeConfig.textMultiplier * 2.2),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -285,7 +286,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                       Strings.txtHistory.tr,
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontSize: SizeConfig.textMultiplier *
-                              1.5), // Reduce font size if necessary
+                              1.9), // Reduce font size if necessary
                     ),
                   ),
                 ],
@@ -312,7 +313,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                 children: [
                   Text(Strings.txtTypeLeave.tr,
                           style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                                fontSize: SizeConfig.textMultiplier * 1.9,
+                                fontSize: SizeConfig.textMultiplier * 2.2,
                               ))
                       .animate()
                       .fadeIn(duration: 500.ms, delay: 500.ms)
@@ -394,38 +395,25 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                                   const SizedBox(
                                                     width: 10,
                                                   ),
-                                                  // Text(
-                                                  //   leaveTypeProvider
-                                                  //       .getLeaveTypeModel!
-                                                  //       .data!
-                                                  //       .firstWhere((e) =>
-                                                  //           e.keyWord ==
-                                                  //           leaveProvider
-                                                  //               .selectedLeaveType)
-                                                  //       .typeName!,
-                                                  //   style: Theme.of(context)
-                                                  //       .textTheme
-                                                  //       .titleMedium,
-                                                  // ),
                                                   Text(
-                                                    leaveProvider
-                                                                .selectedLeaveType !=
-                                                            null
-                                                        ? getItemColorAndText(
-                                                                leaveProvider
-                                                                    .selectedLeaveType!)[
-                                                            'txt'] as String
-                                                        : 'No selection',
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleMedium,
-                                                  ),
+                                                      leaveProvider
+                                                                  .selectedLeaveType !=
+                                                              null
+                                                          ? getItemColorAndText(
+                                                                  leaveProvider
+                                                                      .selectedLeaveType!)[
+                                                              'txt'] as String
+                                                          : '',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .titleMedium!
+                                                          .copyWith(
+                                                              fontSize: SizeConfig
+                                                                      .textMultiplier *
+                                                                  2)),
                                                   const SizedBox(width: 10),
                                                   Row(
                                                     children: [
-                                                      //                      Text(
-                                                      // '${(widget.data.used != null) ? (widget.data.used! % 1 == 0 ? widget.data.used!.toInt().toString() : widget.data.used!.toStringAsFixed(1)) : '-'} '
-                                                      //     .tr,
                                                       Text(
                                                         () {
                                                           final dataList =
@@ -470,9 +458,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                                               color: kRedColor,
                                                             ),
                                                       ),
-
                                                       Text('/'),
-
                                                       Text(
                                                         () {
                                                           final dataList =
@@ -514,7 +500,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                                               fontSize: SizeConfig
                                                                       .textMultiplier *
                                                                   1.9,
-                                                              color: Color(
+                                                              color: const Color(
                                                                   0xFF23A26D),
                                                             ),
                                                       ),
@@ -523,7 +509,16 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                                 ],
                                               ),
                                             )
-                                          : Text(Strings.txtSelectLeave.tr),
+                                          : Text(
+                                              Strings.txtSelectLeave.tr,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium!
+                                                  .copyWith(
+                                                      fontSize: SizeConfig
+                                                              .textMultiplier *
+                                                          2),
+                                            ),
                                       Icon(leaveProvider.isDropdownOpen
                                           ? Icons.arrow_drop_up
                                           : Icons.arrow_drop_down),
@@ -572,8 +567,6 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                         var dataColor = getItemColorAndText(
                                             data.keyWord.toString());
                                         Color color = dataColor['color'];
-                                        var dataText = getItemColorAndText(
-                                            data.keyWord.toString());
                                         String txt = dataColor['txt'];
                                         return InkWell(
                                           onTap: () {
@@ -750,7 +743,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                     Text(
                       Strings.txtDayS.tr,
                       style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            fontSize: SizeConfig.textMultiplier * 1.9,
+                            fontSize: SizeConfig.textMultiplier * 2.2,
                           ),
                     )
                         .animate()
@@ -802,12 +795,12 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                               ? Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
-                                  .copyWith()
-                              : Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(),
-                          errorText: _validate ? "ກະລຸນາເລືອກວັນທີກ່ອນ" : null,
+                                  .copyWith(
+                                      fontSize: SizeConfig.textMultiplier * 2)
+                              : Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                  fontSize: SizeConfig.textMultiplier * 2),
+                          errorText:
+                              _validate ? Strings.txtSelectDates.tr : null,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return null;
@@ -837,7 +830,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                   .textTheme
                                   .titleSmall!
                                   .copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 1.9,
+                                    fontSize: SizeConfig.textMultiplier * 2.2,
                                   ),
                               text: Strings.txtTimeNew.tr,
                               children: [
@@ -848,7 +841,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                       .titleLarge!
                                       .copyWith(
                                         fontSize:
-                                            SizeConfig.textMultiplier * 1.9,
+                                            SizeConfig.textMultiplier * 2.2,
                                         color: kGreyColor2,
                                       ),
                                 ),
@@ -1491,7 +1484,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                     Text.rich(
                       TextSpan(
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            fontSize: SizeConfig.textMultiplier * 1.9),
+                            fontSize: SizeConfig.textMultiplier * 2.2),
                         text: Strings.txtReasonNew.tr,
                         children: [
                           TextSpan(
@@ -1500,7 +1493,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                 .textTheme
                                 .titleLarge!
                                 .copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 1.9,
+                                    fontSize: SizeConfig.textMultiplier * 2.2,
                                     color: kGreyColor2),
                           ),
                         ],
@@ -1514,8 +1507,10 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                       maxLines: 5,
                       hintText: Strings.txtPLeaseEnter.tr,
                       controller: leaveNotifier.accordingController,
-                      hintStyle:
-                          Theme.of(context).textTheme.bodyLarge!.copyWith(),
+                      hintStyle: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(fontSize: SizeConfig.textMultiplier * 2),
                     )
                         .animate()
                         .fadeIn(duration: 500.ms, delay: 500.ms)
@@ -1733,6 +1728,10 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
         children: [
           Text(
             Strings.txtPleaseChooseImage.tr,
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(fontSize: SizeConfig.textMultiplier * 2),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -1746,6 +1745,10 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                     const Icon(Icons.camera_alt_outlined, color: kYellowColor),
                 label: Text(
                   Strings.txtCamera.tr,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
                 ),
               ),
               TextButton.icon(
@@ -1756,6 +1759,10 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                 icon: const Icon(Icons.image_outlined, color: kYellowColor),
                 label: Text(
                   Strings.txtGallery.tr,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
                 ),
               ),
             ],

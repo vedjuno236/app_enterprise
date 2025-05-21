@@ -22,7 +22,7 @@ class Strings {
   static const String txtClockIn = "Clock In";
   static const String txtDraw = "Draw";
   static const String txtDrawDate = "Draw-Date";
-  static const String txtNo = "No";
+  static const String txtNo = "No"; 
   static const String txtYes = "Yes";
   static const String txtDigit = "Digit";
   static const String txtAmount = "Amount";
@@ -32,6 +32,7 @@ class Strings {
   static const String txtTotal = "Total";
   static const String txt23456D = "23456D";
   static const String txt4Animals = "4_Animals";
+  static const String txtemtyData = "Emty Data";
 
   static const String txtSale = "Sale";
   static const String txtRandom = "Random";
@@ -144,7 +145,7 @@ class Strings {
   static const String txtPlace = "Place";
   static const String txtPhone = "Phone";
   static const String txtSolution = "Solution Treatment";
-  static const String txtUploadImage = "UploadImage";
+  static const String txtUploadImage = "Click to add your photo or files";
   static const String txtImage = "Image";
   static const String txtEditLeave = "Edit Leave";
   static const String txtRequests = "Requests";
@@ -209,7 +210,6 @@ class Strings {
   static const String txtAvailable = "No Policies available!";
   static const String txtBy = "By";
   static const String txtYoutakeleaves = "You take leavesBy";
-
   static const String txtAvailableMonth =
       "No data available for the selected month";
   static const String txtPleaseEnterYourPassword = "Please enter your password";
@@ -293,6 +293,8 @@ class Strings {
   static const String txtEndTime = "End time";
   static const String txtTimeNew = "Time";
   static const String txtTimNoIsYes = "Wear it or not";
+  static const String txtSelectDates= "Please select a date";
+
 
   static const String txtReasonNew = "Please give a reason";
   static const String txtReferences = "References";
@@ -365,4 +367,10 @@ class Strings {
 
   static const String txtDark = "Dark Mode";
    static const String  txtLight = "Light Mode";
+
+
+   // check text input
+      static const String  txtPleaseEnter = "Please enter text";
+
+
 }

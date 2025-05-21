@@ -5,12 +5,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/colors.dart';
 import 'package:enterprise/components/constants/image_path.dart';
 import 'package:enterprise/components/languages/localization_service.dart';
-import 'package:enterprise/components/poviders/bottom_bar_provider/bottom_bar_provider.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/router/router.dart';
 import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/components/utils/dio_exceptions.dart';
-import 'package:enterprise/views/screens/auth/translate.dart';
 import 'package:enterprise/views/screens/settings/setting_screen.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_login.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
@@ -409,7 +407,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                       .titleLarge!
                                       .copyWith(
                                           fontSize:
-                                              SizeConfig.textMultiplier * 2,
+                                              SizeConfig.textMultiplier * 2.2,
                                           color: Theme.of(context)
                                               .primaryColorLight),
                                 )
@@ -607,7 +605,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   .textTheme
                                   .titleLarge!
                                   .copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 2,
+                                    fontSize: SizeConfig.textMultiplier * 2.2,
                                   ),
                             )
                                 .animate()
@@ -642,7 +640,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                               .copyWith(
                                                 fontSize:
                                                     SizeConfig.textMultiplier *
-                                                        1.8,
+                                                        2.2,
                                               ),
                                           textAlign: TextAlign.left,
                                         ),
@@ -665,7 +663,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                 .copyWith(
                                                   fontSize: SizeConfig
                                                           .textMultiplier *
-                                                      1.9,
+                                                      2.2,
                                                 ),
                                             text: '${Strings.txtLivesIn.tr} ',
                                             children: [
@@ -678,7 +676,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                     .copyWith(
                                                         fontSize: SizeConfig
                                                                 .textMultiplier *
-                                                            1.9,
+                                                            2.2,
                                                         fontWeight:
                                                             FontWeight.bold),
                                               ),
@@ -704,7 +702,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                 .copyWith(
                                                   fontSize: SizeConfig
                                                           .textMultiplier *
-                                                      1.9,
+                                                      2.2,
                                                 ),
                                             text: '${Strings.txtDep.tr} ',
                                             children: [
@@ -717,7 +715,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                     .copyWith(
                                                         fontSize: SizeConfig
                                                                 .textMultiplier *
-                                                            1.9,
+                                                            2.2,
                                                         fontWeight:
                                                             FontWeight.bold),
                                               ),
@@ -743,7 +741,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                 .copyWith(
                                                   fontSize: SizeConfig
                                                           .textMultiplier *
-                                                      1.9,
+                                                      2.2,
                                                 ),
                                             text: '${Strings.txtSartWork.tr} ',
                                             children: [
@@ -757,7 +755,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                     .copyWith(
                                                         fontSize: SizeConfig
                                                                 .textMultiplier *
-                                                            1.9,
+                                                            2.2,
                                                         fontWeight:
                                                             FontWeight.bold),
                                               ),

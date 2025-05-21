@@ -324,7 +324,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 begin: const Offset(-16, 0),
                                 curve: Curves.easeOutQuad),
                         SizedBox(height: SizeConfig.heightMultiplier * 2),
-                        if (roleName != "EMPLOYEE") ...[
+                        // if (roleName != "EMPLOYEE") ...[
                           Text(
                             Strings.txtTeam.tr,
                             style: Theme.of(context)
@@ -337,8 +337,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             height: SizeConfig.widthMultiplier * 2,
                           ),
                           const TeamHighlightsWidget(),
-                        ] else
-                          const SizedBox.shrink(),
+                        // ] else
+                        //   const SizedBox.shrink(),
                         // SizedBox(height: SizeConfig.heightMultiplier * 2),
                         // Row(
                         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,

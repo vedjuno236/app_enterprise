@@ -38,7 +38,7 @@ class Indicator extends StatelessWidget {
           text,
           style: GoogleFonts.notoSansLao(
             textStyle: Theme.of(context).textTheme.titleLarge,
-            fontSize: SizeConfig.textMultiplier * 1.9,
+            fontSize: SizeConfig.textMultiplier * 2.1,
           ),
         )
       ],

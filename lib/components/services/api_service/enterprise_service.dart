@@ -483,6 +483,30 @@ class EnterpriseAPIService {
     return response.data;
   }
 
+  Future callAllLeave({
+    required startdate,
+    required enddate,
+  }) async {
+    String url = APIPathHelper.getValue(ApiPath.allLeave);
+
+    Map body = {
+      'start_date': startdate,
+      "end_date": enddate,
+    };
+    response = await _dio!.post(
+      url,
+      data: body,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+
+    return response.data;
+  }
+
   ///call LeaveType
   Future callDepartment() async {
     String url = APIPathHelper.getValue(ApiPath.department);

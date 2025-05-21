@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/image_path.dart';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
+import 'package:enterprise/components/poviders/all_leave_provider/all_leave_provider.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
-import 'package:enterprise/components/poviders/leave_provider/leave_onLeave_provider/leave_onleave_provider.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
 import 'package:enterprise/components/utils/date_format_utils.dart';
 import 'package:enterprise/components/utils/dialogs.dart';
@@ -64,7 +64,7 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
   late List<Map<String, String>> categories;
   String EndDate = '';
   String StartDate = '';
-  Future fetchNotificationApi({required startDate, required endDate}) async {
+  Future fetchAllleave({required startDate, required endDate}) async {
     setState(() {
       isLoading = true;
       StartDate = startDate;
@@ -72,13 +72,13 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
     });
 
     EnterpriseAPIService()
-        .callNotification(
-      token: sharedPrefs.getStringNow(KeyShared.keyToken),
-      start_date: startDate,
-      end_date: endDate,
+        .callAllLeave(
+      startdate: startDate,
+      enddate: endDate,
     )
         .then((value) {
-      ref.watch(onLeaveProvider).setNotificationModel(value: value);
+      ref.watch(stateAllLeaveProvider).setAllleaveModel(value: value);
+
       logger.d(value);
     }).catchError((onError) {
       errorDialog(
@@ -94,10 +94,10 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
   void initState() {
     super.initState();
     initializeDates();
-    final initialIndex = ref.read(onLeaveProvider).selectedIndexleave;
+    final initialIndex = ref.read(stateAllLeaveProvider).selectedIndexleave;
     final startDate = categories[initialIndex]['startDate']!;
     final endDate = categories[initialIndex]['endDate']!;
-    fetchNotificationApi(startDate: startDate, endDate: endDate);
+    fetchAllleave(startDate: startDate, endDate: endDate);
   }
 
   @override
@@ -183,7 +183,7 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
     BuildContext context,
     WidgetRef ref,
   ) async {
-    final dateProvider = ref.read(onLeaveProvider);
+    final dateProvider = ref.read(stateAllLeaveProvider);
     DateTime initialDate = dateProvider.selectedMonth ?? DateTime.now();
     DateTime? selectedMonth = DateTime.now();
     DateTime now = DateTime.now();
@@ -262,10 +262,10 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
               ),
               onPressed: () {
                 if (selectedMonth != null) {
-                  final provider = ref.read(onLeaveProvider.notifier);
+                  final provider = ref.read(stateAllLeaveProvider.notifier);
                   provider.selectedMonth = selectedMonth;
 
-                  fetchNotificationApi(
+                  fetchAllleave(
                     startDate:
                         DateFormat('yyyy-MM-dd').format(provider.startDate),
                     endDate: DateFormat('yyyy-MM-dd').format(provider.endDate),
@@ -283,9 +283,9 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
   }
 
   Widget build(BuildContext context) {
-    final leaveHistoryNotifier = ref.watch(onLeaveProvider);
+    final leaveHistoryNotifier = ref.watch(stateAllLeaveProvider);
     final selectedIndex = leaveHistoryNotifier.selectedIndexleave;
-    final dataAPI = ref.watch(onLeaveProvider);
+    final dataAPI = ref.watch(stateAllLeaveProvider);
 
     return Scaffold(
         appBar: AppBar(
@@ -294,7 +294,7 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
           flexibleSpace: const AppbarWidget(),
           title: AnimatedTextAppBarWidget(
             text: Strings.txtAllLeave.tr,
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(),
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(),
           ),
           // systemOverlayStyle: SystemUiOverlayStyle.dark,
           actions: [
@@ -345,9 +345,9 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                           child: InkWell(
                             onTap: () {
                               ref
-                                  .read(onLeaveProvider.notifier)
+                                  .read(stateAllLeaveProvider.notifier)
                                   .updateSelectedIndexOnleave(index);
-                              fetchNotificationApi(
+                              fetchAllleave(
                                   startDate: item['startDate'],
                                   endDate: item['endDate']);
                             },
@@ -367,8 +367,7 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                                       .textTheme
                                       .titleLarge!
                                       .copyWith(
-                                        fontSize:
-                                            SizeConfig.textMultiplier * 1.7,
+                                        fontSize: SizeConfig.textMultiplier * 2,
                                       ),
                                 ),
                               ),
@@ -381,9 +380,9 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  dataAPI.getNotificationModel == null
+                  dataAPI.getAllLeaveModel == null
                       ? Expanded(child: Center(child: _buildShimmerItem()))
-                      : dataAPI.getNotificationModel!.data!.isEmpty
+                      : dataAPI.getAllLeaveModel!.data!.isEmpty
                           ? Center(
                               child: Image.asset(ImagePath.imgIconCreateAcc))
                           : Expanded(
@@ -423,12 +422,12 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                                   ),
                                   child: ListView.builder(
                                       padding: EdgeInsets.zero,
-                                      itemCount: dataAPI.getNotificationModel
-                                              ?.data?.length ??
+                                      itemCount: dataAPI
+                                              .getAllLeaveModel?.data?.length ??
                                           0,
                                       itemBuilder: (context, index) {
                                         final data = dataAPI
-                                            .getNotificationModel?.data?[index];
+                                            .getAllLeaveModel?.data?[index];
                                         if (data == null) {
                                           return const SizedBox.shrink();
                                         }
@@ -577,7 +576,7 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                                                                         .titleLarge!
                                                                         .copyWith(
                                                                           fontSize:
-                                                                              SizeConfig.textMultiplier * 1.9,
+                                                                              SizeConfig.textMultiplier * 2.2,
                                                                         ),
                                                                   ),
                                                                   Text(
@@ -590,7 +589,8 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                                                                         .bodyMedium!
                                                                         .copyWith(
                                                                             color:
-                                                                                const Color(0xFF99A1BE)),
+                                                                                const Color(0xFF99A1BE),
+                                                                            fontSize: SizeConfig.textMultiplier * 2.2),
                                                                   ),
                                                                 ],
                                                               ),
@@ -623,9 +623,10 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                                                                         .textTheme
                                                                         .bodyMedium!
                                                                         .copyWith(
-                                                                          color:
-                                                                              kTextGrey,
-                                                                        ),
+                                                                            color:
+                                                                                kTextGrey,
+                                                                            fontSize:
+                                                                                SizeConfig.textMultiplier * 2),
                                                                   ),
                                                                   const SizedBox(
                                                                       height:
@@ -659,9 +660,10 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                                                                         .textTheme
                                                                         .bodyMedium!
                                                                         .copyWith(
-                                                                          color:
-                                                                              kTextGrey,
-                                                                        ),
+                                                                            color:
+                                                                                kTextGrey,
+                                                                            fontSize:
+                                                                                SizeConfig.textMultiplier * 2),
                                                                   ),
                                                                   const SizedBox(
                                                                       height:

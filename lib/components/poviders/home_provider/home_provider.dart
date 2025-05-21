@@ -45,7 +45,7 @@ class HomeProvider with ChangeNotifier {
   void _setupClockReset() {
     _clockResetTimer?.cancel();
     final now = DateTime.now();
-    DateTime nextReset = DateTime(now.year, now.month, now.day, 23, 55);
+    DateTime nextReset = DateTime(now.year, now.month, now.day, 23, 59);
     if (now.isAfter(nextReset)) {
       nextReset = nextReset.add(Duration(days: 1));
     }
@@ -67,13 +67,11 @@ class HomeProvider with ChangeNotifier {
     saveState();
     notifyListeners();
 
-    // When clocking out, ensure the timer is set up for the next reset
     _setupClockReset();
   }
 
   @override
   void dispose() {
-    debugPrint("🔴 HomeProvider disposed");
     _clockResetTimer?.cancel();
     super.dispose();
   }

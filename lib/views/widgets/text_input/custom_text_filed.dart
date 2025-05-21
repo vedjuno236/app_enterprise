@@ -1,4 +1,5 @@
 import 'package:enterprise/components/constants/colors.dart';
+import 'package:enterprise/components/styles/size_config.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -50,7 +51,10 @@ class CustomTextField extends StatelessWidget {
       maxLines: maxLines,
       validator: validator,
       onChanged: onChanged,
-      style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
+      style: Theme.of(context)
+          .textTheme
+          .bodyMedium!
+          .copyWith(fontSize: SizeConfig.textMultiplier * 2),
       decoration: InputDecoration(
         prefixIcon: prefixIcon != null
             ? IconTheme(
@@ -92,7 +96,10 @@ class CustomTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
             ),
         errorText: errorText,
-        errorStyle: const TextStyle(color: kRedColor),
+        // errorStyle: const TextStyle(color: kRedColor),
+        errorStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              color: kRedColor,
+            ),
         fillColor: Theme.of(context).canvasColor,
         filled: true,
       ),

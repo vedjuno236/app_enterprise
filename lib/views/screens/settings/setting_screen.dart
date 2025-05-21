@@ -5,6 +5,7 @@ import 'package:enterprise/components/languages/localization_service.dart';
 import 'package:enterprise/components/poviders/bottom_bar_provider/bottom_bar_provider.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/router/router.dart';
+import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
 import 'package:enterprise/views/widgets/appbar/appbar_widget.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!
-                  .copyWith(fontWeight: FontWeight.bold),
+                  .copyWith(fontSize: SizeConfig.textMultiplier * 2),
             ),
             selected: _selectedLanguageCode == 'en',
           ),
@@ -79,7 +80,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!
-                  .copyWith(fontWeight: FontWeight.bold),
+                  .copyWith(fontSize: SizeConfig.textMultiplier * 2),
             ),
             selected: _selectedLanguageCode == 'lo',
           ),
@@ -123,7 +124,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!
-                  .copyWith(fontWeight: FontWeight.bold),
+                  .copyWith(fontSize: SizeConfig.textMultiplier * 2),
             ),
             selected: !darkTheme.darkTheme,
           ),
@@ -133,11 +134,11 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
           child: ListTile(
             leading: const Icon(IonIcons.moon),
             title: Text(
-                  Strings.txtDark.tr,
+              Strings.txtDark.tr,
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!
-                  .copyWith(fontWeight: FontWeight.bold),
+                  .copyWith(fontSize: SizeConfig.textMultiplier * 2),
             ),
             selected: darkTheme.darkTheme,
           ),
@@ -172,7 +173,10 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             children: [
               Text(
                 Strings.txtContenDisplay.tr,
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 2.2),
               ),
               const SizedBox(height: 20),
               Container(
@@ -200,9 +204,14 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                                     const SizedBox(width: 10),
                                     Text(
                                       Strings.txtLanguage.tr,
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                              fontSize:
+                                                  SizeConfig.textMultiplier *
+                                                      2.2),
+                                    )
                                   ],
                                 ),
                                 Row(
@@ -213,9 +222,11 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                                           : 'ພາສາລາວ',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyLarge!
+                                          .titleMedium!
                                           .copyWith(
-                                              fontWeight: FontWeight.bold),
+                                              fontSize:
+                                                  SizeConfig.textMultiplier *
+                                                      2.2),
                                     ),
                                     const SizedBox(width: 10),
                                     const Icon(
@@ -249,8 +260,13 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                                     const SizedBox(width: 10),
                                     Text(
                                       Strings.txtDisplayScreen.tr,
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                              fontSize:
+                                                  SizeConfig.textMultiplier *
+                                                      2.2),
                                     ),
                                   ],
                                 ),
@@ -270,7 +286,10 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
               const SizedBox(height: 20),
               Text(
                 Strings.txtLogin.tr,
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 2.2),
               ),
               const SizedBox(height: 20),
               SizedBox(
@@ -303,8 +322,11 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                       const SizedBox(width: 10),
                       Text(
                         Strings.txtLogout.tr,
-                        style:
-                            Theme.of(context).textTheme.bodyLarge!.copyWith(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(
+                                fontSize: SizeConfig.textMultiplier * 2.2),
                       ),
                     ],
                   ),

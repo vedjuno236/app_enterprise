@@ -2,6 +2,7 @@ import 'package:enterprise/components/constants/colors.dart';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:enterprise/components/logger/logger.dart';
+import 'package:enterprise/components/poviders/all_leave_provider/all_leave_provider.dart';
 import 'package:enterprise/components/poviders/leave_provider/leave_teamhighlights_provider/leave_teamhigh_provider.dart';
 import 'package:enterprise/components/poviders/notifition_provider/notifition_provider.dart';
 import 'package:enterprise/components/router/router.dart';
@@ -26,20 +27,21 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
   bool isLoading = false;
   SharedPrefs sharedPrefs = SharedPrefs();
 
-  Future fetchNotificationApi() async {
+  Future fetchAllleave() async {
     DateTime now = DateTime.now();
     String formattedNow = DateFormat('yyyy-MM-dd').format(now);
     setState(() {
       isLoading = true;
     });
     EnterpriseAPIService()
-        .callNotification(
-          token: sharedPrefs.getStringNow(KeyShared.keyToken),
-          start_date: formattedNow,
-          end_date: formattedNow,
+        .callAllLeave(
+          startdate: formattedNow,
+          enddate: formattedNow,
         )
         .then((value) {
-          ref.watch(teamHighlightsProvider).setNotificationModel(value: value);
+          ref.watch(stateAllLeaveProvider).setAllleaveModel(value: value);
+
+          logger.d(value);
         })
         .catchError((onError) {})
         .whenComplete(() => setState(() {
@@ -50,13 +52,13 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
   @override
   void initState() {
     super.initState();
-    fetchNotificationApi();
+    fetchAllleave();
   }
 
   @override
   Widget build(BuildContext context) {
-    final notiProvider = ref.watch(teamHighlightsProvider);
-    final notificationData = notiProvider.getNotificationModel?.data ?? [];
+    final nallleaveProvider = ref.watch(stateAllLeaveProvider);
+    final nallleavedata = nallleaveProvider.getAllLeaveModel?.data ?? [];
     return Container(
       width: double.infinity,
       height: SizeConfig.heightMultiplier * 20,
@@ -90,7 +92,7 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          notificationData.length.toString(),
+                          nallleavedata.length.toString(),
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!
@@ -105,7 +107,10 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
                 Expanded(
                   child: Text(
                     Strings.txtPeoplefrom.tr,
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
                     softWrap: true,
                     overflow: TextOverflow.visible,
                   ),
@@ -128,9 +133,9 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
                       children: [
                         for (int i = 0;
                             i <
-                                (notificationData.length > 3
+                                (nallleavedata.length > 3
                                     ? 3
-                                    : notificationData.length);
+                                    : nallleavedata.length);
                             i++)
                           Align(
                             widthFactor: 0.6,
@@ -139,21 +144,20 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
                               backgroundColor: kTextWhiteColor,
                               child: CircleAvatar(
                                 radius: SizeConfig.heightMultiplier * 2,
-                                backgroundImage: NetworkImage(notificationData[
-                                        i]
+                                backgroundImage: NetworkImage(nallleavedata[i]
                                     .profile
                                     .toString()), // Access the correct property
                               ),
                             ),
                           ),
-                        if (notificationData.length > 3)
+                        if (nallleavedata.length > 3)
                           Align(
                             widthFactor: 0.6,
                             child: CircleAvatar(
                                 radius: SizeConfig.heightMultiplier * 2,
                                 backgroundColor: kYellowColor,
                                 child: Text(
-                                  '+${(notificationData.length - 3).toString()}',
+                                  '+${(nallleavedata.length - 3).toString()}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleLarge!
@@ -175,12 +179,12 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
                               Strings.txtSeeAll.tr,
                               style: Theme.of(context)
                                   .textTheme
-                                  .titleLarge!
+                                  .titleMedium!
                                   .copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 1.9,
+                                    fontSize: SizeConfig.textMultiplier * 2,
                                   ),
                             ),
-                            Icon(
+                            const Icon(
                               Icons.arrow_right,
                             )
                           ],

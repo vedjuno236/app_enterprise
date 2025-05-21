@@ -80,7 +80,6 @@ Future<void> errorDialog({
   }
 }
 
-
 Future<dynamic> customDialog({
   BuildContext? context,
   int? index,
@@ -131,8 +130,8 @@ Future<dynamic> customDialog({
         content: Text(
           content!,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
-              fontSize: SizeConfig.textMultiplier * 1.9,
-              color: Color(0xFF474747)),
+                fontSize: SizeConfig.textMultiplier * 1.9,
+              ),
           textAlign: TextAlign.center,
         ),
         insetPadding: const EdgeInsets.symmetric(horizontal: 15),

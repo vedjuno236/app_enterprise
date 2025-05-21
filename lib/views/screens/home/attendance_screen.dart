@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -219,7 +220,6 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
     final attendanceProvider = ref.watch(stateAttendanceProvider);
     final userProvider = ref.watch(stateUserProvider);
 
- 
     try {
       attendanceProvider.isLoading = true;
       final response = await EnterpriseAPIService().saveAttendanceData(
@@ -255,17 +255,14 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
       }
     } on DioException catch (e) {
       if (context.mounted) {
-        
         errorDialog(context: context, onError: e);
       }
       attendanceProvider.isLoading = false;
     } catch (e) {
       if (context.mounted) {
-     
         errorDialog(context: context, onError: e);
       }
     }
-   
   }
 
   AppState state = AppState.free;
@@ -280,7 +277,6 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       floatingActionButton: Stack(
         children: [
@@ -522,7 +518,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Please enter some text';
+                                          return Strings.txtPleaseEnter.tr;
                                         }
                                         return null;
                                       },
@@ -713,28 +709,28 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                       ? null
                       : () async {
                           if (!attendanceProvider.isLoading) {
-                      
-                              attendanceProvider.isLoading = true;
-                            
+                            attendanceProvider.isLoading = true;
                           }
 
                           try {
                             if (_formKey.currentState!.validate()) {
                               if (_imageFile == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(Strings.txtPleaseUpload),
-                                  ),
-                                );
+                                Fluttertoast.showToast(
+                                    msg: Strings.txtUploadImage,
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 2,
+                                    backgroundColor: kYellowColor,
+                                    textColor: kBack87,
+                                    fontSize: 16.0,
+                                    fontAsset: 'NotoSansLao');
                                 return;
                               }
 
                               await clockInOutService();
                             }
                           } finally {
-                     
-                              attendanceProvider.isLoading = false;
-                            
+                            attendanceProvider.isLoading = false;
                           }
                         },
                   style: ElevatedButton.styleFrom(
@@ -787,6 +783,10 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
         children: [
           Text(
             Strings.txtPleaseChooseImage.tr,
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(fontSize: SizeConfig.textMultiplier * 2),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -800,6 +800,10 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                     const Icon(Icons.camera_alt_outlined, color: kYellowColor),
                 label: Text(
                   Strings.txtCamera.tr,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
                 ),
               ),
               TextButton.icon(
@@ -810,6 +814,10 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                 icon: const Icon(Icons.image_outlined, color: kYellowColor),
                 label: Text(
                   Strings.txtGallery.tr,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
                 ),
               ),
             ],

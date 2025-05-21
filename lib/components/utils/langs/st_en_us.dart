@@ -1,17 +1,20 @@
 const Map<String, String> en = {
-  "Welcome to NCC": "Welcome to NCC",
-  "Enter your phone number": "Enter your phone number And PassWord",
-  "Your phone Number": "Your phone Number",
+  "Welcome to NCC": "Welcome to NCC  Group",
+  "Enter your phone number": "Enter your phone number and password",
+  "Your phone Number": "Phone Number",
   "Password": "Password",
+  "phone not found": "Your number is incorrect please check and try again",
+  "password wrong": "Your password is incorrect please check and try again",
   "Please enter your password": "Please enter your password",
-  "Next": "Next",
+  "Next": "Login",
   "Cancel": "Cancel",
+  "Error": "Sorry",
   "Done": "Done",
   "Slide to Clock In": "Slide to Clock Out",
   "Slide to Clock Out": "Slide to Clock In",
   "Functions": "Functions",
   "Upcoming Events": "Upcoming Events",
-  "Team Highlights": "Team Highlights",
+  "Team Highlights": "People from your team are on vacation and leave today",
   "Sell All": "Sell all",
   "Analytic": 'Analytic',
   "News": 'News',
@@ -35,9 +38,9 @@ const Map<String, String> en = {
   "NOT": " NOT ",
   "in the clock-in area": "in the clock-in area",
   "Are you sure you want to Clock-in in this location":
-      "Are you sure you want to Clock-in in this location",
+      "Are you sure you want to Clock-in in this location?",
   "Have a productive day": "Have a productive day",
-  "Have a good day": "Have a good day",
+  "Have a good day": "Try clocking in earlier tomorrow 🥰 !",
   "Available": "Available",
   "Leave Used": "Leave Used",
   "Image": "ຮູບພIImagemageາບ",
@@ -87,6 +90,7 @@ const Map<String, String> en = {
   "Loading": "Loading....",
   "Submit form": "Submit form",
   "Requests": "Requests",
+  "Please select a date": "Please select a date",
   //
   "Remaining Leaves": "Remaining Leaves",
   "You take leaves": "You take leaves",
@@ -102,8 +106,8 @@ const Map<String, String> en = {
   "Payslips": "Payslips",
   "Calendar": "Calendar",
   "Request OT": "Request OT",
-    "From the date": "From the date",
-    "To the date": "To the date",
+  "From the date": "From the date",
+  "To the date": "To the date",
 
   /// on leave
   "Tomorrow": "Tomorrow",
@@ -121,4 +125,8 @@ const Map<String, String> en = {
   "Logout": "Logout",
   "Light Mode": "Light Mode",
   "Dark Mode": "Dark Mode",
+
+
+   // check text input
+"Please enter text": "Please enter text",
 };

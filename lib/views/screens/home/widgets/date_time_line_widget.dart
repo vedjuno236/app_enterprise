@@ -1,4 +1,3 @@
-
 import 'package:enterprise/views/widgets/easy_date_time/src/properties/date_formatter.dart';
 import 'package:enterprise/views/widgets/easy_date_time/src/properties/day_style.dart';
 import 'package:enterprise/views/widgets/easy_date_time/src/properties/easy_day_props.dart';
@@ -39,23 +38,23 @@ class _DateTimeLineWidgetState extends ConsumerState<DateTimeLineWidget> {
         inactiveDayStyle: DayStyle(
           borderRadius: 25.0,
           dayNumStyle: TextStyle(
-            fontSize: SizeConfig.textMultiplier * 2,
+            fontSize: 20,
             color: Colors.black54,
           ),
           dayStrStyle: TextStyle(
-            fontSize: SizeConfig.textMultiplier * 2,
+            fontSize: SizeConfig.textMultiplier * 2.5,
             color: Colors.black54,
           ),
         ),
         activeDayStyle: DayStyle(
           borderRadius: 25.0,
           dayNumStyle: TextStyle(
-            fontSize: SizeConfig.textMultiplier * 2,
+            fontSize: SizeConfig.textMultiplier * 2.5,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
           dayStrStyle: TextStyle(
-            fontSize: SizeConfig.textMultiplier * 2,
+            fontSize: SizeConfig.textMultiplier * 2.5,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),

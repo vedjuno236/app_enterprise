@@ -61,7 +61,7 @@ class _PieChartWidgetState extends ConsumerState<PieChartWidget> {
           '${(totalUsedDays != null) ? (totalUsedDays! % 1 == 0 ? totalUsedDays!.toInt().toString() : totalUsedDays!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
               .tr,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
-              fontSize: SizeConfig.textMultiplier * 2,
+              fontSize: SizeConfig.textMultiplier * 2.3,
               fontWeight: FontWeight.bold),
         ),
         AspectRatio(
@@ -142,14 +142,11 @@ class _PieChartWidgetState extends ConsumerState<PieChartWidget> {
                               .copyWith(
                                   color: kTextWhiteColor,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: SizeConfig.textMultiplier * 1),
+                                  fontSize: SizeConfig.textMultiplier * 1.2),
                         );
                       }).toList(),
                     ),
                   ),
-               
-               
-               
                 ),
               ),
             ],

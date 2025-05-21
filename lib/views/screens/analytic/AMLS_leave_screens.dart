@@ -17,8 +17,7 @@ import 'package:enterprise/views/widgets/appbar/appbar_widget.dart';
 import 'package:enterprise/views/widgets/date_month_year/shared/month_picker.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
-import 'package:enterprise/views/widgets/text_input/custom_text_filed.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:enterprise/views/widgets/text_input/text_input_custom_design.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,7 +27,6 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:widgets_easier/widgets_easier.dart';
-
 import '../../../components/models/analytic_model/leave_type_model.dart';
 
 class AmlsLeaveScreens extends ConsumerStatefulWidget {
@@ -116,9 +114,13 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                 selectedCellTextStyle: Theme.of(context)
                     .textTheme
                     .bodyMedium!
-                    .copyWith(color: kBack87),
-                enabledCellsTextStyle:
-                    Theme.of(context).textTheme.bodyMedium!.copyWith(),
+                    .copyWith(
+                        color: kBack87,
+                        fontSize: SizeConfig.textMultiplier * 1.9),
+                enabledCellsTextStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
                 enabledCellsDecoration: BoxDecoration(
                   color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.circular(12),
@@ -127,16 +129,23 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                 disabledCellsTextStyle: Theme.of(context)
                     .textTheme
                     .bodyMedium!
-                    .copyWith(color: Color(0xFFE4E4E7)),
+                    .copyWith(
+                        color: Color(0xFFE4E4E7),
+                        fontSize: SizeConfig.textMultiplier * 1.9),
                 disabledCellsDecoration: BoxDecoration(
                   color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+                  border: Border.all(
+                    width: 1,
+                    color: Color(0xFFEDEFF7),
+                  ),
                 ),
                 currentDateTextStyle: Theme.of(context)
                     .textTheme
                     .bodyMedium!
-                    .copyWith(color: kBack87),
+                    .copyWith(
+                        color: kBack87,
+                        fontSize: SizeConfig.textMultiplier * 1.9),
                 currentDateDecoration: BoxDecoration(
                     border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
                     borderRadius: BorderRadius.circular(12)),
@@ -159,7 +168,13 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                 backgroundColor:
                     darkTheme.darkTheme ? kGreyBGColor.withAlpha(50) : kGary,
               ),
-              child: Text(Strings.txtCancel.tr),
+              child: Text(
+                Strings.txtCancel.tr,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 2.2),
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -172,7 +187,13 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                 fetchAllLeaveApi();
                 context.pop();
               },
-              child: Text(Strings.txtOkay.tr),
+              child: Text(
+                Strings.txtOkay.tr,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 2.2),
+              ),
             ),
           ],
         );
@@ -193,12 +214,14 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
   Widget build(BuildContext context) {
     final dataAPI = ref.watch(leaveHistoryProvider);
 
-    int totalLeaveDays = 0;
-    // if (dataAPI.getallLeaveHistoryModel != null &&
-    //     dataAPI.getallLeaveHistoryModel!.data != null) {
-    //   totalLeaveDays = dataAPI.getallLeaveHistoryModel!.data!
-    //       .fold(0, (sum, item) => sum + (item.totalDays ?? item.totalDays!));
-    // }
+    double totalLeaveDays = 0.0;
+    if (dataAPI.getallLeaveHistoryModel != null &&
+        dataAPI.getallLeaveHistoryModel!.data != null) {
+      totalLeaveDays = dataAPI.getallLeaveHistoryModel!.data!
+          .fold(0, (sum, item) => sum + (item.totalDays ?? item.totalDays!));
+    }
+    final darkTheme = ref.watch(darkThemeProviderProvider);
+
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -217,9 +240,10 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                     onTap: () {
                       showDatePickerDialog(context);
                     },
-                    child: const Icon(
-                      IonIcons.ellipsis_vertical,
-                      color: kBack,
+                    child: Icon(
+                      IonIcons.options,
+                      //         size: 24.0,
+                      color: darkTheme.darkTheme ? kTextWhiteColor : kBack,
                     ),
                   ),
                 ],
@@ -270,7 +294,12 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                               getItemColor(
                                   widget.data.keyWord.toString())['txt'],
                               // widget.data.typeName.toString(),
-                              style: Theme.of(context).textTheme.bodyLarge,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                      fontSize:
+                                          SizeConfig.textMultiplier * 2.2),
                             ),
                           ],
                         ),
@@ -315,7 +344,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                           .copyWith(
                                               fontSize:
                                                   SizeConfig.textMultiplier *
-                                                      1.7),
+                                                      2),
                                     ),
                                   ],
                                 ),
@@ -328,7 +357,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                       .bodyLarge!
                                       .copyWith(
                                           fontSize:
-                                              SizeConfig.textMultiplier * 2),
+                                              SizeConfig.textMultiplier * 2.2),
                                 ),
                               ],
                             ),
@@ -369,7 +398,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                           .copyWith(
                                               fontSize:
                                                   SizeConfig.textMultiplier *
-                                                      1.7),
+                                                      2),
                                     ),
                                   ],
                                 ),
@@ -382,7 +411,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                       .bodyLarge!
                                       .copyWith(
                                           fontSize:
-                                              SizeConfig.textMultiplier * 2),
+                                              SizeConfig.textMultiplier * 2.2),
                                 ),
                               ],
                             ),
@@ -401,7 +430,10 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
               ),
               Text(
                 '${Strings.txtHistory.tr}  (${totalLeaveDays.toString()} ${Strings.txtdays.tr})  ',
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 2.2),
               ).animate().fadeIn(duration: 400.ms, delay: 400.ms).move(
                     begin: const Offset(-50, 0),
                     curve: Curves.easeOutQuad,
@@ -515,22 +547,8 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                                         children: [
                                                           Row(
                                                             children: [
-                                                              CachedNetworkImage(
-                                                                imageUrl:
-                                                                    data.logo!,
-                                                                progressIndicatorBuilder: (context,
-                                                                        url,
-                                                                        downloadProgress) =>
-                                                                    CircularProgressIndicator(
-                                                                        value: downloadProgress
-                                                                            .progress),
-                                                                errorWidget: (context,
-                                                                        url,
-                                                                        error) =>
-                                                                    const Icon(Icons
-                                                                        .error),
-                                                                color: color,
-                                                              ),
+                                                              Image.asset(ImagePath
+                                                                  .iconRequestOT),
                                                               const SizedBox(
                                                                 width: 10,
                                                               ),
@@ -546,9 +564,13 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                                                     .textTheme
                                                                     .bodyMedium!
                                                                     .copyWith(
-                                                                      color: Color(
-                                                                          0xFF37474F),
-                                                                    ),
+                                                                        color:
+                                                                            const Color(
+                                                                          0xFF37474F,
+                                                                        ),
+                                                                        fontSize:
+                                                                            SizeConfig.textMultiplier *
+                                                                                2),
                                                               )
                                                             ],
                                                           ),
@@ -588,14 +610,14 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                                                           Text(
                                                                             Strings.txtLeaveDate.tr,
                                                                             style:
-                                                                                Theme.of(context).textTheme.bodyMedium!.copyWith(color: const Color(0xFF979797)),
+                                                                                Theme.of(context).textTheme.bodyMedium!.copyWith(color: const Color(0xFF979797), fontSize: SizeConfig.textMultiplier * 2),
                                                                           ),
                                                                           Text(
                                                                               '${DateFormatUtil.formatDD(DateTime.parse(data.startDate.toString()))} - ${DateFormatUtil.formatdm(
                                                                                 DateTime.parse(data.endDate.toString()),
                                                                               )}',
                                                                               style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                                                                    fontSize: SizeConfig.textMultiplier * 1.9,
+                                                                                    fontSize: SizeConfig.textMultiplier * 2,
                                                                                   )),
                                                                         ],
                                                                       ),
@@ -610,12 +632,12 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                                                           Text(
                                                                             Strings.txtTotalLeave.tr,
                                                                             style:
-                                                                                Theme.of(context).textTheme.bodyMedium!.copyWith(color: const Color(0xFF979797)),
+                                                                                Theme.of(context).textTheme.bodyMedium!.copyWith(color: const Color(0xFF979797), fontSize: SizeConfig.textMultiplier * 2),
                                                                           ),
                                                                           Text(
                                                                               '${(data.totalDays != null) ? (data.totalDays! % 1 == 0 ? data.totalDays!.toInt().toString() : data.totalDays!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'.tr,
                                                                               style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                                                                    fontSize: SizeConfig.textMultiplier * 1.9,
+                                                                                    fontSize: SizeConfig.textMultiplier * 2,
                                                                                   )),
                                                                         ],
                                                                       ),
@@ -665,7 +687,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                                                           .titleLarge!
                                                                           .copyWith(
                                                                             fontSize:
-                                                                                SizeConfig.textMultiplier * 1.5,
+                                                                                SizeConfig.textMultiplier * 1.9,
                                                                             color:
                                                                                 colorStatus,
                                                                           ),
@@ -807,7 +829,7 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                         TextSpan(
                           style:
                               Theme.of(context).textTheme.titleSmall!.copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 1.9,
+                                    fontSize: SizeConfig.textMultiplier * 2,
                                   ),
                           text: Strings.txtRequestdetails.tr,
                           children: [
@@ -817,7 +839,7 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                                   .textTheme
                                   .titleLarge!
                                   .copyWith(
-                                      fontSize: SizeConfig.textMultiplier * 1.9,
+                                      fontSize: SizeConfig.textMultiplier * 2,
                                       fontWeight: FontWeight.bold,
                                       color: const Color(0xFF99A1BE)),
                             ),
@@ -825,7 +847,7 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                         ),
                       ),
                       const SizedBox(height: 8),
-                      CustomTextField(
+                      CustomTextFieldDesign(
                         prefixIcon: Image.asset(ImagePath.iconCalendar),
                         hintText:
                             '${DateFormatUtil.formatDD(DateTime.parse(leaveData.startDate.toString()))} - ${DateFormatUtil.formatdm(DateTime.parse(leaveData.endDate.toString()))} ',
@@ -844,12 +866,11 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                                       .textTheme
                                       .titleSmall!
                                       .copyWith(
-                                        fontSize:
-                                            SizeConfig.textMultiplier * 1.9,
+                                        fontSize: SizeConfig.textMultiplier * 2,
                                       ),
                                 ),
                                 const SizedBox(height: 6),
-                                CustomTextField(
+                                CustomTextFieldDesign(
                                   prefixIcon: Image.asset(ImagePath.iconIn),
                                   hintText:
                                       '${DateFormatUtil.formatH(DateTime.parse(leaveData.startDate.toString()))} ',
@@ -868,12 +889,11 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                                       .textTheme
                                       .titleSmall!
                                       .copyWith(
-                                        fontSize:
-                                            SizeConfig.textMultiplier * 1.9,
+                                        fontSize: SizeConfig.textMultiplier * 2,
                                       ),
                                 ),
                                 const SizedBox(height: 6),
-                                CustomTextField(
+                                CustomTextFieldDesign(
                                   prefixIcon: Image.asset(ImagePath.iconOut),
                                   hintText:
                                       '${DateFormatUtil.formatH(DateTime.parse(leaveData.endDate.toString()))} ',
@@ -887,11 +907,11 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                       Text(
                         Strings.txtReason.tr,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                              fontSize: SizeConfig.textMultiplier * 1.9,
+                              fontSize: SizeConfig.textMultiplier * 2,
                             ),
                       ),
                       const SizedBox(height: 8),
-                      CustomTextField(
+                      CustomTextFieldDesign(
                         maxLines: 4,
                         hintText: leaveData.reason ?? '',
                       ),
@@ -940,7 +960,7 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                           leaveData.approvedBy!.isNotEmpty) ...[
                         Container(
                           decoration: BoxDecoration(
-                            color: kTextWhiteColor,
+                            color: Theme.of(context).canvasColor,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Padding(
@@ -968,117 +988,132 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                                       ? DateFormatUtil.formatddMMy(
                                           DateTime.parse(
                                               leaveData.updatedAt.toString()))
-                                      : 'N/A';
+                                      : '';
 
                                   return Padding(
                                     padding: const EdgeInsets.only(bottom: 8.0),
                                     child: Column(
                                       children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            // Status Indicator
-                                            Row(
-                                              children: [
-                                                if (approver.status ==
-                                                        "APPROVED" ||
-                                                    approver.status ==
-                                                        "REJECTED")
-                                                  CircleAvatar(
-                                                    radius: SizeConfig
-                                                            .heightMultiplier *
-                                                        1.2,
-                                                    backgroundColor:
-                                                        statusColor,
-                                                    child: Icon(
+                                        SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              // Status Indicator
+                                              Row(
+                                                children: [
+                                                  if (approver.status ==
+                                                          "APPROVED" ||
                                                       approver.status ==
-                                                              "APPROVED"
-                                                          ? Icons.check
-                                                          : Icons.close,
-                                                      size: SizeConfig
-                                                              .imageSizeMultiplier *
-                                                          4,
-                                                      color: kTextWhiteColor,
+                                                          "REJECTED")
+                                                    CircleAvatar(
+                                                      radius: SizeConfig
+                                                              .heightMultiplier *
+                                                          1.2,
+                                                      backgroundColor:
+                                                          statusColor,
+                                                      child: Icon(
+                                                        approver.status ==
+                                                                "APPROVED"
+                                                            ? Icons.check
+                                                            : Icons.close,
+                                                        size: SizeConfig
+                                                                .imageSizeMultiplier *
+                                                            4,
+                                                        color: kTextWhiteColor,
+                                                      ),
                                                     ),
-                                                  ),
-                                                if (approver.status ==
-                                                    "PENDING")
-                                                  CircleAvatar(
-                                                    radius: SizeConfig
-                                                            .heightMultiplier *
-                                                        1.2,
-                                                    backgroundColor:
-                                                        statusColor,
-                                                    child: Icon(
-                                                      approver.status ==
-                                                              "PENDING"
-                                                          ? Icons.check
-                                                          : Icons.close,
-                                                      size: SizeConfig
-                                                              .imageSizeMultiplier *
-                                                          4,
-                                                      color: kTextWhiteColor,
+                                                  if (approver.status ==
+                                                      "PENDING")
+                                                    CircleAvatar(
+                                                      radius: SizeConfig
+                                                              .heightMultiplier *
+                                                          1.2,
+                                                      backgroundColor:
+                                                          statusColor,
+                                                      child: Icon(
+                                                        approver.status ==
+                                                                "PENDING"
+                                                            ? Icons.check
+                                                            : Icons.close,
+                                                        size: SizeConfig
+                                                                .imageSizeMultiplier *
+                                                            4,
+                                                        color: kTextWhiteColor,
+                                                      ),
                                                     ),
-                                                  ),
-                                                const SizedBox(width: 10),
-                                                Text(
-                                                  '${approver.status == "PENDING " ? statusText : Strings.txtApprov.tr} $updatedAt',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall!
-                                                      .copyWith(
-                                                          color: statusColor),
-                                                ),
-                                              ],
-                                            ),
-
-                                            // Approver Info
-                                            Row(
-                                              children: [
-                                                Text(Strings.txtBy.tr,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall),
-                                                const SizedBox(width: 5),
-                                                CircleAvatar(
-                                                  radius: SizeConfig
-                                                          .heightMultiplier *
-                                                      2,
-                                                  backgroundImage: NetworkImage(
-                                                    approver.profile
-                                                                ?.isNotEmpty ==
-                                                            true
-                                                        ? approver.profile!
-                                                        : "https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg",
-                                                  ),
-                                                  onBackgroundImageError: (_,
-                                                          __) =>
-                                                      const Icon(Icons.error),
-                                                ),
-                                                const SizedBox(width: 5),
-                                                ConstrainedBox(
-                                                  constraints: BoxConstraints(
-                                                    maxWidth:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.3,
-                                                  ),
-                                                  child: Text(
-                                                    approver.username ??
-                                                        'Unknown',
+                                                  const SizedBox(width: 10),
+                                                  Text(
+                                                    '${approver.status == "PENDING " ? statusText : Strings.txtApprov.tr} $updatedAt',
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodySmall!
-                                                        .copyWith(color: kBack),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                        .copyWith(
+                                                            color: statusColor,
+                                                            fontSize: SizeConfig
+                                                                    .textMultiplier *
+                                                                2),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                ],
+                                              ),
+
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    Strings.txtBy.tr,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleMedium!
+                                                        .copyWith(
+                                                            fontSize: SizeConfig
+                                                                    .textMultiplier *
+                                                                2),
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  CircleAvatar(
+                                                    radius: SizeConfig
+                                                            .heightMultiplier *
+                                                        2,
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                      approver.profile
+                                                                  ?.isNotEmpty ==
+                                                              true
+                                                          ? approver.profile!
+                                                          : "https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg",
+                                                    ),
+                                                    onBackgroundImageError: (_,
+                                                            __) =>
+                                                        const Icon(Icons.error),
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  ConstrainedBox(
+                                                    constraints: BoxConstraints(
+                                                      maxWidth:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.3,
+                                                    ),
+                                                    child: Text(
+                                                      approver.username ??
+                                                          'Unknown',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .titleMedium!
+                                                          .copyWith(
+                                                              fontSize: SizeConfig
+                                                                      .textMultiplier *
+                                                                  2),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         const Divider(color: kGary),
                                         if ((approver.comment ?? '')
@@ -1109,7 +1144,11 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                                                     approver.comment!,
                                                     style: Theme.of(context)
                                                         .textTheme
-                                                        .bodySmall,
+                                                        .titleMedium!
+                                                        .copyWith(
+                                                            fontSize: SizeConfig
+                                                                    .textMultiplier *
+                                                                2),
                                                   ),
                                                 ],
                                               ),

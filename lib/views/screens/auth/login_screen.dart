@@ -16,12 +16,12 @@ import 'package:enterprise/views/screens/auth/translate.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_login.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -139,10 +139,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
                   Text(
                     Strings.txtWelcome.tr,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(fontWeight: FontWeight.bold, fontSize: 25),
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: SizeConfig.textMultiplier * 3),
                   )
                       .animate()
                       .fadeIn(duration: 900.ms, delay: 300.ms)
@@ -155,7 +154,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium
-                        ?.copyWith(fontSize: 15),
+                        ?.copyWith(fontSize: SizeConfig.textMultiplier * 2.2),
                     textAlign: TextAlign.center,
                   )
                       .animate()
@@ -167,7 +166,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     children: [
                       Text(
                         Strings.txtYourPhoneNumber.tr,
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(fontSize: SizeConfig.textMultiplier * 2),
                       ).animate().fadeIn(duration: 900.ms, delay: 300.ms).move(
                           begin: Offset(-16, 0), curve: Curves.easeOutQuad),
                       SizedBox(height: SizeConfig.heightMultiplier * 1),
@@ -192,6 +194,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ),
                             borderRadius: BorderRadius.circular(20),
                           ),
+                          errorStyle: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(
+                                  color: kRedColor,
+                                  fontSize: SizeConfig.textMultiplier * 1.9),
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(
                               color: kYellowFirstColor,
@@ -224,8 +232,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       width: SizeConfig.widthMultiplier * 2),
                                   Text(
                                     selectedNumber!,
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall!
+                                        .copyWith(
+                                          fontSize:
+                                              SizeConfig.textMultiplier * 2,
+                                        ),
                                   ),
                                   Image.asset(
                                     'assets/images/ps.png',
@@ -264,7 +277,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       SizedBox(height: SizeConfig.heightMultiplier * 1),
                       Text(
                         Strings.txtPassword.tr,
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                              fontSize: SizeConfig.textMultiplier * 2,
+                            ),
                       ).animate().fadeIn(duration: 900.ms, delay: 300.ms).move(
                           begin: const Offset(-16, 0),
                           curve: Curves.easeOutQuad),
@@ -297,6 +312,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               Theme.of(context).textTheme.titleSmall!.copyWith(
                                     fontSize: SizeConfig.textMultiplier * 1.8,
                                   ),
+                          errorStyle: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(
+                                  color: kRedColor,
+                                  fontSize: SizeConfig.textMultiplier * 1.9),
                           prefixIcon: Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 8,
@@ -405,7 +426,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     )
                   : Text(
                       Strings.txtNext.tr,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
             ),
           )

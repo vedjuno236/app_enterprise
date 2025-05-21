@@ -1,6 +1,7 @@
 import 'package:enterprise/components/constants/colors.dart';
 import 'package:enterprise/components/constants/image_path.dart';
 import 'package:enterprise/components/constants/strings.dart';
+import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/poviders/bottom_bar_provider/bottom_bar_provider.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/styles/size_config.dart';
@@ -42,26 +43,23 @@ class AttendanceSuccess extends ConsumerWidget {
         clipBehavior: Clip.none,
         children: [
           // Back button
-          Positioned(
-            top: 65,
-            left: 16,
-            child: GestureDetector(
-              onTap: () {
-                if (Navigator.canPop(context)) context.pop();
-                if (Navigator.canPop(context)) context.pop();
-              },
-              child: const Center(
-                child: Icon(Icons.arrow_back_ios_new_outlined,
-                    color: Colors.black),
-              ),
-            ),
-          ).animate().scaleXY(
-                begin: 0,
-                end: 1,
-                delay: 1000.ms,
-                duration: 500.ms,
-                curve: Curves.easeInOutCubic,
-              ),
+          // Positioned(
+          //   top: 65,
+          //   left: 16,
+          //   child: InkWell(
+          //     onTap: () {
+          //       logger.d('1234567');
+          //       if (Navigator.canPop(context)) context.pop();
+          //       if (Navigator.canPop(context)) context.pop();
+          //     },
+          //     child: const Center(
+          //       child: Icon(
+          //         Icons.arrow_back_ios_new_outlined,
+          //         color: kBack,
+          //       ),
+          //     ),
+          //   ),
+          // ),
 
           // Gradient background
           Container(
@@ -108,7 +106,7 @@ class AttendanceSuccess extends ConsumerWidget {
                           "${Strings.txtYou.tr} ${typeClock == "IN" ? Strings.txtClockedIn.tr : Strings.txtClockedOut.tr} ${Strings.txtSuccessFully.tr}.",
                           style:
                               Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 1.9,
+                                    fontSize: SizeConfig.textMultiplier * 2.5,
                                   ),
                         ),
                       ),

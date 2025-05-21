@@ -154,9 +154,7 @@ class _HeaderProfileState extends ConsumerState<HeaderProfile> {
                   ),
                 ),
               ),
-            
-            
-            
+
               SizedBox(width: SizeConfig.widthMultiplier * 2),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,27 +163,34 @@ class _HeaderProfileState extends ConsumerState<HeaderProfile> {
                     children: [
                       Text(
                         widget.name!,
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: SizeConfig.textMultiplier * 1.9),
                       ),
                       const SizedBox(
                         width: 10,
                       ),
                       Text(
                         widget.lastName!,
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: SizeConfig.textMultiplier * 1.9),
                       ),
                     ],
                   ),
                   SizedBox(height: SizeConfig.heightMultiplier * 0.5),
                   Text(
                     widget.positionName!,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(fontSize: SizeConfig.textMultiplier * 1.8),
                   ),
                 ],
               ),

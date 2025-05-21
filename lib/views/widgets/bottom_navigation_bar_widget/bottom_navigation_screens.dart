@@ -55,7 +55,7 @@ class HomeScreenPage extends ConsumerWidget {
           showSelectedLabels: false,
           currentIndex: selectedIndex,
           unselectedLabelStyle:
-              TextStyle(fontSize: SizeConfig.textMultiplier * 1.8),
+              TextStyle(fontSize: SizeConfig.textMultiplier * 1.9),
           selectedLabelStyle: TextStyle(
             fontSize: SizeConfig.textMultiplier * 1,
             fontWeight: FontWeight.bold,

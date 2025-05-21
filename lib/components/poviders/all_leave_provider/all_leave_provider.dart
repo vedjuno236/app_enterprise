@@ -1,15 +1,23 @@
 import 'package:enterprise/components/constants/strings.dart';
-import 'package:enterprise/components/models/notification_model/notification_model.dart';
+import 'package:enterprise/components/models/leave_all_model/leave_all_model.dart';
 import 'package:enterprise/components/utils/date_format_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final onLeaveProvider = ChangeNotifierProvider<OnLeaveNotifier>((ref) {
-  return OnLeaveNotifier();
+final stateAllLeaveProvider = ChangeNotifierProvider<AllLeaveProvider>((ref) {
+  return AllLeaveProvider();
 });
 
-class OnLeaveNotifier with ChangeNotifier {
-  NotificationModel? _notificationModel;
+class AllLeaveProvider with ChangeNotifier {
+  AllLeaveModel? _allLeaveModel;
+  AllLeaveModel? get getAllLeaveModel => _allLeaveModel;
+
+  Future setAllleaveModel({value}) async {
+    _allLeaveModel = AllLeaveModel.fromJson(value);
+    notifyListeners();
+  }
+
+  AllLeaveModel? _AllLeaveModel;
   DateTime? _selectedMonth;
   // String _selectedMonthText = Strings.txtThisMonth;
   String _selectedMonthText = '';
@@ -18,14 +26,14 @@ class OnLeaveNotifier with ChangeNotifier {
   DateTime _endDate;
   int? _selectedIndex;
 
-  OnLeaveNotifier()
+  AllLeaveProvider()
       : _startDate = DateTime(DateTime.now().year, DateTime.now().month, 1),
         _endDate = DateTime(DateTime.now().year, DateTime.now().month + 1, 0) {
     _selectedMonth = DateTime.now();
   }
 
   // Getters
-  NotificationModel? get getNotificationModel => _notificationModel;
+
   DateTime? get selectedMonth => _selectedMonth;
   String get selectedMonthText => _selectedMonthText;
   DateTime get startDate => _startDate;
@@ -33,10 +41,6 @@ class OnLeaveNotifier with ChangeNotifier {
   int? get selectedIndex => _selectedIndex;
 
   // Methods
-  Future<void> setNotificationModel({required dynamic value}) async {
-    _notificationModel = NotificationModel.fromJson(value);
-    notifyListeners();
-  }
 
   set selectedMonth(DateTime? month) {
     if (month != null) {

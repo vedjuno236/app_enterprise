@@ -165,9 +165,13 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                 selectedCellTextStyle: Theme.of(context)
                     .textTheme
                     .bodyMedium!
-                    .copyWith(color: kBack87),
-                enabledCellsTextStyle:
-                    Theme.of(context).textTheme.bodyMedium!.copyWith(),
+                    .copyWith(
+                        color: kBack87,
+                        fontSize: SizeConfig.textMultiplier * 1.9),
+                enabledCellsTextStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
                 enabledCellsDecoration: BoxDecoration(
                   color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.circular(12),
@@ -176,7 +180,9 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                 disabledCellsTextStyle: Theme.of(context)
                     .textTheme
                     .bodyMedium!
-                    .copyWith(color: Color(0xFFE4E4E7)),
+                    .copyWith(
+                        color: Color(0xFFE4E4E7),
+                        fontSize: SizeConfig.textMultiplier * 1.9),
                 disabledCellsDecoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
@@ -211,7 +217,13 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                   backgroundColor:
                       darkTheme.darkTheme ? kGreyBGColor.withAlpha(50) : kGary,
                 ),
-                child: Text(Strings.txtCancel.tr),
+                child: Text(
+                  Strings.txtCancel.tr,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontSize: SizeConfig.textMultiplier * 2),
+                ),
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -224,7 +236,13 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                   fetchAnalyticAttendanceApi();
                   context.pop();
                 },
-                child: Text(Strings.txtOkay.tr),
+                child: Text(
+                  Strings.txtOkay.tr,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontSize: SizeConfig.textMultiplier * 2),
+                ),
               ),
             ],
           );
@@ -241,7 +259,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
           style: Theme.of(context)
               .textTheme
               .titleLarge!
-              .copyWith(fontSize: SizeConfig.textMultiplier * 2),
+              .copyWith(fontSize: SizeConfig.textMultiplier * 2.3),
           textAlign: TextAlign.left,
         )
             .animate()
@@ -265,7 +283,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
-                    .copyWith(fontSize: SizeConfig.textMultiplier * 2),
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 2.3),
               )
                   .animate()
                   .slideY(duration: 900.ms, curve: Curves.easeOutCubic)
@@ -328,7 +346,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                                   Strings.txtNotOnTime.tr,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyLarge!
+                                      .titleLarge!
                                       .copyWith(color: kTextGrey),
                                 )
                                     .animate()
@@ -690,7 +708,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!
-                        .copyWith(fontSize: SizeConfig.textMultiplier * 2),
+                        .copyWith(fontSize: SizeConfig.textMultiplier * 2.4),
                   )
                       .animate()
                       .fadeIn(duration: 500.ms, delay: 500.ms)
@@ -706,7 +724,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge!
-                          .copyWith(fontSize: SizeConfig.textMultiplier * 2),
+                          .copyWith(fontSize: SizeConfig.textMultiplier * 2.4),
                     ),
                   )
                       .animate()
@@ -719,9 +737,9 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 10.0,
-                  crossAxisSpacing: 5.0,
-                  childAspectRatio: 2.5,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                  childAspectRatio: 2,
                 ),
                 itemCount: leaveType.getLeaveTypeModel?.data?.length ?? 0,
                 itemBuilder: (context, index) {
@@ -746,11 +764,11 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                       ),
                     );
                   }
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).canvasColor,
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
+                  return Card(
+                    elevation: 0.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                    color: Theme.of(context).canvasColor,
                     child: InkWell(
                       onTap: () {
                         context.push(
@@ -776,29 +794,27 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                         title: Text(
                           txt,
                           // data.typeName!.toLowerCase(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(
-                                  fontSize: SizeConfig.textMultiplier * 1.6,
-                                  fontWeight: FontWeight.bold),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    fontSize: SizeConfig.textMultiplier * 1.9,
+                                  ),
                         ),
                         subtitle: Text(
                           '${(data.unUsed != null) ? (data.unUsed! % 1 == 0 ? data.unUsed!.toInt().toString() : data.unUsed!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}'
                               .tr,
                           style:
                               Theme.of(context).textTheme.titleSmall!.copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 1.9,
+                                    fontSize: SizeConfig.textMultiplier * 2,
                                     color: color,
                                   ),
                         ),
                       ),
-                    ),
-                  )
-                      .animate()
-                      .fadeIn(duration: 500.ms, delay: 500.ms)
-                      .shimmer(blendMode: BlendMode.srcOver, color: kGary)
-                      .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad);
+                    )
+                        .animate()
+                        .fadeIn(duration: 500.ms, delay: 500.ms)
+                        .shimmer(blendMode: BlendMode.srcOver, color: kGary)
+                        .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
+                  );
                 },
               ),
               SizedBox(height: SizeConfig.heightMultiplier * 1),
@@ -810,7 +826,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!
-                        .copyWith(fontSize: SizeConfig.textMultiplier * 2),
+                        .copyWith(fontSize: SizeConfig.textMultiplier * 2.4),
                   ),
                   TextButton(
                     onPressed: () {
@@ -821,7 +837,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge!
-                          .copyWith(fontSize: SizeConfig.textMultiplier * 2),
+                          .copyWith(fontSize: SizeConfig.textMultiplier * 2.4),
                     ),
                   ),
                 ],
@@ -845,8 +861,12 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge!
-                                  .copyWith(color: Color(0xFF979797)),
+                                  .copyWith(
+                                      color: Color(0xFF979797),
+                                      fontSize:
+                                          SizeConfig.textMultiplier * 2.4),
                             ),
+
                             // OutlinedButton(
                             //   onPressed: () async {
                             //     // showDateDialog(context, ref);
@@ -910,7 +930,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
               Text(
                 Strings.txtDayS.tr,
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: SizeConfig.textMultiplier * 2,
+                      fontSize: SizeConfig.textMultiplier * 2.2,
                     ),
               ),
             ],
@@ -930,7 +950,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
               Text(
                 Strings.txtIn.tr,
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: SizeConfig.textMultiplier * 2,
+                      fontSize: SizeConfig.textMultiplier * 2.2,
                     ),
               ),
             ],
@@ -949,7 +969,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
               Text(
                 Strings.txtOut.tr,
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: SizeConfig.textMultiplier * 2,
+                      fontSize: SizeConfig.textMultiplier * 2.2,
                     ),
               ),
             ],

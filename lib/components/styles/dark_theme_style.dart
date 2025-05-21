@@ -6,10 +6,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static ThemeData themeData(bool isDarkTheme, BuildContext context) {
+    final locale = LocalizationService.locale ?? const Locale('en');
     if (isDarkTheme) {
       ///dark theme
       return ThemeData(
-        // fontFamily: LocalizationService.locale!.languageCode == "lo"
+        // fontFamily: locale.languageCode == "lo"
         // ? GoogleFonts.notoSansLao().fontFamily
         // : GoogleFonts.rubik().fontFamily,
         fontFamily: GoogleFonts.notoSansLao().fontFamily,
@@ -68,9 +69,9 @@ class AppTheme {
     } else {
       ///light theme
       return ThemeData(
-        // fontFamily: LocalizationService.locale!.languageCode == "lo"
-        //     ? GoogleFonts.notoSansLao().fontFamily
-        //     : GoogleFonts.rubik().fontFamily,
+        //    fontFamily: locale.languageCode == "lo"
+        // ? GoogleFonts.notoSansLao().fontFamily
+        // : GoogleFonts.rubik().fontFamily,
         fontFamily: GoogleFonts.notoSansLao().fontFamily,
         colorScheme: const ColorScheme.light(
           primary: Colors.black,

@@ -46,7 +46,7 @@ class _SlideCheckState extends ConsumerState<SlideCheck> {
                   ? Strings.txtSlideToClockIn.tr
                   : Strings.txtSlideToClockOut.tr,
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  fontSize: SizeConfig.textMultiplier * 2,
+                  fontSize: SizeConfig.textMultiplier * 2.2,
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFF37474F)),
             ),

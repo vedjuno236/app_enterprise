@@ -226,7 +226,10 @@ class _FunctionWidgetState extends ConsumerState<FunctionWidget> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium!
-                                        .copyWith(),
+                                        .copyWith(
+                                            fontSize:
+                                                SizeConfig.textMultiplier *
+                                                    1.9),
                                   ),
                                 ],
                               ),

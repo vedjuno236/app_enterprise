@@ -8,21 +8,18 @@ import 'package:enterprise/components/utils/dialogs.dart';
 import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
-import 'package:enterprise/views/widgets/text_input/custom_text_filed.dart';
+import 'package:enterprise/views/widgets/text_input/text_input_custom_design.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:widgets_easier/widgets_easier.dart';
 import '../../../components/constants/colors.dart';
 import '../../../components/constants/image_path.dart';
 import '../../../components/constants/strings.dart';
-import '../../../components/poviders/analytic_provider/analytic_provider.dart';
 import '../../../components/poviders/leave_provider/leave_history_provider/leave_histoy_provider.dart';
 import '../../../components/styles/size_config.dart';
 import '../../widgets/appbar/appbar_widget.dart';
@@ -133,10 +130,14 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                     borderRadius: BorderRadius.circular(12)
                     // shape: BoxShape.circle,
                     ),
-                selectedCellTextStyle:
-                    Theme.of(context).textTheme.bodyMedium!.copyWith(),
-                enabledCellsTextStyle:
-                    Theme.of(context).textTheme.bodyMedium!.copyWith(),
+                selectedCellTextStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
+                enabledCellsTextStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
                 enabledCellsDecoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(12),
@@ -145,14 +146,18 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                 disabledCellsTextStyle: Theme.of(context)
                     .textTheme
                     .bodyMedium!
-                    .copyWith(color: Color(0xFFE4E4E7)),
+                    .copyWith(
+                        color: Color(0xFFE4E4E7),
+                        fontSize: SizeConfig.textMultiplier * 1.9),
                 disabledCellsDecoration: BoxDecoration(
                   color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
                 ),
-                currentDateTextStyle:
-                    Theme.of(context).textTheme.bodyMedium!.copyWith(),
+                currentDateTextStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
                 currentDateDecoration: BoxDecoration(
                     border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
                     borderRadius: BorderRadius.circular(12)),
@@ -175,7 +180,13 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                 backgroundColor:
                     darkTheme.darkTheme ? kGreyBGColor.withAlpha(50) : kGary,
               ),
-              child: Text(Strings.txtCancel.tr),
+              child: Text(
+                Strings.txtCancel.tr,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 2.2),
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -188,7 +199,13 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                 fetchAllLeaveApi(status: currentStatus);
                 context.pop();
               },
-              child: Text(Strings.txtOkay.tr),
+              child: Text(
+                Strings.txtOkay.tr,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 2.2),
+              ),
             ),
           ],
         );
@@ -250,7 +267,7 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                           '${Strings.txtYoutakeleaves.tr} : ${Strings.txtApproved.tr}',
                           style:
                               Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 1.5,
+                                    fontSize: SizeConfig.textMultiplier * 2,
                                   ),
                         ),
                         const SizedBox(height: 10),
@@ -346,7 +363,7 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                                   .textTheme
                                   .titleLarge!
                                   .copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 1.7,
+                                    fontSize: SizeConfig.textMultiplier * 2,
                                   ),
                             ),
                           ),
@@ -474,7 +491,7 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                                                     .copyWith(
                                                       fontSize: SizeConfig
                                                               .textMultiplier *
-                                                          1.8,
+                                                          2,
                                                       color: Theme.of(context)
                                                           .primaryColorLight,
                                                       fontWeight:
@@ -513,8 +530,12 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                                                             .textTheme
                                                             .bodyMedium!
                                                             .copyWith(
-                                                                color: const Color(
-                                                                    0xFF979797)),
+                                                              color: const Color(
+                                                                  0xFF979797),
+                                                              fontSize: SizeConfig
+                                                                      .textMultiplier *
+                                                                  2,
+                                                            ),
                                                       ),
                                                       Text(
                                                         '${DateFormatUtil.formatDD(DateTime.parse(data.startDate ?? DateTime.now().toString()))} - '
@@ -525,7 +546,7 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                                                             .copyWith(
                                                                 fontSize: SizeConfig
                                                                         .textMultiplier *
-                                                                    1.9),
+                                                                    2),
                                                       ),
                                                     ],
                                                   ),
@@ -541,8 +562,12 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                                                             .textTheme
                                                             .bodyMedium!
                                                             .copyWith(
-                                                                color: const Color(
-                                                                    0xFF979797)),
+                                                              color: const Color(
+                                                                  0xFF979797),
+                                                              fontSize: SizeConfig
+                                                                      .textMultiplier *
+                                                                  2,
+                                                            ),
                                                       ),
                                                       Text(
                                                         // '${data.totalDays ?? 0} ${Strings.txtDay.tr}',
@@ -554,7 +579,7 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                                                             .copyWith(
                                                                 fontSize: SizeConfig
                                                                         .textMultiplier *
-                                                                    1.9),
+                                                                    2),
                                                       ),
                                                     ],
                                                   ),
@@ -594,7 +619,7 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                                                         .copyWith(
                                                           fontSize: SizeConfig
                                                                   .textMultiplier *
-                                                              1.5,
+                                                              2,
                                                           color: colorStatus,
                                                         ),
                                                   ),
@@ -688,6 +713,52 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
   }
 }
 
+Widget _buildShimmerItem() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+    child: SingleChildScrollView(
+      child: Column(
+        children: [
+          AppShimmer(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: SizeConfig.heightMultiplier * 20,
+                  decoration: BoxDecoration(
+                    color: kGary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                SizedBox(height: SizeConfig.heightMultiplier * 1),
+                Container(
+                  width: double.infinity,
+                  height: SizeConfig.heightMultiplier * 20,
+                  decoration: BoxDecoration(
+                    color: kGary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                SizedBox(height: SizeConfig.heightMultiplier * 1),
+                Container(
+                  width: double.infinity,
+                  height: SizeConfig.heightMultiplier * 20,
+                  decoration: BoxDecoration(
+                    color: kGary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                SizedBox(height: SizeConfig.heightMultiplier * 1),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
     BuildContext context, dynamic leaveData) {
   return showModalBottomSheet(
@@ -696,16 +767,14 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
       // backgroundColor: Theme.of(context).canvasColor,
       builder: (BuildContext context) {
         return FractionallySizedBox(
-            heightFactor: 0.6,
+            heightFactor: 0.7,
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(16)),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
               ),
               child: SingleChildScrollView(
-                // controller: scrollController,
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -721,7 +790,7 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                                 Strings.txtLeaveHistory.tr,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyLarge!
+                                    .titleLarge!
                                     .copyWith(),
                               ),
                             ),
@@ -756,7 +825,7 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                         ),
                       ),
                       const SizedBox(height: 8),
-                      CustomTextField(
+                      CustomTextFieldDesign(
                         prefixIcon: Image.asset(ImagePath.iconCalendar),
                         hintText:
                             '${DateFormatUtil.formatDD(DateTime.parse(leaveData.startDate.toString()))} - ${DateFormatUtil.formatdm(DateTime.parse(leaveData.endDate.toString()))} ',
@@ -780,7 +849,7 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                                       ),
                                 ),
                                 const SizedBox(height: 6),
-                                CustomTextField(
+                                CustomTextFieldDesign(
                                   prefixIcon: Image.asset(ImagePath.iconIn),
                                   hintText:
                                       '${DateFormatUtil.formatH(DateTime.parse(leaveData.startDate.toString()))} ',
@@ -804,7 +873,7 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                                       ),
                                 ),
                                 const SizedBox(height: 6),
-                                CustomTextField(
+                                CustomTextFieldDesign(
                                   prefixIcon: Image.asset(ImagePath.iconOut),
                                   hintText:
                                       '${DateFormatUtil.formatH(DateTime.parse(leaveData.endDate.toString()))} ',
@@ -818,11 +887,11 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                       Text(
                         Strings.txtReason.tr,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                              fontSize: SizeConfig.textMultiplier * 1.9,
+                              fontSize: SizeConfig.textMultiplier * 2,
                             ),
                       ),
                       const SizedBox(height: 8),
-                      CustomTextField(
+                      CustomTextFieldDesign(
                         maxLines: 4,
                         hintText: leaveData.reason ?? '',
                       ),
@@ -880,6 +949,7 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 ...leaveData.approvedBy!.map((approver) {
+                                  // Determine status text and color
                                   final statusText =
                                       approver.status == "APPROVED"
                                           ? Strings.txtApproved.tr
@@ -887,127 +957,143 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                                               ? Strings.txtRejected.tr
                                               : Strings.txtWaiting.tr;
 
-                                  final statusColor =
-                                      approver.status == "APPROVED"
-                                          ? Colors.green
-                                          : approver.status == "REJECTED"
-                                              ? Colors.red
-                                              : Colors.orange;
+                                  final statusColor = approver.status ==
+                                          "APPROVED"
+                                      ? Colors.green
+                                      : approver.status == "REJECTED"
+                                          ? Colors.red
+                                          : Colors.orange; // Color for PENDING
 
                                   final updatedAt = leaveData.updatedAt != null
                                       ? DateFormatUtil.formatddMMy(
                                           DateTime.parse(
                                               leaveData.updatedAt.toString()))
-                                      : 'N/A';
+                                      : '';
 
                                   return Padding(
                                     padding: const EdgeInsets.only(bottom: 8.0),
                                     child: Column(
                                       children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            // Status Indicator
-                                            Row(
-                                              children: [
-                                                if (approver.status ==
-                                                        "APPROVED" ||
-                                                    approver.status ==
-                                                        "REJECTED")
-                                                  CircleAvatar(
-                                                    radius: SizeConfig
-                                                            .heightMultiplier *
-                                                        1.2,
-                                                    backgroundColor:
-                                                        statusColor,
-                                                    child: Icon(
+                                        SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              // Status Indicator
+                                              Row(
+                                                children: [
+                                                  if (approver.status ==
+                                                          "APPROVED" ||
                                                       approver.status ==
-                                                              "APPROVED"
-                                                          ? Icons.check
-                                                          : Icons.close,
-                                                      size: SizeConfig
-                                                              .imageSizeMultiplier *
-                                                          4,
-                                                      color: kTextWhiteColor,
+                                                          "REJECTED")
+                                                    CircleAvatar(
+                                                      radius: SizeConfig
+                                                              .heightMultiplier *
+                                                          1.2,
+                                                      backgroundColor:
+                                                          statusColor,
+                                                      child: Icon(
+                                                        approver.status ==
+                                                                "APPROVED"
+                                                            ? Icons.check
+                                                            : Icons.close,
+                                                        size: SizeConfig
+                                                                .imageSizeMultiplier *
+                                                            4,
+                                                        color: kTextWhiteColor,
+                                                      ),
                                                     ),
-                                                  ),
-                                                if (approver.status ==
-                                                    "PENDING")
-                                                  CircleAvatar(
-                                                    radius: SizeConfig
-                                                            .heightMultiplier *
-                                                        1.2,
-                                                    backgroundColor:
-                                                        statusColor,
-                                                    child: Icon(
-                                                      approver.status ==
-                                                              "PENDING"
-                                                          ? Icons.check
-                                                          : Icons.close,
-                                                      size: SizeConfig
-                                                              .imageSizeMultiplier *
-                                                          4,
-                                                      color: kTextWhiteColor,
+                                                  if (approver.status ==
+                                                      "PENDING")
+                                                    CircleAvatar(
+                                                      radius: SizeConfig
+                                                              .heightMultiplier *
+                                                          1.2,
+                                                      backgroundColor:
+                                                          statusColor,
+                                                      child: Icon(
+                                                        approver.status ==
+                                                                "PENDING"
+                                                            ? Icons.check
+                                                            : Icons.close,
+                                                        size: SizeConfig
+                                                                .imageSizeMultiplier *
+                                                            4,
+                                                        color: kTextWhiteColor,
+                                                      ),
                                                     ),
-                                                  ),
-                                                Text(
-                                                  ' ${approver.status == "PENDING" ? Strings.txtApprov.tr : (approver.status == "APPROVED" || approver.status == "REJECTED" ? statusText : "Unknown")} $updatedAt',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall!
-                                                      .copyWith(
-                                                          color: statusColor),
-                                                ),
-                                              ],
-                                            ),
-
-                                            // Approver Info
-                                            Row(
-                                              children: [
-                                                Text(Strings.txtBy.tr,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall),
-                                                const SizedBox(width: 5),
-                                                CircleAvatar(
-                                                  radius: SizeConfig
-                                                          .heightMultiplier *
-                                                      2,
-                                                  backgroundImage: NetworkImage(
-                                                    approver.profile
-                                                                ?.isNotEmpty ==
-                                                            true
-                                                        ? approver.profile!
-                                                        : "https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg",
-                                                  ),
-                                                  onBackgroundImageError: (_,
-                                                          __) =>
-                                                      const Icon(Icons.error),
-                                                ),
-                                                const SizedBox(width: 5),
-                                                ConstrainedBox(
-                                                  constraints: BoxConstraints(
-                                                    maxWidth:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.3,
-                                                  ),
-                                                  child: Text(
-                                                    approver.username ??
-                                                        'Unknown',
+                                                  const SizedBox(width: 10),
+                                                  Text(
+                                                    '${approver.status == "PENDING " ? statusText : Strings.txtApprov.tr} $updatedAt',
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodySmall!
-                                                        .copyWith(color: kBack),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                        .copyWith(
+                                                            color: statusColor,
+                                                            fontSize: SizeConfig
+                                                                    .textMultiplier *
+                                                                2),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                ],
+                                              ),
+
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    Strings.txtBy.tr,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleMedium!
+                                                        .copyWith(
+                                                            fontSize: SizeConfig
+                                                                    .textMultiplier *
+                                                                2),
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  CircleAvatar(
+                                                    radius: SizeConfig
+                                                            .heightMultiplier *
+                                                        2,
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                      approver.profile
+                                                                  ?.isNotEmpty ==
+                                                              true
+                                                          ? approver.profile!
+                                                          : "https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg",
+                                                    ),
+                                                    onBackgroundImageError: (_,
+                                                            __) =>
+                                                        const Icon(Icons.error),
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  ConstrainedBox(
+                                                    constraints: BoxConstraints(
+                                                      maxWidth:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.3,
+                                                    ),
+                                                    child: Text(
+                                                      approver.username ??
+                                                          'Unknown',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .titleMedium!
+                                                          .copyWith(
+                                                              fontSize: SizeConfig
+                                                                      .textMultiplier *
+                                                                  2),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         const Divider(color: kGary),
                                         if ((approver.comment ?? '')
@@ -1038,7 +1124,11 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                                                     approver.comment!,
                                                     style: Theme.of(context)
                                                         .textTheme
-                                                        .bodySmall,
+                                                        .titleMedium!
+                                                        .copyWith(
+                                                            fontSize: SizeConfig
+                                                                    .textMultiplier *
+                                                                2),
                                                   ),
                                                 ],
                                               ),
@@ -1058,52 +1148,6 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
               ),
             ));
       });
-}
-
-Widget _buildShimmerItem() {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-    child: SingleChildScrollView(
-      child: Column(
-        children: [
-          AppShimmer(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 20,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 20,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-                Container(
-                  width: double.infinity,
-                  height: SizeConfig.heightMultiplier * 20,
-                  decoration: BoxDecoration(
-                    color: kGary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
 }
 
 Map<String, dynamic> getItemColor(String? keywrd) {

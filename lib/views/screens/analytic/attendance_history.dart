@@ -1,12 +1,9 @@
-import 'package:collection/collection.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
-import 'package:enterprise/components/models/analytic_model/overview_attendance_month_model.dart';
+import 'package:enterprise/components/styles/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:intl/intl.dart';
@@ -175,7 +172,6 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
     final isDataEmpty =
         analyticState.getAttendanceModel?.data?.items?.isEmpty ?? true;
 
-    final dataProvider = ref.watch(stateAnalyticProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -183,30 +179,30 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
         flexibleSpace: const AppbarWidget(),
         title: Text(
           Strings.txtAttendanceHistory.tr,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(),
         )
             .animate()
             .fadeIn(duration: 500.ms, delay: 500.ms)
             .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
-        actions: [
-          GestureDetector(
-            onTap: () {},
-            child: const Padding(
-              padding: EdgeInsets.only(right: 20),
-              // child: Icon(
-              //   Ionicons.options_outline,
-              //   size: 24.0,
-              // ),
-              child: const Icon(
-                IonIcons.options,
-                size: 24.0,
-              ),
-            )
-                .animate()
-                .fadeIn(duration: 500.ms, delay: 500.ms)
-                .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
-          ),
-        ],
+        // actions: [
+        //   GestureDetector(
+        //     onTap: () {},
+        //     child: const Padding(
+        //       padding: EdgeInsets.only(right: 20),
+        //       // child: Icon(
+        //       //   Ionicons.options_outline,
+        //       //   size: 24.0,
+        //       // ),
+        //       child: const Icon(
+        //         IonIcons.options,
+        //         size: 24.0,
+        //       ),
+        //     )
+        //         .animate()
+        //         .fadeIn(duration: 500.ms, delay: 500.ms)
+        //         .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
+        //   ),
+        // ],
         // systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: Padding(
@@ -376,17 +372,26 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                                                 DateTime.parse(dateKey!)),
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .titleMedium,
+                                                .titleMedium!
+                                                .copyWith(
+                                                    fontSize: SizeConfig
+                                                            .textMultiplier *
+                                                        2),
                                           ),
                                         ),
                                         Text(
                                           isToday
                                               ? Strings.txtToday.tr
                                               : DateFormatUtil.formatD(
-                                                  DateTime.parse(dateKey)),
+                                                  DateTime.parse(dateKey),
+                                                ),
                                           style: Theme.of(context)
                                               .textTheme
-                                              .titleMedium,
+                                              .titleMedium!
+                                              .copyWith(
+                                                  fontSize: SizeConfig
+                                                          .textMultiplier *
+                                                      2),
                                         ),
                                         const SizedBox(width: 20),
                                         GestureDetector(
@@ -436,8 +441,10 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                                                     .textTheme
                                                     .bodyMedium
                                                     ?.copyWith(
-                                                      color: Colors.grey[600],
-                                                    ),
+                                                        color: Colors.grey[600],
+                                                        fontSize: SizeConfig
+                                                                .textMultiplier *
+                                                            2),
                                               ),
                                               const SizedBox(height: 4),
                                               Text(
@@ -463,8 +470,10 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                                                     .textTheme
                                                     .bodyMedium
                                                     ?.copyWith(
-                                                      color: Colors.grey[600],
-                                                    ),
+                                                        color: Colors.grey[600],
+                                                        fontSize: SizeConfig
+                                                                .textMultiplier *
+                                                            1.9),
                                               ),
                                               const SizedBox(height: 4),
                                               Text(
@@ -514,7 +523,10 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodyLarge
-                                                      ?.copyWith(),
+                                                      ?.copyWith(
+                                                          fontSize: SizeConfig
+                                                                  .textMultiplier *
+                                                              2),
                                                 ),
                                                 const Spacer(),
                                                 Text(
@@ -529,7 +541,10 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                                                               ? Theme.of(
                                                                       context)
                                                                   .primaryColorLight
-                                                              : kRedColor),
+                                                              : kRedColor,
+                                                          fontSize: SizeConfig
+                                                                  .textMultiplier *
+                                                              2),
                                                 ),
                                               ],
                                             ),
@@ -611,15 +626,19 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                                                                   .textTheme
                                                                   .bodyMedium
                                                                   ?.copyWith(
-                                                                    color: record.type ==
-                                                                            "REMOTE"
-                                                                        ? const Color(
-                                                                            0xFF605BFF)
-                                                                        : record.type ==
-                                                                                "OFFICE"
-                                                                            ? Colors.green
-                                                                            : Colors.black,
-                                                                  ),
+                                                                      color: record.type ==
+                                                                              "REMOTE"
+                                                                          ? const Color(
+                                                                              0xFF605BFF)
+                                                                          : record.type ==
+                                                                                  "OFFICE"
+                                                                              ? Colors
+                                                                                  .green
+                                                                              : Colors
+                                                                                  .black,
+                                                                      fontSize:
+                                                                          SizeConfig.textMultiplier *
+                                                                              1.9),
                                                             ),
                                                           ],
                                                         ),

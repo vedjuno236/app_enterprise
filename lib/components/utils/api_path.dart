@@ -21,6 +21,7 @@ enum ApiPath {
   updateleavenoti,
   notificationUser,
   updateProfile,
+  allLeave,
 }
 
 class APIPathHelper {
@@ -54,6 +55,8 @@ class APIPathHelper {
         return "/api/create-leave";
       case ApiPath.allLeaveHistory:
         return "/api/get-leave-for-one-user";
+      case ApiPath.allLeave:
+        return "/api/get-leave-for-all-users";
       case ApiPath.notification:
         return "/api/auth/get-leave-for-approved";
       case ApiPath.notificationUser:
