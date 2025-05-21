@@ -72,10 +72,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             }));
   }
 
-  Future<void> _loadSavedLanguage() async {
-    final saveLocale = await LocalizationService.getSaveLocal();
-    setState(() {});
-  }
+
 
   void checkToken() async {
     final token = sharedPrefs.getStringNow(KeyShared.keyToken);
@@ -140,7 +137,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     super.initState();
     checkExpiredToken();
     fetchUserApi();
-    _loadSavedLanguage();
+  
   }
 
   // final _picker = ImagePicker();

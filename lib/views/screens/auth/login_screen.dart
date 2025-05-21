@@ -141,7 +141,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     Strings.txtWelcome.tr,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: SizeConfig.textMultiplier * 3),
+                        fontSize: SizeConfig.textMultiplier * 3.5),
+                    textAlign: TextAlign.center,
                   )
                       .animate()
                       .fadeIn(duration: 900.ms, delay: 300.ms)

@@ -816,7 +816,7 @@ class _NotifitionsNewScreensState
                     ? Expanded(child: Center(child: _buildShimmerItem(context)))
                     : notiProverUser.getNotificationUserModel!.data!.isEmpty ??
                             true
-                        ? Center(child: Image.asset(ImagePath.iconIconImage))
+                        ? Center(child: Image.asset(ImagePath.imgIconCreateAcc))
                         : Expanded(
                             child: SmartRefresher(
                               enablePullDown: true,
@@ -2035,12 +2035,16 @@ class _NotifitionsNewScreensState
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      approver.comment!,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .titleMedium,
-                                                    ),
+                                                    Text(approver.comment!,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleMedium!
+                                                            .copyWith(
+                                                                fontSize: SizeConfig
+                                                                        .textMultiplier *
+                                                                    2,
+                                                                color:
+                                                                    kBack87)),
                                                   ],
                                                 ),
                                               ),
@@ -2171,6 +2175,7 @@ class _NotifitionsNewScreensState
                                 onPressed: () async {
                                   showDialog(
                                       context: context,
+                                      barrierDismissible: false,
                                       builder: (context) {
                                         return AlertSuccessDialog(
                                           title: Container(
@@ -2204,6 +2209,20 @@ class _NotifitionsNewScreensState
                                                         fontSize: SizeConfig
                                                                 .textMultiplier *
                                                             2),
+                                              ),
+                                              const SizedBox(height: 20),
+                                              Text(
+                                                '${leaveData.username}  ${leaveData.typeName} ${Strings.txtDayOffOn.tr} ${DateFormatUtil.formatDD(DateTime.parse(leaveData.startDate.toString()))} - ${DateFormatUtil.formatA(DateTime.parse(leaveData.endDate.toString()))} ',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                        color:
+                                                            Color(0xFF23A26D),
+                                                        fontSize: SizeConfig
+                                                                .textMultiplier *
+                                                            2),
+                                                textAlign: TextAlign.center,
                                               ),
                                             ],
                                           ),
@@ -2331,7 +2350,7 @@ class _NotifitionsNewScreensState
                                                     .copyWith(
                                                       fontSize: SizeConfig
                                                               .textMultiplier *
-                                                          1.9,
+                                                          2.3,
                                                     ),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -2346,7 +2365,7 @@ class _NotifitionsNewScreensState
                                                       .copyWith(
                                                         fontSize: SizeConfig
                                                                 .textMultiplier *
-                                                            1.5,
+                                                            2.2,
                                                       ),
                                                 ),
                                               ),
@@ -2454,7 +2473,7 @@ class _NotifitionsNewScreensState
                                                         .copyWith(
                                                           fontSize: SizeConfig
                                                                   .textMultiplier *
-                                                              2,
+                                                              2.2,
                                                         ),
                                                   ),
                                                 ),

@@ -45,7 +45,7 @@ class HomeProvider with ChangeNotifier {
   void _setupClockReset() {
     _clockResetTimer?.cancel();
     final now = DateTime.now();
-    DateTime nextReset = DateTime(now.year, now.month, now.day, 23, 59);
+    DateTime nextReset = DateTime(now.year, now.month, now.day, 14, 12);
     if (now.isAfter(nextReset)) {
       nextReset = nextReset.add(Duration(days: 1));
     }

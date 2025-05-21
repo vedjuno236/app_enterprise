@@ -157,8 +157,8 @@ class AttendanceSuccess extends ConsumerWidget {
                   ),
                   child: Text(
                     isLate
-                        ? Strings.txtHaveAproductiveday.tr
-                        : Strings.txtHaveAgoodday.tr,
+                        ? Strings.txtHaveAgoodday.tr
+                        : Strings.txtHaveAproductiveday.tr,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontSize: SizeConfig.textMultiplier * 2,
                         ),

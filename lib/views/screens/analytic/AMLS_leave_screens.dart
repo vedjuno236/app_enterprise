@@ -1148,7 +1148,8 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                                                         .copyWith(
                                                             fontSize: SizeConfig
                                                                     .textMultiplier *
-                                                                2),
+                                                                2,
+                                                            color: kBack87),
                                                   ),
                                                 ],
                                               ),

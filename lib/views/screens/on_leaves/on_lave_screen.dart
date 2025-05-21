@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/image_path.dart';
-import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:enterprise/components/poviders/all_leave_provider/all_leave_provider.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
@@ -293,7 +292,7 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
           elevation: 0,
           flexibleSpace: const AppbarWidget(),
           title: AnimatedTextAppBarWidget(
-            text: Strings.txtAllLeave.tr,
+            text: Strings.txtAllLeaveHistory.tr,
             style: Theme.of(context).textTheme.titleLarge!.copyWith(),
           ),
           // systemOverlayStyle: SystemUiOverlayStyle.dark,

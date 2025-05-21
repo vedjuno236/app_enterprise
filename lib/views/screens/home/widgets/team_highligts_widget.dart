@@ -3,6 +3,7 @@ import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/poviders/all_leave_provider/all_leave_provider.dart';
+import 'package:enterprise/components/poviders/all_leave_provider/team_highligts_provider.dart';
 import 'package:enterprise/components/poviders/leave_provider/leave_teamhighlights_provider/leave_teamhigh_provider.dart';
 import 'package:enterprise/components/poviders/notifition_provider/notifition_provider.dart';
 import 'package:enterprise/components/router/router.dart';
@@ -39,7 +40,7 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
           enddate: formattedNow,
         )
         .then((value) {
-          ref.watch(stateAllLeaveProvider).setAllleaveModel(value: value);
+          ref.watch(stateTeamHighligtsProvider).setteamHighligtsLeaveModel(value: value);
 
           logger.d(value);
         })
@@ -57,8 +58,8 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final nallleaveProvider = ref.watch(stateAllLeaveProvider);
-    final nallleavedata = nallleaveProvider.getAllLeaveModel?.data ?? [];
+    final nallleaveProvider = ref.watch(stateTeamHighligtsProvider);
+    final nallleavedata = nallleaveProvider.getTeamHighligtsModelLeaveModel?.data ?? [];
     return Container(
       width: double.infinity,
       height: SizeConfig.heightMultiplier * 20,

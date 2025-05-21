@@ -310,7 +310,7 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
 
                               Map<String, dynamic> showLocation(
                                   String keyWord, String? recordTitle) {
-                                if (keyWord == "REMOTE") {
+                                if (keyWord == "OUTDOOR") {
                                   return {'text': recordTitle ?? 'ນອກຫ້ອງການ'};
                                 } else if (keyWord == "OFFICE") {
                                   return {'text': 'ຫ້ອງການ'};
@@ -538,10 +538,10 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           color: isLate
-                                                              ? Theme.of(
+                                                              ? kRedColor
+                                                              : Theme.of(
                                                                       context)
-                                                                  .primaryColorLight
-                                                              : kRedColor,
+                                                                  .primaryColorLight,
                                                           fontSize: SizeConfig
                                                                   .textMultiplier *
                                                               2),
@@ -571,7 +571,7 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                                                           vertical: 5.0),
                                                       decoration: BoxDecoration(
                                                         color: record.type ==
-                                                                "REMOTE"
+                                                                "OUTDOOR"
                                                             ? const Color(
                                                                     0xFF605BFF)
                                                                 .withAlpha(50)
@@ -600,15 +600,15 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                                                               size: 15,
                                                               color: record
                                                                           .type ==
-                                                                      "REMOTE"
+                                                                      "OUTDOOR"
                                                                   ? const Color(
                                                                       0xFF605BFF)
                                                                   : record.type ==
                                                                           "OFFICE"
-                                                                      ? const Color(
-                                                                          0xFFF5F6FA)
-                                                                      : const Color(
-                                                                          0xFFF5F6FA),
+                                                                      ? Colors
+                                                                          .black
+                                                                      : Colors
+                                                                          .black,
                                                             ),
                                                             const SizedBox(
                                                               width: 15,
@@ -627,13 +627,13 @@ class AttendanceHistoryState extends ConsumerState<AttendanceHistory> {
                                                                   .bodyMedium
                                                                   ?.copyWith(
                                                                       color: record.type ==
-                                                                              "REMOTE"
+                                                                              "OUTDOOR"
                                                                           ? const Color(
                                                                               0xFF605BFF)
                                                                           : record.type ==
                                                                                   "OFFICE"
                                                                               ? Colors
-                                                                                  .green
+                                                                                  .black
                                                                               : Colors
                                                                                   .black,
                                                                       fontSize:

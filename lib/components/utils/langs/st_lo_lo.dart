@@ -10,9 +10,9 @@ const Map<String, String> lo = {
   "Analytic": "ລາຍງານ",
   "News": "ຂ່າວສານ",
   "Information": "ຂໍ້ມູນ",
-
+"Day off On": "ໃນຊ່ວງວັນທີ",
   "Announcement": "ຂ່າວສານຕ່າງໆ",
-  "Profile": "ໂປຣຟາຍ",
+ "Profile": "ໂປຣຟາຍ",
   "You Clocked": "",
   "Slide to Clock Out": "ເລື່ອນເພື່ອເຂົ້າວຽກ",
   "Slide to Clock In": "ເລື່ອນເພື່ອເລີກວຽກ",
@@ -36,7 +36,7 @@ const Map<String, String> lo = {
   "Apply Leave": "ຂໍລາພັກ",
   "Successfully": "ສົ່ງການຂໍລາພັກສໍາເລັດ!",
   "Your form have submitted and your form will be reviewed soon!":
-      "ແບບຟອມຂອງເຈົ້າໄດ້ສົ່ງແລ້ວ ແລະແບບຟອມຂອງເຈົ້າຈະຖືກກວດສອບໃນໄວໆນີ້!",
+      "ແບບຟອມຂອງທ່ານໄດ້ສົ່ງແລ້ວ ແລະແບບຟອມຂອງເຈົ້າຈະຖືກກວດສອບໃນໄວໆນີ້!",
   "phone not found": "ເບີໂທຂອງທ່ານບໍ່ຖືກຕ້ອງ ກະລຸນາກວດສອບ ແລ້ວລອງອີກຄັ້ງ",
   "password wrong": "ລະຫັດຂອງທ່ານບໍ່ຖືກຕ້ອງ ກະລຸນາກວດສອບ ແລ້ວລອງອີກຄັ້ງ",
   "PhoneIsIncorrect": "ເບີຂອງທ່ານບໍຖືກຕ້ອງ",

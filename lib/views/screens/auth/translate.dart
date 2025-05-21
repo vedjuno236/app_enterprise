@@ -18,7 +18,6 @@ class _LanguageSwitcherState extends State<LanguageSwitcher> {
   String? _selectedLanguageCode;
 
   @override
- 
   @override
   void initState() {
     super.initState();
@@ -61,7 +60,10 @@ class _LanguageSwitcherState extends State<LanguageSwitcher> {
               leading: _getFlagIcon(langCode),
               title: Text(
                 LocalizationService.langs[langCode]!,
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 2),
               ),
               onTap: () {
                 setState(() {
@@ -92,7 +94,10 @@ class _LanguageSwitcherState extends State<LanguageSwitcher> {
           const SizedBox(width: 8),
           Text(
             _selectedLanguageCode == 'lo' ? 'language' : 'ພາສາ',
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(fontSize: SizeConfig.textMultiplier * 2),
           ),
           const SizedBox(width: 8),
           // const Icon(Ionicons.language_outline),

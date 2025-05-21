@@ -1748,7 +1748,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge!
-                      .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
+                      .copyWith(fontSize: SizeConfig.textMultiplier * 2),
                 ),
               ),
               TextButton.icon(
@@ -1762,7 +1762,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge!
-                      .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
+                      .copyWith(fontSize: SizeConfig.textMultiplier * 2),
                 ),
               ),
             ],

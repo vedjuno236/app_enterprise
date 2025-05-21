@@ -12,7 +12,7 @@ SharedPrefs sharedPrefs = SharedPrefs();
 
 class LocalizationService extends Translations {
   static final locale = _getLocaleFromLanguage();
-  static const fallbackLocale = Locale('en', 'US');
+  static const fallbackLocale = Locale('lo', 'LO');
 
   static final langCodes = [
     'en',
@@ -45,19 +45,17 @@ class LocalizationService extends Translations {
 
   static Future<Locale?> getSaveLocal() async {
     final langCode = sharedPrefs.getStringNow(KeyShared.keyCountryName);
-
     if (langCode != null) {
       return _getLocaleFromLanguage(langCode: langCode);
     }
-
     /// new
     return _getLocaleFromLanguage(langCode: Get.deviceLocale!.languageCode);
   }
 
   static Locale? _getLocaleFromLanguage({String? langCode}) {
     var deviceLangs = Get.deviceLocale!.languageCode;
-    // var lang = langCode ?? deviceLangs;
-    var lang = langCode;
+    var lang = langCode ?? deviceLangs;
+    // var lang = langCode;
     // logger.d(lang);
     for (int i = 0; i < langCodes.length; i++) {
       if (lang == langCodes[i]) {
@@ -67,3 +65,5 @@ class LocalizationService extends Translations {
     return Get.locale;
   }
 }
+
+

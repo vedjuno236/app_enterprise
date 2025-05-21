@@ -5,22 +5,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
-
 import '../../../components/constants/colors.dart';
 import '../../../components/constants/strings.dart';
 import '../../../components/poviders/home_provider/home_provider.dart';
 import '../../../components/styles/size_config.dart';
-
 class SlideCheck extends ConsumerStatefulWidget {
   const SlideCheck({
     this.callback,
     this.clockIn = false,
     super.key,
   });
-
   final FutureOr<void> Function()? callback;
   final bool clockIn;
-
   @override
   // ignore: library_private_types_in_public_api
   _SlideCheckState createState() => _SlideCheckState();

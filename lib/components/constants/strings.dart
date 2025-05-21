@@ -164,7 +164,7 @@ class Strings {
   static const String txtWhatIsOnYourProduct = "What's on your product?";
   static const String txtPosts = "posts";
   static const String txtNetSalary = "Net Salary";
-
+  static const String txtDayOffOn = "Day off On";
   static const String txtPaidOff = "Paid Off";
   static const String txtGrossIncome = "Gross Income";
   static const String txtSalary = "Salary";

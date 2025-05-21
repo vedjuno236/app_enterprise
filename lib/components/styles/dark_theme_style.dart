@@ -1,19 +1,19 @@
 import 'package:enterprise/components/constants/colors.dart';
-import 'package:enterprise/components/languages/localization_service.dart';
 import 'package:enterprise/components/styles/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static ThemeData themeData(bool isDarkTheme, BuildContext context) {
-    final locale = LocalizationService.locale ?? const Locale('en');
+final String currentLangCode = Get.locale?.languageCode ?? 'lo'; // Fallback to 'lo' if null
     if (isDarkTheme) {
       ///dark theme
       return ThemeData(
-        // fontFamily: locale.languageCode == "lo"
-        // ? GoogleFonts.notoSansLao().fontFamily
-        // : GoogleFonts.rubik().fontFamily,
-        fontFamily: GoogleFonts.notoSansLao().fontFamily,
+        fontFamily: currentLangCode == "en"
+            ? GoogleFonts.rubik().fontFamily
+            : GoogleFonts.notoSansLao().fontFamily,
+        // fontFamily: GoogleFonts.notoSansLao().fontFamily,
         colorScheme: const ColorScheme.dark(
           primary: Colors.white,
           onPrimary: Color(0xff262626),
@@ -69,10 +69,10 @@ class AppTheme {
     } else {
       ///light theme
       return ThemeData(
-        //    fontFamily: locale.languageCode == "lo"
-        // ? GoogleFonts.notoSansLao().fontFamily
-        // : GoogleFonts.rubik().fontFamily,
-        fontFamily: GoogleFonts.notoSansLao().fontFamily,
+             fontFamily: currentLangCode == "en"
+            ? GoogleFonts.rubik().fontFamily
+            : GoogleFonts.notoSansLao().fontFamily,
+        // fontFamily: GoogleFonts.notoSansLao().fontFamily,
         colorScheme: const ColorScheme.light(
           primary: Colors.black,
           onPrimary: kYellowColor,

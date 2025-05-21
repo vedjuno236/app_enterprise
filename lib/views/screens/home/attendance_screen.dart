@@ -223,7 +223,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
     try {
       attendanceProvider.isLoading = true;
       final response = await EnterpriseAPIService().saveAttendanceData(
-        type: "REMOTE",
+        type: "OUTDOOR",
         userID: userProvider.getUserModel!.data!.id ?? 0,
         longitude: _currentPosition!.latitude,
         latitude: _currentPosition!.longitude,
