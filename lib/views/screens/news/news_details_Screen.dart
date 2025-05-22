@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/models/news_model/news_pagination_model.dart';
+import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +24,11 @@ class NewsDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final darkTheme = ref.watch(darkThemeProviderProvider);
+    darkTheme.darkTheme
+        ? SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light)
+        : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

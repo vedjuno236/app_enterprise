@@ -4,7 +4,7 @@ import 'package:enterprise/components/constants/image_path.dart';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
-import 'package:enterprise/components/logger/logger.dart';
+
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/poviders/notifition_provider/notification_user_provider.dart';
 import 'package:enterprise/components/poviders/notifition_provider/notifition_provider.dart';
@@ -12,7 +12,6 @@ import 'package:enterprise/components/services/api_service/enterprise_service.da
 import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/components/utils/date_format_utils.dart';
 import 'package:enterprise/components/utils/dialogs.dart';
-import 'package:enterprise/components/utils/dio_exceptions.dart';
 import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
 import 'package:enterprise/views/widgets/app_dialog/alerts_dialog.dart';
 import 'package:enterprise/views/widgets/appbar/appbar_widget.dart';
@@ -31,7 +30,6 @@ import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:widgets_easier/widgets_easier.dart';
 
-import '../../widgets/text_input/custom_text_filed.dart';
 
 class NotificationsNewScreens extends ConsumerStatefulWidget {
   const NotificationsNewScreens({super.key});
@@ -115,14 +113,12 @@ class _NotifitionsNewScreensState
       ref
           .watch(stateNotifitionUserProvider)
           .setNotificationUserModel(value: value);
-      logger.d(value);
     }).catchError((onError) {
       errorDialog(
         // ignore: use_build_context_synchronously
         context: context,
         onError: onError,
       );
-      logger.e(DioExceptions.fromDioError(onError));
     }).whenComplete(() => setState(() {
               isLoadingLeave = false;
             }));
@@ -245,9 +241,7 @@ class _NotifitionsNewScreensState
                       selectedMonth;
 
                   fetchNotificationApi();
-                } else {
-                  logger.d("No month selected");
-                }
+                } else {}
                 context.pop();
               },
               child: Text(Strings.txtOkay.tr),
@@ -395,7 +389,7 @@ class _NotifitionsNewScreensState
                                         data.keyWord.toString());
                                     Color color = dataColor['color'];
                                     String txt = dataColor['txt'];
-                                    logger.d(data.unUsed);
+
                                     return GestureDetector(
                                       onTap: () {
                                         if (data.status == "PENDING") {
@@ -533,242 +527,251 @@ class _NotifitionsNewScreensState
                                                                   0xFF99A1BE),
                                                               fontSize: SizeConfig
                                                                       .textMultiplier *
-                                                                  1.8),
+                                                                  2),
                                                     ),
                                                   ],
                                                 ),
                                               ],
                                             ),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                if (data.status == 'REJECTED')
-                                                  SizedBox(
-                                                    height: SizeConfig
-                                                            .widthMultiplier *
-                                                        8.5,
-                                                    width: SizeConfig
-                                                            .widthMultiplier *
-                                                        25,
-                                                    child: OutlinedButton(
-                                                      onPressed: () async {
-                                                        widgetBottomSheetREJECTEDandAPPROVED(
-                                                            context, data);
-                                                      },
-                                                      style: OutlinedButton
-                                                          .styleFrom(
-                                                        side: const BorderSide(
-                                                            color: Color(
-                                                                0xFFF28C84)),
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
+                                            SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  if (data.status == 'REJECTED')
+                                                    SizedBox(
+                                                      height: SizeConfig
+                                                              .widthMultiplier *
+                                                          8.5,
+                                                      width: SizeConfig
+                                                              .widthMultiplier *
+                                                          25,
+                                                      child: OutlinedButton(
+                                                        onPressed: () async {
+                                                          widgetBottomSheetREJECTEDandAPPROVED(
+                                                              context, data);
+                                                        },
+                                                        style: OutlinedButton
+                                                            .styleFrom(
+                                                          side: const BorderSide(
+                                                              color: Color(
+                                                                  0xFFF28C84)),
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        50),
+                                                          ),
+                                                          backgroundColor:
+                                                              const Color(
+                                                                  0xFFF28C84),
+                                                          padding:
+                                                              EdgeInsets.zero,
                                                         ),
-                                                        backgroundColor:
-                                                            const Color(
-                                                                0xFFF28C84),
-                                                        padding:
-                                                            EdgeInsets.zero,
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          const Icon(
-                                                            Bootstrap
-                                                                .check_circle_fill,
-                                                            color: Colors.white,
-                                                            size: 15,
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 2,
-                                                          ),
-                                                          Text(
-                                                            Strings
-                                                                .txtReject.tr,
-                                                            style:
-                                                                Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .titleMedium
-                                                                    ?.copyWith(
-                                                                      fontSize:
-                                                                          SizeConfig.textMultiplier *
-                                                                              1.5,
-                                                                      color:
-                                                                          kTextWhiteColor,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                if (data.status ==
-                                                    'PENDING') ...[
-                                                  SizedBox(
-                                                    width: SizeConfig
-                                                            .widthMultiplier *
-                                                        25,
-                                                    height: SizeConfig
-                                                            .widthMultiplier *
-                                                        8.5,
-                                                    child: OutlinedButton(
-                                                      onPressed: () async {
-                                                        widgetBottomSheetFormHR(
-                                                            context, data);
-                                                      },
-                                                      style: OutlinedButton
-                                                          .styleFrom(
-                                                              side: const BorderSide(
-                                                                  color:
-                                                                      kYellowColor),
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            50),
-                                                              ),
-                                                              backgroundColor:
-                                                                  kYellowColor,
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .zero),
-                                                      child: Text(
-                                                        Strings.txtApprov.tr,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .titleMedium
-                                                            ?.copyWith(
-                                                              fontSize: SizeConfig
-                                                                      .textMultiplier *
-                                                                  1.5,
-                                                              color: const Color(
-                                                                  0xFF37474F),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            const Icon(
+                                                              Bootstrap
+                                                                  .check_circle_fill,
+                                                              color:
+                                                                  Colors.white,
+                                                              size: 15,
                                                             ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  SizedBox(
-                                                    width: SizeConfig
-                                                            .widthMultiplier *
-                                                        25,
-                                                    height: SizeConfig
-                                                            .widthMultiplier *
-                                                        8.5,
-                                                    child: OutlinedButton(
-                                                      onPressed: () async {
-                                                        widgetBottomSheetFormHR(
-                                                            context, data);
-                                                      },
-                                                      style: OutlinedButton
-                                                          .styleFrom(
-                                                              side: const BorderSide(
-                                                                  color:
-                                                                      kGreyBGColor),
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            50),
-                                                              ),
-                                                              backgroundColor:
-                                                                  kGary,
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .zero),
-                                                      child: Text(
-                                                        Strings.txtReject.tr,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .titleMedium
-                                                            ?.copyWith(
-                                                              fontSize: SizeConfig
-                                                                      .textMultiplier *
-                                                                  1.5,
-                                                              color: const Color(
-                                                                  0xFF99A1BE),
+                                                            const SizedBox(
+                                                              width: 2,
                                                             ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                                if (data.status == 'APPROVED')
-                                                  SizedBox(
-                                                    width: SizeConfig
-                                                            .widthMultiplier *
-                                                        25,
-                                                    height: SizeConfig
-                                                            .widthMultiplier *
-                                                        8.5,
-                                                    child: OutlinedButton(
-                                                      onPressed: () async {
-                                                        widgetBottomSheetREJECTEDandAPPROVED(
-                                                            context, data);
-                                                      },
-                                                      style: OutlinedButton
-                                                          .styleFrom(
-                                                              side: const BorderSide(
-                                                                  color: Color(
-                                                                      0xFF23A26D)),
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            50),
-                                                              ),
-                                                              backgroundColor:
-                                                                  const Color(
-                                                                      0xFF23A26D),
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .zero),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          const Icon(
-                                                            Bootstrap
-                                                                .check_circle_fill,
-                                                            color: Colors.white,
-                                                            size: 15,
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 2,
-                                                          ),
-                                                          Text(
-                                                            Strings
-                                                                .txtApprov.tr,
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .titleMedium
-                                                                ?.copyWith(
+                                                            Text(
+                                                              Strings
+                                                                  .txtRejected
+                                                                  .tr,
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .titleMedium
+                                                                  ?.copyWith(
                                                                     fontSize:
                                                                         SizeConfig.textMultiplier *
                                                                             1.5,
                                                                     color:
-                                                                        kTextWhiteColor),
-                                                          ),
-                                                        ],
+                                                                        kTextWhiteColor,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                              ],
+                                                  if (data.status ==
+                                                      'PENDING') ...[
+                                                    SizedBox(
+                                                      width: SizeConfig
+                                                              .widthMultiplier *
+                                                          25,
+                                                      height: SizeConfig
+                                                              .widthMultiplier *
+                                                          8.5,
+                                                      child: OutlinedButton(
+                                                        onPressed: () async {
+                                                          widgetBottomSheetFormHR(
+                                                              context, data);
+                                                        },
+                                                        style: OutlinedButton
+                                                            .styleFrom(
+                                                                side: const BorderSide(
+                                                                    color:
+                                                                        kYellowColor),
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              50),
+                                                                ),
+                                                                backgroundColor:
+                                                                    kYellowColor,
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .zero),
+                                                        child: Text(
+                                                          Strings.txtApprov.tr,
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleMedium
+                                                                  ?.copyWith(
+                                                                    fontSize:
+                                                                        SizeConfig.textMultiplier *
+                                                                            1.5,
+                                                                    color: const Color(
+                                                                        0xFF37474F),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                    SizedBox(
+                                                      width: SizeConfig
+                                                              .widthMultiplier *
+                                                          25,
+                                                      height: SizeConfig
+                                                              .widthMultiplier *
+                                                          8.5,
+                                                      child: OutlinedButton(
+                                                        onPressed: () async {
+                                                          widgetBottomSheetFormHR(
+                                                              context, data);
+                                                        },
+                                                        style: OutlinedButton
+                                                            .styleFrom(
+                                                                side: const BorderSide(
+                                                                    color:
+                                                                        kGreyBGColor),
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              50),
+                                                                ),
+                                                                backgroundColor:
+                                                                    kGary,
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .zero),
+                                                        child: Text(
+                                                          Strings.txtReject.tr,
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleMedium
+                                                                  ?.copyWith(
+                                                                    fontSize:
+                                                                        SizeConfig.textMultiplier *
+                                                                            1.5,
+                                                                    color: const Color(
+                                                                        0xFF99A1BE),
+                                                                  ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                  if (data.status == 'APPROVED')
+                                                    SizedBox(
+                                                      width: SizeConfig
+                                                              .widthMultiplier *
+                                                          25,
+                                                      height: SizeConfig
+                                                              .widthMultiplier *
+                                                          8.5,
+                                                      child: OutlinedButton(
+                                                        onPressed: () async {
+                                                          widgetBottomSheetREJECTEDandAPPROVED(
+                                                              context, data);
+                                                        },
+                                                        style: OutlinedButton
+                                                            .styleFrom(
+                                                                side: const BorderSide(
+                                                                    color: Color(
+                                                                        0xFF23A26D)),
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              50),
+                                                                ),
+                                                                backgroundColor:
+                                                                    const Color(
+                                                                        0xFF23A26D),
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .zero),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            const Icon(
+                                                              Bootstrap
+                                                                  .check_circle_fill,
+                                                              color:
+                                                                  Colors.white,
+                                                              size: 15,
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 2,
+                                                            ),
+                                                            Text(
+                                                              Strings
+                                                                  .txtApproved
+                                                                  .tr,
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .titleMedium
+                                                                  ?.copyWith(
+                                                                      fontSize:
+                                                                          SizeConfig.textMultiplier *
+                                                                              1.5,
+                                                                      color:
+                                                                          kTextWhiteColor),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
                                             )
                                           ],
                                         ),
@@ -865,7 +868,7 @@ class _NotifitionsNewScreensState
                                       data.status.toString());
                                   Color colorStatus = dataStatus['color'];
                                   String txtStatus = dataStatus['txt'];
-                                  logger.d(txtStatus);
+
                                   Icon iconStatus = dataStatus['icon'];
                                   if (data == null) {
                                     return const SizedBox.shrink();
@@ -886,140 +889,170 @@ class _NotifitionsNewScreensState
                                         padding: const EdgeInsets.all(0.0),
                                         child: Column(
                                           children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                            Column(
                                               children: [
-                                                Row(
-                                                  children: [
-                                                    CircleAvatar(
-                                                      radius: SizeConfig
-                                                              .imageSizeMultiplier *
-                                                          7,
-                                                      backgroundColor: Colors
-                                                              .grey[
-                                                          200], // optional fallback color
-                                                      child: ClipOval(
-                                                        child: Image.network(
-                                                          data.profile
-                                                              .toString(),
-                                                          width: 110,
-                                                          height: 110,
-                                                          fit: BoxFit.cover,
-                                                          loadingBuilder: (context,
-                                                              child,
-                                                              loadingProgress) {
-                                                            if (loadingProgress ==
-                                                                null)
-                                                              return child;
-                                                            return const Center(
+                                                SingleChildScrollView(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          CircleAvatar(
+                                                            radius: SizeConfig
+                                                                    .imageSizeMultiplier *
+                                                                7,
+                                                            backgroundColor: Colors
+                                                                    .grey[
+                                                                200], // optional fallback color
+                                                            child: ClipOval(
                                                               child:
-                                                                  LoadingPlatformV1(),
-                                                            );
+                                                                  Image.network(
+                                                                data.profile
+                                                                    .toString(),
+                                                                width: 110,
+                                                                height: 110,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                loadingBuilder:
+                                                                    (context,
+                                                                        child,
+                                                                        loadingProgress) {
+                                                                  if (loadingProgress ==
+                                                                      null)
+                                                                    return child;
+                                                                  return const Center(
+                                                                    child:
+                                                                        LoadingPlatformV1(),
+                                                                  );
+                                                                },
+                                                                errorBuilder:
+                                                                    (context,
+                                                                        error,
+                                                                        stackTrace) {
+                                                                  return const Icon(
+                                                                      Icons
+                                                                          .error,
+                                                                      size: 40,
+                                                                      color: Colors
+                                                                          .red);
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 15,
+                                                          ),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                // data.typeName.toString(),
+                                                                data.username
+                                                                    .toString(),
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyLarge!
+                                                                    .copyWith(),
+                                                              ),
+                                                              Text(
+                                                                // data.typeName.toString(),
+                                                                '${txtStatus} ${txt}',
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyLarge!
+                                                                    .copyWith(
+                                                                      color:
+                                                                          const Color(
+                                                                        0xFF99A1BE,
+                                                                      ),
+                                                                      fontSize:
+                                                                          SizeConfig.textMultiplier *
+                                                                              2,
+                                                                    ),
+                                                              ),
+                                                              Text(
+                                                                'On ${DateFormatUtil.formatDD(DateTime.parse(data.startDate.toString()))}-${DateFormatUtil.formatddMMy(DateTime.parse(data.endDate.toString()))}',
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyLarge!
+                                                                    .copyWith(
+                                                                      color: const Color(
+                                                                          0xFF99A1BE),
+                                                                      fontSize:
+                                                                          SizeConfig.textMultiplier *
+                                                                              2,
+                                                                    ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      SizedBox(
+                                                        height: SizeConfig
+                                                                .heightMultiplier *
+                                                            4.5,
+                                                        child: OutlinedButton(
+                                                          onPressed: () async {
+                                                            widgetBottomSheetUser(
+                                                                context, data);
                                                           },
-                                                          errorBuilder:
-                                                              (context, error,
-                                                                  stackTrace) {
-                                                            return const Icon(
-                                                                Icons.error,
-                                                                size: 40,
-                                                                color:
-                                                                    Colors.red);
-                                                          },
+                                                          style: OutlinedButton
+                                                              .styleFrom(
+                                                                  side: BorderSide(
+                                                                      color:
+                                                                          colorStatus),
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            50),
+                                                                  ),
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              8),
+                                                                  backgroundColor:
+                                                                      colorStatus),
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              iconStatus,
+                                                              const SizedBox(
+                                                                  width: 5),
+                                                              Text(
+                                                                txtStatus
+                                                                    .toString(),
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyMedium
+                                                                    ?.copyWith(
+                                                                      color:
+                                                                          kTextWhiteColor,
+                                                                      fontSize:
+                                                                          SizeConfig.textMultiplier *
+                                                                              1.5,
+                                                                    ),
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 15,
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          // data.typeName.toString(),
-                                                          data.username
-                                                              .toString(),
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyLarge!
-                                                                  .copyWith(),
-                                                        ),
-                                                        Text(
-                                                          // data.typeName.toString(),
-                                                          '${txtStatus} ${txt}',
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyLarge!
-                                                                  .copyWith(
-                                                                    color: const Color(
-                                                                        0xFF99A1BE),
-                                                                  ),
-                                                        ),
-                                                        Text(
-                                                          'On ${DateFormatUtil.formatDD(DateTime.parse(data.startDate.toString()))}-${DateFormatUtil.formatddMMy(DateTime.parse(data.endDate.toString()))}',
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyLarge!
-                                                                  .copyWith(
-                                                                    color: const Color(
-                                                                        0xFF99A1BE),
-                                                                  ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: SizeConfig
-                                                          .heightMultiplier *
-                                                      4.5,
-                                                  child: OutlinedButton(
-                                                    onPressed: () async {
-                                                      widgetBottomSheetUser(
-                                                          context, data);
-                                                    },
-                                                    style: OutlinedButton
-                                                        .styleFrom(
-                                                            side: BorderSide(
-                                                                color:
-                                                                    colorStatus),
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          50),
-                                                            ),
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    8),
-                                                            backgroundColor:
-                                                                colorStatus),
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        iconStatus,
-                                                        const SizedBox(
-                                                            width: 5),
-                                                        Text(
-                                                          txtStatus.toString(),
-                                                          style: Theme.of(
-                                                                  context)
-                                                              .textTheme
-                                                              .bodyMedium
-                                                              ?.copyWith(
-                                                                  color:
-                                                                      kTextWhiteColor),
-                                                        ),
-                                                      ],
-                                                    ),
+                                                    ],
                                                   ),
                                                 ),
                                               ],
@@ -1440,6 +1473,47 @@ class _NotifitionsNewScreensState
     }
   }
 
+  Map<String, dynamic> getCheckStatusHR(String title) {
+    switch (title) {
+      case "APPROVED":
+        return {
+          'color': const Color(0xFF23A26D),
+          'txt': Strings.txtApproved.tr,
+          'icon': const Icon(
+            Bootstrap.check_circle_fill,
+            color: Colors.white,
+            size: 15,
+          ),
+        };
+      case "REJECTED":
+        return {
+          'color': const Color(0xFFF28C84),
+          'txt': Strings.txtReject.tr,
+          'icon': const Icon(
+            Bootstrap.x_circle_fill,
+            color: Colors.white,
+            size: 15,
+          ),
+        };
+
+      case "PENDING":
+        return {
+          'color': const Color(0xFFFFCE08),
+          'txt': Strings.txtWaiting.tr,
+          'icon': const Icon(
+            Bootstrap.check_circle_fill,
+            color: Colors.white,
+            size: 15,
+          ),
+        };
+
+      default:
+        return {
+          'color': Colors.blueAccent,
+        };
+    }
+  }
+
   Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
       BuildContext context, dynamic leaveData) {
     return showModalBottomSheet(
@@ -1450,7 +1524,7 @@ class _NotifitionsNewScreensState
           Color colorStatus = dataStatus['color'];
           String txt = dataStatus['txt'];
           var dataColor = getCheckStatus(leaveData.status.toString());
-          var dataText = getCheckStatusUser(leaveData.status.toString());
+          var dataText = getCheckStatusHR(leaveData.status.toString());
           Color colorButton = dataColor['color'];
           String txtButton = dataText['txt'];
           return FractionallySizedBox(
@@ -1554,13 +1628,13 @@ class _NotifitionsNewScreensState
                                   width: 10,
                                 ),
                                 Text(
-                                  'ທ່ານ ${txtButton.toString()}',
+                                  'ທ່ານໄດ້${txtButton.toString()}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium
                                       ?.copyWith(
                                           fontSize:
-                                              SizeConfig.textMultiplier * 2,
+                                              SizeConfig.textMultiplier * 2.2,
                                           color: kTextWhiteColor),
                                 ),
                               ],
@@ -1627,7 +1701,7 @@ class _NotifitionsNewScreensState
                                   children: [
                                     Expanded(
                                       child: Container(
-                                        height: 70,
+                                        height: SizeConfig.heightMultiplier * 9,
                                         padding: const EdgeInsets.all(8.0),
                                         decoration: BoxDecoration(
                                           borderRadius:
@@ -1690,7 +1764,7 @@ class _NotifitionsNewScreensState
                                     ),
                                     Expanded(
                                       child: Container(
-                                        height: 70,
+                                        height: SizeConfig.heightMultiplier * 9,
                                         padding: const EdgeInsets.all(8.0),
                                         decoration: BoxDecoration(
                                           borderRadius:
@@ -1788,7 +1862,71 @@ class _NotifitionsNewScreensState
                               '${DateFormatUtil.formatDD(DateTime.parse(leaveData.startDate.toString()))} - ${DateFormatUtil.formatdm(DateTime.parse(leaveData.endDate.toString()))} ',
                         ),
                         const SizedBox(height: 16),
-
+                        if (leaveData.startDate != null &&
+                            leaveData.endDate != null &&
+                            DateTime(
+                                  DateTime.parse(leaveData.startDate!).year,
+                                  DateTime.parse(leaveData.startDate!).month,
+                                  DateTime.parse(leaveData.startDate!).day,
+                                ).compareTo(DateTime(
+                                  DateTime.parse(leaveData.endDate!).year,
+                                  DateTime.parse(leaveData.endDate!).month,
+                                  DateTime.parse(leaveData.endDate!).day,
+                                )) ==
+                                0)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      Strings.txtStarttime.tr,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall!
+                                          .copyWith(
+                                            fontSize:
+                                                SizeConfig.textMultiplier * 1.9,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    CustomTextFieldDesign(
+                                      prefixIcon: Image.asset(ImagePath.iconIn),
+                                      hintText:
+                                          '${DateFormatUtil.formatH(DateTime.parse(leaveData.startDate.toString()))} ',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      Strings.txtEndtime.tr,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall!
+                                          .copyWith(
+                                            fontSize:
+                                                SizeConfig.textMultiplier * 1.9,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    CustomTextFieldDesign(
+                                      prefixIcon:
+                                          Image.asset(ImagePath.iconOut),
+                                      hintText:
+                                          '${DateFormatUtil.formatH(DateTime.parse(leaveData.endDate.toString()))} ',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         // Reason
                         Text(
                           Strings.txtReason.tr,
@@ -2173,104 +2311,188 @@ class _NotifitionsNewScreensState
                               height: SizeConfig.heightMultiplier * 5,
                               child: OutlinedButton(
                                 onPressed: () async {
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (context) {
-                                        return AlertSuccessDialog(
-                                          title: Container(
-                                            padding: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color: const Color(0xFF23A26D)
-                                                  .withOpacity(.12),
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: Icon(
-                                              Bootstrap.check_circle_fill,
-                                              color: const Color(0xFF23A26D),
-                                              size: SizeConfig
-                                                      .imageSizeMultiplier *
-                                                  10,
-                                            ),
-                                          ),
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                Strings.txtApprov.tr,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleMedium
-                                                    ?.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: SizeConfig
-                                                                .textMultiplier *
-                                                            2),
+                                  final response = await EnterpriseAPIService()
+                                      .updateLeaveNoti(
+                                          id: leaveData.id,
+                                          status: "APPROVED",
+                                          comment: "",
+                                          token: sharedPrefs
+                                              .getStringNow(KeyShared.keyToken))
+                                      .whenComplete(() => showDialog(
+                                          context: context,
+                                          // barrierDismissible: false,
+                                          builder: (context) {
+                                            return AlertSuccessDialog(
+                                              title: Container(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                  color: const Color(0xFF23A26D)
+                                                      .withOpacity(.12),
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Icon(
+                                                  Bootstrap.check_circle_fill,
+                                                  color:
+                                                      const Color(0xFF23A26D),
+                                                  size: SizeConfig
+                                                          .imageSizeMultiplier *
+                                                      10,
+                                                ),
                                               ),
-                                              const SizedBox(height: 20),
-                                              Text(
-                                                '${leaveData.username}  ${leaveData.typeName} ${Strings.txtDayOffOn.tr} ${DateFormatUtil.formatDD(DateTime.parse(leaveData.startDate.toString()))} - ${DateFormatUtil.formatA(DateTime.parse(leaveData.endDate.toString()))} ',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge
-                                                    ?.copyWith(
-                                                        color:
-                                                            Color(0xFF23A26D),
-                                                        fontSize: SizeConfig
-                                                                .textMultiplier *
-                                                            2),
-                                                textAlign: TextAlign.center,
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    Strings.txtApprov.tr,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleMedium
+                                                        ?.copyWith(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: SizeConfig
+                                                                    .textMultiplier *
+                                                                2),
+                                                  ),
+                                                  const SizedBox(height: 20),
+                                                  Text(
+                                                    '${leaveData.username}  ${getItemColorAndIcon(leaveData.keyWord.toString())['txt']} ${Strings.txtDayOffOn.tr} ${DateFormatUtil.formatDD(DateTime.parse(leaveData.startDate.toString()))} - ${DateFormatUtil.formatA(DateTime.parse(leaveData.endDate.toString()))} ',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge
+                                                        ?.copyWith(
+                                                            color: const Color(
+                                                                0xFF23A26D),
+                                                            fontSize: SizeConfig
+                                                                    .textMultiplier *
+                                                                2),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                          onTapOK: () async {
-                                            logger.d(leaveData.id);
-                                            final response =
-                                                await EnterpriseAPIService()
-                                                    .updateLeaveNoti(
-                                                        id: leaveData.id,
-                                                        status: "APPROVED",
-                                                        comment: "",
-                                                        token: sharedPrefs
-                                                            .getStringNow(
-                                                                KeyShared
-                                                                    .keyToken))
-                                                    .whenComplete(
-                                                        () => context.pop());
-                                            if (response['data'] ==
-                                                "You have already approved this leave") {
-                                              Fluttertoast.showToast(
-                                                msg:
-                                                    'ອະນຸມັດ    ${leaveData.username}  ໄປແລ້ວ',
-                                                toastLength: Toast.LENGTH_SHORT,
-                                                gravity: ToastGravity.CENTER,
-                                                timeInSecForIosWeb: 1,
-                                                backgroundColor: kYellowColor,
-                                                textColor: Colors.white,
-                                                fontSize: 16.0,
-                                              );
-                                            } else {
-                                              Fluttertoast.showToast(
-                                                msg:
-                                                    'ອະນຸມັດ ການຂໍລາພັກ   ${leaveData.username} ສໍາເລັດ',
-                                                toastLength: Toast.LENGTH_SHORT,
-                                                gravity: ToastGravity.CENTER,
-                                                timeInSecForIosWeb: 1,
-                                                backgroundColor: kBColor,
-                                                textColor: Colors.white,
-                                                fontSize: 16.0,
-                                              );
-                                            }
-                                            await fetchNotificationApi();
-                                            context.pop();
+                                              onTapOK: () async {
+                                                context.pop();
 
-                                            print('🎖️🤾‍♂️${response}');
-                                          },
-                                        );
-                                      });
+                                                // print('🎖️🤾‍♂️${response}');
+                                              },
+                                            );
+                                          }));
+
+                                  Fluttertoast.showToast(
+                                    msg:
+                                        'ອະນຸມັດ ການຂໍລາພັກ   ${leaveData.username} ສໍາເລັດ',
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: kBColor,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0,
+                                  );
+
+                                  await fetchNotificationApi();
+                                  context.pop();
+
+                                  print('🎖️🤾‍♂️${response}');
+                                  // showDialog(
+                                  //     context: context,
+                                  //     // barrierDismissible: false,
+                                  //     builder: (context) {
+                                  //       return AlertSuccessDialog(
+                                  //         title: Container(
+                                  //           padding: const EdgeInsets.all(10),
+                                  //           decoration: BoxDecoration(
+                                  //             color: const Color(0xFF23A26D)
+                                  //                 .withOpacity(.12),
+                                  //             shape: BoxShape.circle,
+                                  //           ),
+                                  //           child: Icon(
+                                  //             Bootstrap.check_circle_fill,
+                                  //             color: const Color(0xFF23A26D),
+                                  //             size: SizeConfig
+                                  //                     .imageSizeMultiplier *
+                                  //                 10,
+                                  //           ),
+                                  //         ),
+                                  //         content: Column(
+                                  //           mainAxisSize: MainAxisSize.min,
+                                  //           mainAxisAlignment:
+                                  //               MainAxisAlignment.center,
+                                  //           children: [
+                                  //             Text(
+                                  //               Strings.txtApprov.tr,
+                                  //               style: Theme.of(context)
+                                  //                   .textTheme
+                                  //                   .titleMedium
+                                  //                   ?.copyWith(
+                                  //                       fontWeight:
+                                  //                           FontWeight.bold,
+                                  //                       fontSize: SizeConfig
+                                  //                               .textMultiplier *
+                                  //                           2),
+                                  //             ),
+                                  //             const SizedBox(height: 20),
+                                  //             Text(
+                                  //               '${leaveData.username}  ${getItemColorAndIcon(leaveData.keyWord.toString())['txt']} ${Strings.txtDayOffOn.tr} ${DateFormatUtil.formatDD(DateTime.parse(leaveData.startDate.toString()))} - ${DateFormatUtil.formatA(DateTime.parse(leaveData.endDate.toString()))} ',
+                                  //               style: Theme.of(context)
+                                  //                   .textTheme
+                                  //                   .bodyLarge
+                                  //                   ?.copyWith(
+                                  //                       color:
+                                  //                           Color(0xFF23A26D),
+                                  //                       fontSize: SizeConfig
+                                  //                               .textMultiplier *
+                                  //                           2),
+                                  //               textAlign: TextAlign.center,
+                                  //             ),
+                                  //           ],
+                                  //         ),
+                                  //         onTapOK: () async {
+                                  //           // final response =
+                                  //           //     await EnterpriseAPIService()
+                                  //           //         .updateLeaveNoti(
+                                  //           //             id: leaveData.id,
+                                  //           //             status: "APPROVED",
+                                  //           //             comment: "",
+                                  //           //             token: sharedPrefs
+                                  //           //                 .getStringNow(
+                                  //           //                     KeyShared
+                                  //           //                         .keyToken))
+                                  //           //         .whenComplete(
+                                  //           //             () => context.pop());
+                                  //           // if (response['data'] ==
+                                  //           //     "You have already approved this leave") {
+                                  //           //   Fluttertoast.showToast(
+                                  //           //     msg:
+                                  //           //         'ອະນຸມັດ    ${leaveData.username}  ໄປແລ້ວ',
+                                  //           //     toastLength: Toast.LENGTH_SHORT,
+                                  //           //     gravity: ToastGravity.CENTER,
+                                  //           //     timeInSecForIosWeb: 1,
+                                  //           //     backgroundColor: kYellowColor,
+                                  //           //     textColor: Colors.white,
+                                  //           //     fontSize: 16.0,
+                                  //           //   );
+                                  //           // } else {
+                                  //           //   Fluttertoast.showToast(
+                                  //           //     msg:
+                                  //           //         'ອະນຸມັດ ການຂໍລາພັກ   ${leaveData.username} ສໍາເລັດ',
+                                  //           //     toastLength: Toast.LENGTH_SHORT,
+                                  //           //     gravity: ToastGravity.CENTER,
+                                  //           //     timeInSecForIosWeb: 1,
+                                  //           //     backgroundColor: kBColor,
+                                  //           //     textColor: Colors.white,
+                                  //           //     fontSize: 16.0,
+                                  //           //   );
+                                  //           // }
+                                  //           // await fetchNotificationApi();
+                                  //           // context.pop();
+
+                                  //           // print('🎖️🤾‍♂️${response}');
+                                  //         },
+                                  //       );
+                                  //     });
                                 },
                                 style: OutlinedButton.styleFrom(
                                   // side: const BorderSide(
@@ -2429,7 +2651,6 @@ class _NotifitionsNewScreensState
                                                     ),
                                                   ),
                                                   onPressed: () async {
-                                                    logger.d(leaveData.id);
                                                     final response =
                                                         await EnterpriseAPIService()
                                                             .updateLeaveNoti(
@@ -2737,7 +2958,71 @@ class _NotifitionsNewScreensState
                         ),
 
                         const SizedBox(height: 16),
-
+                        if (leaveData.startDate != null &&
+                            leaveData.endDate != null &&
+                            DateTime(
+                                  DateTime.parse(leaveData.startDate!).year,
+                                  DateTime.parse(leaveData.startDate!).month,
+                                  DateTime.parse(leaveData.startDate!).day,
+                                ).compareTo(DateTime(
+                                  DateTime.parse(leaveData.endDate!).year,
+                                  DateTime.parse(leaveData.endDate!).month,
+                                  DateTime.parse(leaveData.endDate!).day,
+                                )) ==
+                                0)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      Strings.txtStarttime.tr,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall!
+                                          .copyWith(
+                                            fontSize:
+                                                SizeConfig.textMultiplier * 1.9,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    CustomTextFieldDesign(
+                                      prefixIcon: Image.asset(ImagePath.iconIn),
+                                      hintText:
+                                          '${DateFormatUtil.formatH(DateTime.parse(leaveData.startDate.toString()))} ',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      Strings.txtEndtime.tr,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall!
+                                          .copyWith(
+                                            fontSize:
+                                                SizeConfig.textMultiplier * 1.9,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    CustomTextFieldDesign(
+                                      prefixIcon:
+                                          Image.asset(ImagePath.iconOut),
+                                      hintText:
+                                          '${DateFormatUtil.formatH(DateTime.parse(leaveData.endDate.toString()))} ',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         // Reason
                         Text(
                           Strings.txtReason.tr,

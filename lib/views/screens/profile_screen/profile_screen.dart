@@ -14,6 +14,7 @@ import 'package:enterprise/views/widgets/loading_platform/loading_login.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -71,8 +72,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               isLoadingUser = false;
             }));
   }
-
-
 
   void checkToken() async {
     final token = sharedPrefs.getStringNow(KeyShared.keyToken);
@@ -137,7 +136,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     super.initState();
     checkExpiredToken();
     fetchUserApi();
-  
   }
 
   // final _picker = ImagePicker();
@@ -315,6 +313,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final userProvider = ref.watch(stateUserProvider);
     final userData = userProvider.getUserModel?.data;
     final darkTheme = ref.watch(darkThemeProviderProvider);
+    darkTheme.darkTheme
+        ? SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light)
+        : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
     return Scaffold(
       // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: CustomProgressHUD(
@@ -363,20 +365,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                             fontSize:
                                                 SizeConfig.textMultiplier * 3,
                                           ),
-                                    ),
+                                    )
+                                        .animate()
+                                        .slideY(
+                                            duration: 900.ms,
+                                            curve: Curves.easeOutCubic)
+                                        .fadeIn(),
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    Text(
-                                      userData!.lastName.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge!
-                                          .copyWith(
-                                            fontSize:
-                                                SizeConfig.textMultiplier * 3,
-                                          ),
-                                    )
+                                    Text(userData!.lastName.toString(),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge!
+                                                .copyWith(
+                                                  fontSize: SizeConfig
+                                                          .textMultiplier *
+                                                      3,
+                                                ))
                                         .animate()
                                         .slideY(
                                             duration: 900.ms,
@@ -1140,7 +1146,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       child: CircleAvatar(
                         backgroundColor: kGary,
                         radius: SizeConfig.heightMultiplier * 1.8,
-                        child: Icon(
+                        child:const Icon(
                           Bootstrap.gear,
                           color: kBack,
                         ),

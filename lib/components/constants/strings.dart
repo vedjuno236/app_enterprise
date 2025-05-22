@@ -341,10 +341,11 @@ class Strings {
   static const String txtPleaseEnterTheCorrectPhone =
       "Please enter the correct Phone";
   static const String txtLoading = "Loading";
-  static const String txtHaveAproductiveday = "Have a productive day";
+  static const String txtTryclockingearliertomorrow = "Try clocking in earlier tomorrow";
   static const String txtHaveAgoodday = "Have a good day";
-  static const String txtTryClockingInEarlierTomorrow =
-      "Try clocking in earlier tomorrow";
+  static const String txtHaveaproductiveday = "Have a productive day";
+
+
 
   // onleave
   static const String txtTomorrow = "Tomorrow";
@@ -371,6 +372,10 @@ class Strings {
 
    // check text input
       static const String  txtPleaseEnter = "Please enter text";
+
+// AMLS
+      static const String  txtStarttime = "Start time";
+      static const String  txtEndtime = "End time";
 
 
 }

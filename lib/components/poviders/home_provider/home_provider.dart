@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/function_model/funcation_model.dart';
 
@@ -39,17 +40,20 @@ class HomeProvider with ChangeNotifier {
   }
 
   Future<void> saveState() async {
-    await prefs.setBoolNow('isClockedIn', _isClockedIn);
+    await prefs.setBoolNow('isClockedIn', _isClockedIn) ;
   }
 
   void _setupClockReset() {
     _clockResetTimer?.cancel();
     final now = DateTime.now();
-    DateTime nextReset = DateTime(now.year, now.month, now.day, 14, 12);
+    DateTime nextReset = DateTime(now.year, now.month, now.day, 23,59);
     if (now.isAfter(nextReset)) {
-      nextReset = nextReset.add(Duration(days: 1));
+      nextReset = nextReset.add(const Duration(days: 1));
     }
     final timeUntilReset = nextReset.difference(now);
+    final formatter = DateFormat('yyyy-MM-dd HH:mm');
+  // print('Current time: ${formatter.format(now)}');
+  // print('Next reset: ${formatter.format(nextReset)}');
     _clockResetTimer = Timer(timeUntilReset, () {
       setClockInFalse();
       _setupClockReset();

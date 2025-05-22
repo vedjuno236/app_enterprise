@@ -39,14 +39,15 @@ const Map<String, String> en = {
   "Sart Working": "Sart Working",
   // atten
   "You are": "You are",
-  "SuccessFully": "SuccessFully",
-  "You": "You",
+  "SuccessFully": "Successfully",
+  "You": "You 've",
   "NOT": " NOT ",
   "in the clock-in area": "in the clock-in area",
   "Are you sure you want to Clock-in in this location":
       "Are you sure you want to Clock-in in this location?",
-  "Have a productive day": "Have a productive day",
-  "Have a good day": "Try clocking in earlier tomorrow 🥰 !",
+  "Have a productive day": "Have a productive day!",
+  "Try clocking in earlier tomorrow": "Try clocking in earlier tomorrow 🥰 !",
+     "Have a good day": "Have a good day!",
   "Available": "Available",
   "Leave Used": "Leave Used",
   "Image": "Image",
@@ -135,4 +136,8 @@ const Map<String, String> en = {
 
    // check text input
 "Please enter text": "Please enter text",
+
+
+
+
 };

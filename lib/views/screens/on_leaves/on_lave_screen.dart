@@ -77,8 +77,6 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
     )
         .then((value) {
       ref.watch(stateAllLeaveProvider).setAllleaveModel(value: value);
-
-      logger.d(value);
     }).catchError((onError) {
       errorDialog(
         context: context,

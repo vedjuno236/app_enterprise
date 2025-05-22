@@ -1,12 +1,14 @@
-
 import 'dart:async';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:enterprise/components/constants/key_shared.dart';
+import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/poviders/news_provider/news_provider.dart';
 import 'package:enterprise/components/poviders/users_provider/users_provider.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
 import 'package:enterprise/components/styles/size_config.dart';
+import 'package:enterprise/components/utils/dialogs.dart';
 import 'package:enterprise/views/screens/news/news_details_Screen.dart';
 import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
 import 'package:enterprise/views/widgets/bottom_sheet_push/bottom_sheet_push.dart';
@@ -14,6 +16,7 @@ import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart'
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -289,7 +292,12 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
   @override
   Widget build(BuildContext context) {
     final newsProvider = ref.watch(stateNewsProvider);
+    final darkTheme = ref.watch(darkThemeProviderProvider);
 
+    darkTheme.darkTheme
+        ? SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light)
+        : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    String? role = sharedPrefs.getStringNow(KeyShared.keyRole);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       extendBodyBehindAppBar: true,
@@ -301,27 +309,29 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
           style: Theme.of(context).textTheme.titleLarge!.copyWith(),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min, // Minimize Column height
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    widgetBottomSheetFormNews(context);
-                  },
-                  child: const CircleAvatar(
-                    backgroundColor: kBack87,
-                    radius: 16,
-                    child: Icon(
-                      Bootstrap.plus,
-                      color: kTextWhiteColor,
+          if (role == "HR") ...[
+            Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min, // Minimize Column height
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      widgetBottomSheetFormNews(context);
+                    },
+                    child: const CircleAvatar(
+                      backgroundColor: kBack87,
+                      radius: 16,
+                      child: Icon(
+                        Bootstrap.plus,
+                        color: kTextWhiteColor,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ]
         ],
       ),
       body: SafeArea(

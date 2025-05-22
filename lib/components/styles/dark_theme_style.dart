@@ -1,12 +1,24 @@
 import 'package:enterprise/components/constants/colors.dart';
 import 'package:enterprise/components/styles/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static ThemeData themeData(bool isDarkTheme, BuildContext context) {
-final String currentLangCode = Get.locale?.languageCode ?? 'lo'; // Fallback to 'lo' if null
+    final String currentLangCode = Get.locale?.languageCode ?? 'lo';
+    SystemChrome.setSystemUIOverlayStyle(
+      isDarkTheme
+          ? const SystemUiOverlayStyle(
+              statusBarIconBrightness: Brightness.light,
+              statusBarColor: Colors.transparent,
+            )
+          : const SystemUiOverlayStyle(
+              statusBarIconBrightness: Brightness.dark,
+              statusBarColor: Colors.transparent,
+            ),
+    );
     if (isDarkTheme) {
       ///dark theme
       return ThemeData(
@@ -69,7 +81,7 @@ final String currentLangCode = Get.locale?.languageCode ?? 'lo'; // Fallback to 
     } else {
       ///light theme
       return ThemeData(
-             fontFamily: currentLangCode == "en"
+        fontFamily: currentLangCode == "en"
             ? GoogleFonts.rubik().fontFamily
             : GoogleFonts.notoSansLao().fontFamily,
         // fontFamily: GoogleFonts.notoSansLao().fontFamily,

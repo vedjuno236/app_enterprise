@@ -1091,7 +1091,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                                   Navigator.pop(context);
                                                 },
                                                 child: Text(
-                                                  Strings.txtConfirm,
+                                                  Strings.txtConfirm.tr,
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .titleMedium!
@@ -1113,7 +1113,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                                 Navigator.pop(context);
                                               },
                                               child: Text(
-                                                Strings.txtCancel,
+                                                Strings.txtCancel.tr,
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .titleMedium!

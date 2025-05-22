@@ -7,6 +7,7 @@ import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -249,6 +250,12 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
         },
       );
     }
+
+    final darkTheme = ref.watch(darkThemeProviderProvider);
+
+    darkTheme.darkTheme
+        ? SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light)
+        : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return Scaffold(
       appBar: AppBar(
@@ -547,6 +554,8 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                                                   attendanceItem.statusLate ==
                                                       false;
 
+                                              logger.d(isLate);
+
                                               return Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -592,10 +601,13 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                                                                   .textTheme
                                                                   .titleLarge!
                                                                   .copyWith(
-                                                                    fontSize:
-                                                                        SizeConfig.textMultiplier *
-                                                                            2,
-                                                                  ),
+                                                                      fontSize:
+                                                                          SizeConfig.textMultiplier *
+                                                                              2,
+                                                                      color: isLate
+                                                                          ? Theme.of(context)
+                                                                              .primaryColorLight
+                                                                          : kRedLightColor),
                                                             ),
                                                           ),
                                                         ),
@@ -744,7 +756,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                 itemCount: leaveType.getLeaveTypeModel?.data?.length ?? 0,
                 itemBuilder: (context, index) {
                   final data = leaveType.getLeaveTypeModel?.data?[index];
-                  logger.d(data!.unUsed.toString());
+
                   var dataColor = getItemColor(leaveType
                       .getLeaveTypeModel!.data![index].keyWord
                       .toString());

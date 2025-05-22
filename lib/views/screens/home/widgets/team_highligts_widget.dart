@@ -40,9 +40,9 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
           enddate: formattedNow,
         )
         .then((value) {
-          ref.watch(stateTeamHighligtsProvider).setteamHighligtsLeaveModel(value: value);
-
-          logger.d(value);
+          ref
+              .watch(stateTeamHighligtsProvider)
+              .setteamHighligtsLeaveModel(value: value);
         })
         .catchError((onError) {})
         .whenComplete(() => setState(() {
@@ -59,7 +59,8 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
   @override
   Widget build(BuildContext context) {
     final nallleaveProvider = ref.watch(stateTeamHighligtsProvider);
-    final nallleavedata = nallleaveProvider.getTeamHighligtsModelLeaveModel?.data ?? [];
+    final nallleavedata =
+        nallleaveProvider.getTeamHighligtsModelLeaveModel?.data ?? [];
     return Container(
       width: double.infinity,
       height: SizeConfig.heightMultiplier * 20,
@@ -141,10 +142,10 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
                           Align(
                             widthFactor: 0.6,
                             child: CircleAvatar(
-                              radius: SizeConfig.heightMultiplier * 2.6,
-                              backgroundColor: kTextWhiteColor,
+                              radius: SizeConfig.heightMultiplier * 3,
+                              backgroundColor: Theme.of(context).canvasColor,
                               child: CircleAvatar(
-                                radius: SizeConfig.heightMultiplier * 2,
+                                radius: SizeConfig.heightMultiplier * 2.5,
                                 backgroundImage: NetworkImage(nallleavedata[i]
                                     .profile
                                     .toString()), // Access the correct property

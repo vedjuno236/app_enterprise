@@ -9,6 +9,7 @@ import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
 import 'package:enterprise/views/widgets/appbar/appbar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -154,6 +155,11 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     final darkTheme = ref.watch(darkThemeProviderProvider);
+
+    darkTheme.darkTheme
+        ? SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light)
+        : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       extendBodyBehindAppBar: true,

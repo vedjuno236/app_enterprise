@@ -429,7 +429,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                 height: 10,
               ),
               Text(
-                '${Strings.txtHistory.tr}  (${totalLeaveDays.toString()} ${Strings.txtdays.tr})  ',
+                '${Strings.txtHistory.tr}    ${(totalLeaveDays != null) ? (totalLeaveDays! % 1 == 0 ? totalLeaveDays!.toInt().toString() : totalLeaveDays!.toStringAsFixed(1)) : '-'} ${Strings.txtdays.tr}',
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium!
@@ -831,10 +831,12 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                               Theme.of(context).textTheme.titleSmall!.copyWith(
                                     fontSize: SizeConfig.textMultiplier * 2,
                                   ),
-                          text: Strings.txtRequestdetails.tr,
+                          text: '${Strings.txtRequestdetails.tr} ',
                           children: [
                             TextSpan(
-                              text: leaveData.typeName,
+                              // text: leaveData.typeName,
+                              text: getItemColor(
+                                  leaveData.keyWord.toString())['txt'],
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge!
@@ -853,56 +855,70 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                             '${DateFormatUtil.formatDD(DateTime.parse(leaveData.startDate.toString()))} - ${DateFormatUtil.formatdm(DateTime.parse(leaveData.endDate.toString()))} ',
                       ),
                       const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'ເວລາເລີ່ມຕົ້ນ',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall!
-                                      .copyWith(
-                                        fontSize: SizeConfig.textMultiplier * 2,
-                                      ),
-                                ),
-                                const SizedBox(height: 6),
-                                CustomTextFieldDesign(
-                                  prefixIcon: Image.asset(ImagePath.iconIn),
-                                  hintText:
-                                      '${DateFormatUtil.formatH(DateTime.parse(leaveData.startDate.toString()))} ',
-                                ),
-                              ],
+                      if (leaveData.startDate != null &&
+                          leaveData.endDate != null &&
+                          DateTime(
+                                DateTime.parse(leaveData.startDate!).year,
+                                DateTime.parse(leaveData.startDate!).month,
+                                DateTime.parse(leaveData.startDate!).day,
+                              ).compareTo(DateTime(
+                                DateTime.parse(leaveData.endDate!).year,
+                                DateTime.parse(leaveData.endDate!).month,
+                                DateTime.parse(leaveData.endDate!).day,
+                              )) ==
+                              0)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    Strings.txtStarttime.tr,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall!
+                                        .copyWith(
+                                          fontSize:
+                                              SizeConfig.textMultiplier * 2,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  CustomTextFieldDesign(
+                                    prefixIcon: Image.asset(ImagePath.iconIn),
+                                    hintText:
+                                        '${DateFormatUtil.formatH(DateTime.parse(leaveData.startDate.toString()))} ',
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'ເວລາເລີ່ມຕົ້ນ',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall!
-                                      .copyWith(
-                                        fontSize: SizeConfig.textMultiplier * 2,
-                                      ),
-                                ),
-                                const SizedBox(height: 6),
-                                CustomTextFieldDesign(
-                                  prefixIcon: Image.asset(ImagePath.iconOut),
-                                  hintText:
-                                      '${DateFormatUtil.formatH(DateTime.parse(leaveData.endDate.toString()))} ',
-                                ),
-                              ],
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    Strings.txtEndtime.tr,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall!
+                                        .copyWith(
+                                          fontSize:
+                                              SizeConfig.textMultiplier * 2,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  CustomTextFieldDesign(
+                                    prefixIcon: Image.asset(ImagePath.iconOut),
+                                    hintText:
+                                        '${DateFormatUtil.formatH(DateTime.parse(leaveData.endDate.toString()))} ',
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
                       const SizedBox(height: 16),
                       Text(
                         Strings.txtReason.tr,

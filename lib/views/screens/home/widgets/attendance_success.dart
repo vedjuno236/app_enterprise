@@ -129,9 +129,7 @@ class AttendanceSuccess extends ConsumerWidget {
                       ),
                       SizedBox(height: SizeConfig.heightMultiplier * 1),
                       Text(
-                        isLate
-                            ? Strings.txtTryClockingInEarlierTomorrow.tr
-                            : '',
+                        isLate ? Strings.txtTryclockingearliertomorrow.tr : '',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: SizeConfig.textMultiplier * 1.9,
                             ),
@@ -158,7 +156,7 @@ class AttendanceSuccess extends ConsumerWidget {
                   child: Text(
                     isLate
                         ? Strings.txtHaveAgoodday.tr
-                        : Strings.txtHaveAproductiveday.tr,
+                        : Strings.txtHaveaproductiveday.tr,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontSize: SizeConfig.textMultiplier * 2,
                         ),

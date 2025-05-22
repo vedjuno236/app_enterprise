@@ -85,6 +85,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+
+SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarIconBrightness: Brightness.dark, 
+    statusBarColor: Colors.transparent, 
+  ));
   // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // // Initialize local notifications with iOS settings
@@ -206,6 +211,13 @@ void main() async {
   FirebaseAnalytics.instance.logAppOpen();
   await SharedPrefs().init();
   runApp(const ProviderScope(child: App()));
+ 
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
 }
 
 class App extends ConsumerStatefulWidget {

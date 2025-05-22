@@ -104,10 +104,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final darkTheme = ref.watch(darkThemeProviderProvider);
 
     final loginProvider = ref.watch(stateLoginProvider);
+     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: true,
       body: CustomProgressHUD(
+        color: Theme.of(context).scaffoldBackgroundColor,
         key: UniqueKey(),
         inAsyncCall: isLoading,
         opacity: .7,
