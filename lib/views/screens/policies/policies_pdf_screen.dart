@@ -10,9 +10,9 @@ import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart'
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
@@ -109,7 +109,6 @@ class _PoliciesPdfScreenState extends ConsumerState<PoliciesPdfScreen> {
                     final policy = policyProvider.getPolicyModel!.data![index];
                     final fileUrl = policy.policyFile ?? '';
                     final fileExtension = path.extension(fileUrl).toLowerCase();
-
                     if (fileExtension == '.pdf') {
                       if (!_localFilePaths.containsKey(fileUrl)) {
                         return Center(

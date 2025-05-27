@@ -9,11 +9,9 @@ import 'package:enterprise/components/styles/dark_theme_style.dart';
 import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/firebase_options.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // ignore: depend_on_referenced_packages
@@ -28,16 +26,13 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-// Global NavigatorState key that's accessible throughout the app
 // final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 //     FlutterLocalNotificationsPlugin();
 
-// // Create a top-level variable to store notification payload
 // String? initialNotificationPayload;
 // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   // Check if Firebase is already initialized
 
 //   if (message.notification != null) {
 //     flutterLocalNotificationsPlugin.show(
@@ -57,7 +52,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 //   }
 // }
 
-/// Create a [AndroidNotificationChannel] for heads up notifications
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
   'High Importance Notifications', // title
@@ -85,12 +79,14 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-
-SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarIconBrightness: Brightness.dark, 
-    statusBarColor: Colors.transparent, 
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarIconBrightness: Brightness.dark,
+    statusBarColor: Colors.transparent,
   ));
+
   // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // await FirebaseMessaging.instance.subscribeToTopic('attendance');
 
   // // Initialize local notifications with iOS settings
   // const AndroidInitializationSettings initializationSettingsAndroid =
@@ -173,7 +169,6 @@ SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
   } else {
     await Firebase.initializeApp();
 
-    //set for Log analytics screen view
     FirebaseAnalytics.instance.logAppOpen();
   }
 
@@ -196,7 +191,6 @@ SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
-
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
       alert: true,
@@ -204,14 +198,22 @@ SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       sound: true,
     );
   }
+  await FirebaseMessaging.instance.subscribeToTopic('attendance');
 
-  // final fcmToken = await FirebaseMessaging.instance.getToken();
-  // logger.d('FCM Token: $fcmToken');
+  await Firebase.initializeApp();
+  FirebaseAnalytics.instance.logAppOpen();
+
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+  await SharedPrefs().init();
+
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  logger.d('FCM Token: $fcmToken');
 
   FirebaseAnalytics.instance.logAppOpen();
   await SharedPrefs().init();
   runApp(const ProviderScope(child: App()));
- 
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.dark,

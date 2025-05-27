@@ -252,7 +252,6 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
     }
 
     final darkTheme = ref.watch(darkThemeProviderProvider);
-
     darkTheme.darkTheme
         ? SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light)
         : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);

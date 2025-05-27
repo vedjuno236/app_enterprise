@@ -48,10 +48,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     setState(() {
       isLoading = true;
     });
-    // final deviceToken = OneSignal.User.pushSubscription.id;
+
     final deviceToken = await FirebaseMessaging.instance.getToken();
 
-    logger.d('deviceToken CMF :$deviceToken');
+    // logger.d('deviceToken CMF :$deviceToken');
 
     try {
       final response = await EnterpriseAPIService().loginAPI(
@@ -104,7 +104,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final darkTheme = ref.watch(darkThemeProviderProvider);
 
     final loginProvider = ref.watch(stateLoginProvider);
-     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: true,

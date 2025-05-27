@@ -4,13 +4,16 @@ import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/poviders/location_provider/location_provider.dart';
 import 'package:enterprise/components/router/router.dart';
+import 'package:enterprise/components/services/notification/localnotification.dart';
 import 'package:enterprise/components/utils/dialogs.dart';
 import 'package:enterprise/components/utils/dio_exceptions.dart';
 import 'package:enterprise/views/screens/home/widgets/box_checkIn_widgets.dart';
 import 'package:enterprise/views/screens/home/widgets/function_widget.dart';
 import 'package:enterprise/views/screens/home/widgets/headerProfile_widget.dart';
 import 'package:enterprise/views/screens/home/widgets/team_highligts_widget.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +32,8 @@ import '../../../components/services/api_service/enterprise_service.dart';
 import '../../../components/styles/size_config.dart';
 import '../../widgets/easy_date_time/infinite_item.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
+
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
   @override
@@ -36,6 +41,82 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  LocalNotificationServiceUserApp localNotificationServiceUserApp =
+      LocalNotificationServiceUserApp();
+  Future redirectScreen({screenToNavigate}) async {
+    debugPrint("modalRoute : $screenToNavigate");
+
+    switch (screenToNavigate) {
+      case 'attendance':
+        Future.delayed(const Duration(milliseconds: 2), () {
+          if (mounted) {
+            Navigator.of(context).pushNamed(PageName.navigatorBarScreenRoute,
+                arguments: {"index": 0});
+          }
+        });
+
+        break;
+      case 'leave':
+        Future.delayed(const Duration(milliseconds: 2), () {
+          if (mounted) {
+            Navigator.of(context)
+                .pushNamed(PageName.notificationRoute, arguments: {"index": 1});
+          }
+        });
+
+        break;
+      case 'SetAccountScreen':
+        Future.delayed(const Duration(milliseconds: 2), () {
+          // if (mounted) {
+          //   Navigator.pushNamed(context, AppRoutes.bankAccountRoute);
+          // }
+        });
+        break;
+      case 'NormalScreen':
+        Future.delayed(const Duration(milliseconds: 2), () {
+          // if (mounted) {
+          //   Navigator.of(context).pushNamed(AppRoutes.notificationV2Route,
+          //       arguments: {"index": 2});
+          // }
+        });
+        break;
+      default:
+        Future.delayed(const Duration(milliseconds: 2), () {
+          // if (mounted) {
+          //   Navigator.of(context).pushNamed(AppRoutes.notificationV2Route,
+          //       arguments: {"index": 0});
+          // }
+        });
+        break;
+    }
+  }
+
+  Future<void> _configureCallbacks() async {
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {});
+
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) {
+        RemoteNotification? notification = message.notification;
+        AndroidNotification? android = message.notification?.android;
+        if (notification != null && android != null && !kIsWeb) {
+          LocalNotificationServiceUserApp.display(message);
+        }
+        logger.d("foreground : ${notification!.title}");
+      },
+    );
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      final int messageId = int.parse(message.data['messageId']);
+      logger.d(message.data["ref"]);
+      logger.d(" confirm : ${message.data["ref"] == "TOP_UP"}");
+
+      redirectScreen(screenToNavigate: message.data["screen"]);
+    });
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    FirebaseMessaging.instance.subscribeToTopic('attendance');
+  }
+
   SharedPrefs sharedPrefs = SharedPrefs();
   bool isLoadinUser = false;
   bool isLoadinLocation = false;
@@ -106,6 +187,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _configureCallbacks();
+    LocalNotificationServiceUserApp.initialize(context);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       checkExpiredToken();
       // checkToken();
@@ -143,8 +226,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final roleName = userProvider.getUserModel?.data?.role?.name;
     final darkTheme = ref.watch(darkThemeProviderProvider);
 
-
- darkTheme.darkTheme
+    darkTheme.darkTheme
         ? SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light)
         : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
@@ -329,18 +411,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 curve: Curves.easeOutQuad),
                         SizedBox(height: SizeConfig.heightMultiplier * 2),
                         // if (roleName != "EMPLOYEE") ...[
-                          Text(
-                            Strings.txtTeam.tr,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 2),
-                          ),
-                          SizedBox(
-                            height: SizeConfig.widthMultiplier * 2,
-                          ),
-                          const TeamHighlightsWidget(),
+                        Text(
+                          Strings.txtTeam.tr,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(
+                                  fontSize: SizeConfig.textMultiplier * 2),
+                        ),
+                        SizedBox(
+                          height: SizeConfig.widthMultiplier * 2,
+                        ),
+                        const TeamHighlightsWidget(),
                         // ] else
                         //   const SizedBox.shrink(),
                         // SizedBox(height: SizeConfig.heightMultiplier * 2),

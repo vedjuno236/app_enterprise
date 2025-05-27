@@ -84,24 +84,19 @@ dependencies:
   flutter_launcher_icons: ^0.14.3
   rive_animated_icon: ^2.0.5
   rive: ^0.13.20
-  camera: ^0.11.1
+  # camera: ^0.11.1
   flutter_pdfview: ^1.4.0+1
   syncfusion_flutter_pdfviewer: ^27.2.5
-
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/logo.png"
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^4.0.0
-
 flutter:
   uses-material-design: true
-
   assets:
     - assets/fonts/
     - assets/icons/
@@ -110,11 +105,8 @@ flutter:
     - assets/rives/
     - assets/lottie/
     - assets/logo/
-
   fonts:
-    - family: Orange
-      fonts:
-        - asset: assets/fonts/OrangespersonaluseBold-YzBEv.otf
+ 
     - family: NotoSansLao
       fonts:
         - asset: assets/fonts/NotoSansLao-Bold.ttf

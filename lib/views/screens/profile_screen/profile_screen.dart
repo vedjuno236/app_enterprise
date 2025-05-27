@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/colors.dart';
 import 'package:enterprise/components/constants/image_path.dart';
-import 'package:enterprise/components/languages/localization_service.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/router/router.dart';
 import 'package:enterprise/components/styles/size_config.dart';

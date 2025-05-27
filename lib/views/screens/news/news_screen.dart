@@ -527,8 +527,8 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                                             ).animate().scaleXY(
                                                 begin: 0,
                                                 end: 1,
-                                                delay: 600.ms,
-                                                duration: 600.ms,
+                                                delay: 400.ms,
+                                                duration: 400.ms,
                                                 curve: Curves.easeInOutCubic),
                                             const SizedBox(
                                               height: 10,
@@ -595,7 +595,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                                           ],
                                         ),
                                       ).animate().scale(
-                                          duration: 600.ms,
+                                          duration: 300.ms,
                                           alignment: Alignment.centerLeft),
                                     ),
                                   );
@@ -605,13 +605,34 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                           ),
                         )
                           .animate()
-                          .fadeIn(duration: 1000.ms, delay: 1000.ms)
-                          .shimmer(blendMode: BlendMode.srcOver, color: kGary)
+                          .fadeIn(duration: 500.ms, delay: 500.ms)
                           .move(
                               begin: Offset(-16, 0), curve: Curves.easeOutQuad)
             ])),
       ),
     );
+  }
+
+  Map<String, dynamic> getItemColor(String keywrd) {
+    switch (keywrd) {
+      case "APPLYLEAVE":
+        return {
+          'color': const Color(0xFF3085FE),
+          'txt': Strings.txtApplyeave.tr
+        };
+      case "POLICY":
+        return {'color': const Color(0xFFF45B69), 'txt': Strings.txtPolicy.tr};
+      case "PAYSLIPS":
+        return {
+          'color': const Color(0xFFF59E0B),
+          'txt': Strings.txtPayslips.tr
+        };
+
+      default:
+        return {
+          'color': Colors.blueAccent,
+        };
+    }
   }
 
   void widgetBottomSheetFormNews(BuildContext context) {

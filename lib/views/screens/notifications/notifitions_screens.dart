@@ -30,7 +30,6 @@ import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:widgets_easier/widgets_easier.dart';
 
-
 class NotificationsNewScreens extends ConsumerStatefulWidget {
   const NotificationsNewScreens({super.key});
 
@@ -527,7 +526,7 @@ class _NotifitionsNewScreensState
                                                                   0xFF99A1BE),
                                                               fontSize: SizeConfig
                                                                       .textMultiplier *
-                                                                  2),
+                                                                  4),
                                                     ),
                                                   ],
                                                 ),
@@ -891,23 +890,182 @@ class _NotifitionsNewScreensState
                                           children: [
                                             Column(
                                               children: [
-                                                SingleChildScrollView(
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Row(
+                                                // Row(
+                                                //   mainAxisAlignment:
+                                                //       MainAxisAlignment
+                                                //           .spaceBetween,
+                                                //   children: [
+                                                //     Row(
+                                                //       children: [
+                                                //         CircleAvatar(
+                                                //           radius: SizeConfig
+                                                //                   .imageSizeMultiplier *
+                                                //               7,
+                                                //           backgroundColor: Colors
+                                                //                   .grey[
+                                                //               200], // optional fallback color
+                                                //           child: ClipOval(
+                                                //             child:
+                                                //                 Image.network(
+                                                //               data.profile
+                                                //                   .toString(),
+                                                //               width: 110,
+                                                //               height: 110,
+                                                //               fit: BoxFit.cover,
+                                                //               loadingBuilder:
+                                                //                   (context,
+                                                //                       child,
+                                                //                       loadingProgress) {
+                                                //                 if (loadingProgress ==
+                                                //                     null)
+                                                //                   return child;
+                                                //                 return const Center(
+                                                //                   child:
+                                                //                       LoadingPlatformV1(),
+                                                //                 );
+                                                //               },
+                                                //               errorBuilder:
+                                                //                   (context,
+                                                //                       error,
+                                                //                       stackTrace) {
+                                                //                 return const Icon(
+                                                //                     Icons.error,
+                                                //                     size: 40,
+                                                //                     color: Colors
+                                                //                         .red);
+                                                //               },
+                                                //             ),
+                                                //           ),
+                                                //         ),
+                                                //         const SizedBox(
+                                                //           width: 15,
+                                                //         ),
+                                                //         Column(
+                                                //           crossAxisAlignment:
+                                                //               CrossAxisAlignment
+                                                //                   .start,
+                                                //           children: [
+                                                //             Text(
+                                                //               // data.typeName.toString(),
+                                                //               data.username
+                                                //                   .toString(),
+                                                //               style: Theme.of(
+                                                //                       context)
+                                                //                   .textTheme
+                                                //                   .bodyLarge!
+                                                //                   .copyWith(),
+                                                //             ),
+                                                //             Text(
+                                                //               // data.typeName.toString(),
+                                                //               '${txtStatus} ${txt}',
+                                                //               style: Theme.of(
+                                                //                       context)
+                                                //                   .textTheme
+                                                //                   .bodyLarge!
+                                                //                   .copyWith(
+                                                //                     color:
+                                                //                         const Color(
+                                                //                       0xFF99A1BE,
+                                                //                     ),
+                                                //                     fontSize:
+                                                //                         SizeConfig.textMultiplier *
+                                                //                             2,
+                                                //                   ),
+                                                //             ),
+                                                //             Text(
+                                                //               'On ${DateFormatUtil.formatDD(DateTime.parse(data.startDate.toString()))}-${DateFormatUtil.formatddMMy(DateTime.parse(data.endDate.toString()))}',
+                                                //               style: Theme.of(
+                                                //                       context)
+                                                //                   .textTheme
+                                                //                   .bodyLarge!
+                                                //                   .copyWith(
+                                                //                     color: const Color(
+                                                //                         0xFF99A1BE),
+                                                //                     fontSize:
+                                                //                         SizeConfig.textMultiplier *
+                                                //                             5,
+                                                //                   ),
+                                                //               overflow:
+                                                //                   TextOverflow
+                                                //                       .ellipsis,
+                                                //             ),
+                                                //           ],
+                                                //         ),
+                                                //       ],
+                                                //     ),
+                                                //     SizedBox(
+                                                //       width: 10,
+                                                //     ),
+                                                //     SizedBox(
+                                                //       height: SizeConfig
+                                                //               .heightMultiplier *
+                                                //           4.5,
+                                                //       child: OutlinedButton(
+                                                //         onPressed: () async {
+                                                //           widgetBottomSheetUser(
+                                                //               context, data);
+                                                //         },
+                                                //         style: OutlinedButton
+                                                //             .styleFrom(
+                                                //                 side: BorderSide(
+                                                //                     color:
+                                                //                         colorStatus),
+                                                //                 shape:
+                                                //                     RoundedRectangleBorder(
+                                                //                   borderRadius:
+                                                //                       BorderRadius
+                                                //                           .circular(
+                                                //                               50),
+                                                //                 ),
+                                                //                 padding:
+                                                //                     EdgeInsets
+                                                //                         .all(8),
+                                                //                 backgroundColor:
+                                                //                     colorStatus),
+                                                //         child: Row(
+                                                //           mainAxisSize:
+                                                //               MainAxisSize.min,
+                                                //           children: [
+                                                //             iconStatus,
+                                                //             const SizedBox(
+                                                //                 width: 5),
+                                                //             Text(
+                                                //               txtStatus
+                                                //                   .toString(),
+                                                //               style: Theme.of(
+                                                //                       context)
+                                                //                   .textTheme
+                                                //                   .bodyMedium
+                                                //                   ?.copyWith(
+                                                //                     color:
+                                                //                         kTextWhiteColor,
+                                                //                     fontSize:
+                                                //                         SizeConfig.textMultiplier *
+                                                //                             1.5,
+                                                //                   ),
+                                                //             ),
+                                                //           ],
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //   ],
+                                                // ),
+
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Flexible(
+                                                      child: Row(
                                                         children: [
                                                           CircleAvatar(
                                                             radius: SizeConfig
                                                                     .imageSizeMultiplier *
                                                                 7,
-                                                            backgroundColor: Colors
-                                                                    .grey[
-                                                                200], // optional fallback color
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .grey[200],
                                                             child: ClipOval(
                                                               child:
                                                                   Image.network(
@@ -925,9 +1083,8 @@ class _NotifitionsNewScreensState
                                                                       null)
                                                                     return child;
                                                                   return const Center(
-                                                                    child:
-                                                                        LoadingPlatformV1(),
-                                                                  );
+                                                                      child:
+                                                                          LoadingPlatformV1());
                                                                 },
                                                                 errorBuilder:
                                                                     (context,
@@ -944,116 +1101,119 @@ class _NotifitionsNewScreensState
                                                             ),
                                                           ),
                                                           const SizedBox(
-                                                            width: 15,
-                                                          ),
-                                                          Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                // data.typeName.toString(),
-                                                                data.username
-                                                                    .toString(),
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyLarge!
-                                                                    .copyWith(),
-                                                              ),
-                                                              Text(
-                                                                // data.typeName.toString(),
-                                                                '${txtStatus} ${txt}',
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyLarge!
-                                                                    .copyWith(
-                                                                      color:
-                                                                          const Color(
-                                                                        0xFF99A1BE,
+                                                              width: 15),
+                                                          Expanded(
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                  data.username
+                                                                      .toString(),
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyLarge!
+                                                                      .copyWith(),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ),
+                                                                Text(
+                                                                  '${txtStatus} ${txt}',
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyLarge!
+                                                                      .copyWith(
+                                                                        color: const Color(
+                                                                            0xFF99A1BE),
+                                                                        fontSize:
+                                                                            SizeConfig.textMultiplier *
+                                                                                2,
                                                                       ),
-                                                                      fontSize:
-                                                                          SizeConfig.textMultiplier *
-                                                                              2,
-                                                                    ),
-                                                              ),
-                                                              Text(
-                                                                'On ${DateFormatUtil.formatDD(DateTime.parse(data.startDate.toString()))}-${DateFormatUtil.formatddMMy(DateTime.parse(data.endDate.toString()))}',
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyLarge!
-                                                                    .copyWith(
-                                                                      color: const Color(
-                                                                          0xFF99A1BE),
-                                                                      fontSize:
-                                                                          SizeConfig.textMultiplier *
-                                                                              2,
-                                                                    ),
-                                                              ),
-                                                            ],
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ),
+                                                                Text(
+                                                                  'On ${DateFormatUtil.formatDD(DateTime.parse(data.startDate.toString()))}-${DateFormatUtil.formatddMMy(DateTime.parse(data.endDate.toString()))}',
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyLarge!
+                                                                      .copyWith(
+                                                                        color: const Color(
+                                                                            0xFF99A1BE),
+                                                                        fontSize:
+                                                                            SizeConfig.textMultiplier *
+                                                                                2,
+                                                                      ),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      SizedBox(
-                                                        height: SizeConfig
-                                                                .heightMultiplier *
-                                                            4.5,
-                                                        child: OutlinedButton(
-                                                          onPressed: () async {
-                                                            widgetBottomSheetUser(
-                                                                context, data);
-                                                          },
-                                                          style: OutlinedButton
-                                                              .styleFrom(
-                                                                  side: BorderSide(
-                                                                      color:
-                                                                          colorStatus),
-                                                                  shape:
-                                                                      RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            50),
-                                                                  ),
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              8),
-                                                                  backgroundColor:
-                                                                      colorStatus),
-                                                          child: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            children: [
-                                                              iconStatus,
-                                                              const SizedBox(
-                                                                  width: 5),
-                                                              Text(
-                                                                txtStatus
-                                                                    .toString(),
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyMedium
-                                                                    ?.copyWith(
-                                                                      color:
-                                                                          kTextWhiteColor,
-                                                                      fontSize:
-                                                                          SizeConfig.textMultiplier *
-                                                                              1.5,
-                                                                    ),
-                                                              ),
-                                                            ],
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    SizedBox(
+                                                      height: SizeConfig
+                                                              .heightMultiplier *
+                                                          4.5,
+                                                      child: OutlinedButton(
+                                                        onPressed: () async {
+                                                          widgetBottomSheetUser(
+                                                              context, data);
+                                                        },
+                                                        style: OutlinedButton
+                                                            .styleFrom(
+                                                          side: BorderSide(
+                                                              color:
+                                                                  colorStatus),
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        50),
                                                           ),
+                                                          padding:
+                                                              EdgeInsets.all(8),
+                                                          backgroundColor:
+                                                              colorStatus,
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            iconStatus,
+                                                            const SizedBox(
+                                                                width: 5),
+                                                            Text(
+                                                              txtStatus
+                                                                  .toString(),
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyMedium
+                                                                  ?.copyWith(
+                                                                    color:
+                                                                        kTextWhiteColor,
+                                                                    fontSize:
+                                                                        SizeConfig.textMultiplier *
+                                                                            1.5,
+                                                                  ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),

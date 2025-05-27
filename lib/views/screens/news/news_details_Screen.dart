@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/models/news_model/news_pagination_model.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -24,10 +25,10 @@ class NewsDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final darkTheme = ref.watch(darkThemeProviderProvider);
-    darkTheme.darkTheme
-        ? SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light)
-        : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    // final darkTheme = ref.watch(darkThemeProviderProvider);
+    // darkTheme.darkTheme
+    //     ? SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light)
+    //     : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +37,7 @@ class NewsDetailsScreen extends ConsumerWidget {
         flexibleSpace: const AppbarWidget(),
         title: AnimatedTextAppBarWidget(
           text: Strings.txtDetails.tr,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(),
         ),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
@@ -70,9 +71,8 @@ class NewsDetailsScreen extends ConsumerWidget {
                           imageUrl: news.image!,
                           fit: BoxFit.cover,
                           placeholder: (context, url) => const Center(
-                            child: CircularProgressIndicator(),
+                            child: LoadingPlatformV1(),
                           ),
-                          height: SizeConfig.heightMultiplier * 30,
                           width: double.infinity,
                         ),
                       ),

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:enterprise/components/constants/image_path.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
