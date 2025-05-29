@@ -1145,7 +1145,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       child: CircleAvatar(
                         backgroundColor: kGary,
                         radius: SizeConfig.heightMultiplier * 1.8,
-                        child:const Icon(
+                        child: const Icon(
                           Bootstrap.gear,
                           color: kBack,
                         ),
@@ -1218,6 +1218,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         children: [
           Text(
             Strings.txtPleaseChooseImage.tr,
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(fontSize: SizeConfig.textMultiplier * 2.2),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -1231,6 +1235,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     const Icon(Icons.camera_alt_outlined, color: kYellowColor),
                 label: Text(
                   Strings.txtCamera.tr,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontSize: SizeConfig.textMultiplier * 2),
                 ),
               ),
               TextButton.icon(
@@ -1241,6 +1249,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 icon: const Icon(Icons.image_outlined, color: kYellowColor),
                 label: Text(
                   Strings.txtGallery.tr,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontSize: SizeConfig.textMultiplier * 2),
                 ),
               ),
             ],

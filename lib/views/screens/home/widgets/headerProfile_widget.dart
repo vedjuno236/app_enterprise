@@ -116,41 +116,47 @@ class _HeaderProfileState extends ConsumerState<HeaderProfile> {
                           .updateTabSelection(3, 'Profile');
                     },
                     child: ClipOval(
-                            child: widget.profile != null
-                                ? CachedNetworkImage(
-                                    imageUrl: widget.profile!,
-                                    width: SizeConfig.heightMultiplier * 8,
-                                    height: SizeConfig.heightMultiplier * 8,
-                                    fit: BoxFit.cover,
-                                    key: ValueKey(Random().nextInt(1000000)),
-                                    placeholder: (context, url) =>
-                                        const LoadingPlatformV1(),
-                                    errorWidget: (context, url, error) => Icon(
-                                        Icons.person,
-                                        size:
-                                            SizeConfig.imageSizeMultiplier * 7),
-                                  )
-                                : CachedNetworkImage(
-                                    imageUrl:
-                                        'https://img.freepik.com/free-photo/village-bungalows-along-nam-song-river-vang-vieng-laos_335224-1252.jpg?t=st=1745551578~exp=1745555178~hmac=24020576c9080278d441b77a07e82b6c2b97718a895fc8bfb6be2ada9afb8694&w=2000',
-                                    width: SizeConfig.heightMultiplier * 8,
-                                    height: SizeConfig.heightMultiplier * 8,
-                                    fit: BoxFit.cover,
-                                    key: ValueKey(Random().nextInt(1000000)),
-                                    placeholder: (context, url) =>
-                                        const LoadingPlatformV1(),
-                                    errorWidget: (context, url, error) => Icon(
-                                        Icons.person,
-                                        size:
-                                            SizeConfig.imageSizeMultiplier * 7),
-                                  ))
-                        .animate()
-                        .scaleXY(
-                            begin: 0,
-                            end: 1,
-                            delay: 500.ms,
-                            duration: 500.ms,
-                            curve: Curves.easeInOutCubic),
+                      // child: widget.profile != null
+                      //     ? CachedNetworkImage(
+                      //         imageUrl: widget.profile!,
+                      //         width: SizeConfig.heightMultiplier * 8,
+                      //         height: SizeConfig.heightMultiplier * 8,
+                      //         fit: BoxFit.cover,
+                      //         key: ValueKey(Random().nextInt(1000000)),
+                      //         placeholder: (context, url) =>
+                      //             const LoadingPlatformV1(),
+
+                      //       )
+                      //     : CachedNetworkImage(
+                      //         imageUrl:
+                      //             'https://img.freepik.com/free-photo/village-bungalows-along-nam-song-river-vang-vieng-laos_335224-1252.jpg?t=st=1745551578~exp=1745555178~hmac=24020576c9080278d441b77a07e82b6c2b97718a895fc8bfb6be2ada9afb8694&w=2000',
+                      //         width: SizeConfig.heightMultiplier * 8,
+                      //         height: SizeConfig.heightMultiplier * 8,
+                      //         fit: BoxFit.cover,
+                      //         key: ValueKey(Random().nextInt(1000000)),
+                      //         placeholder: (context, url) =>
+                      //             const LoadingPlatformV1(),
+
+                      //       ),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.profile!.isNotEmpty
+                            ? widget.profile!
+                            : 'https://st.depositphotos.com/1479444/3673/v/450/depositphotos_36730065-stock-illustration-businessman-business-idea.jpg',
+                        width: SizeConfig.heightMultiplier * 8,
+                        height: SizeConfig.heightMultiplier * 8,
+                        fit: BoxFit.cover,
+                        key: ValueKey(Random().nextInt(1000000)),
+                        placeholder: (context, url) =>
+                            const LoadingPlatformV1(),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      ),
+                    ).animate().scaleXY(
+                        begin: 0,
+                        end: 1,
+                        delay: 500.ms,
+                        duration: 500.ms,
+                        curve: Curves.easeInOutCubic),
                   ),
                 ),
               ),

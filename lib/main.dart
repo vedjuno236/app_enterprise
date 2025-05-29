@@ -14,16 +14,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// ignore: depend_on_referenced_packages
+
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'dart:async';
-import 'dart:io';
-import 'dart:ui' as ui;
+
 import 'package:flutter/services.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 // final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -198,22 +195,16 @@ void main() async {
       sound: true,
     );
   }
-  await FirebaseMessaging.instance.subscribeToTopic('attendance');
-
+  // await FirebaseMessaging.instance.subscribeToTopic('attendance');
   await Firebase.initializeApp();
   FirebaseAnalytics.instance.logAppOpen();
-
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-
   await SharedPrefs().init();
-
   final fcmToken = await FirebaseMessaging.instance.getToken();
   logger.d('FCM Token: $fcmToken');
-
   FirebaseAnalytics.instance.logAppOpen();
   await SharedPrefs().init();
   runApp(const ProviderScope(child: App()));
-
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.dark,
@@ -221,17 +212,13 @@ void main() async {
     ),
   );
 }
-
 class App extends ConsumerStatefulWidget {
   const App({Key? key}) : super(key: key);
-
   @override
   ConsumerState<App> createState() => _AppState();
 }
-
 class _AppState extends ConsumerState<App> {
   DarkThemePreference darkThemePreference = DarkThemePreference();
-
   // void initState() {
   //   super.initState();
   //   getCurrentAppTheme();

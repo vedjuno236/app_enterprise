@@ -130,34 +130,26 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                     borderRadius: BorderRadius.circular(12)
                     // shape: BoxShape.circle,
                     ),
-                selectedCellTextStyle: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
-                enabledCellsTextStyle: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
+                selectedCellTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(),
+                enabledCellsTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(),
                 enabledCellsDecoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
                 ),
-                disabledCellsTextStyle: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(
-                        color: Color(0xFFE4E4E7),
-                        fontSize: SizeConfig.textMultiplier * 1.9),
+                disabledCellsTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Color(0xFFE4E4E7),
+                        ),
                 disabledCellsDecoration: BoxDecoration(
                   color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
                 ),
-                currentDateTextStyle: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
+                currentDateTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(),
                 currentDateDecoration: BoxDecoration(
                     border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
                     borderRadius: BorderRadius.circular(12)),
@@ -441,10 +433,12 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                               if ((data.status == "APPROVED" ||
                                       data.status == "REJECTED") &&
                                   data.updatedAt != null) {
-                                formattedDate = DateFormat("d MMM yyyy")
-                                    .format(DateTime.parse(data.updatedAt!));
+                                // formattedDate = DateFormat("d MMMM yyyy")
+                                //     .format(DateTime.parse(data.updatedAt!));
+                                formattedDate = DateFormatUtil.formatA(
+                                    DateTime.parse(data.updatedAt.toString()));
                               }
-
+                              // '${DateFormatUtil.formatdm(DateTime.parse(data.endDate ?? DateTime.now().toString()))}',
                               return GestureDetector(
                                 onTap: () {
                                   widgetBottomSheetREJECTEDandAPPROVED(
@@ -986,6 +980,8 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                                   return Padding(
                                     padding: const EdgeInsets.only(bottom: 8.0),
                                     child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         SingleChildScrollView(
                                           scrollDirection: Axis.horizontal,
@@ -1050,7 +1046,9 @@ Future<dynamic> widgetBottomSheetREJECTEDandAPPROVED(
                                                   ),
                                                 ],
                                               ),
-
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
                                               Row(
                                                 children: [
                                                   Text(

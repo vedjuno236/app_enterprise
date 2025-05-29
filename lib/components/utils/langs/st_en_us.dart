@@ -8,7 +8,7 @@ const Map<String, String> en = {
   "Please enter your password": "Please enter your password",
   "Next": "Login",
   "Cancel": "Cancel",
-  "Error": "Sorry",
+  "Error": "Sorry!",
   "Done": "Done",
   "Slide to Clock In": "Slide to Clock Out",
   "Slide to Clock Out": "Slide to Clock In",
@@ -25,8 +25,12 @@ const Map<String, String> en = {
   "Choose Image": "Choose Image",
   "Reason": "Reason",
   "Status": "Status",
+  
   "By": "By",
-  "People from your team are on vacation and leave": "People from your team are on vacation and leave",
+  "You do not have enough vacation days. Please contact HR": "You do not have enough vacation days. Please contact HR.",
+  "Your vacation is over": "Your vacation is over.",
+  "People from your team are on vacation and leave":
+      "People from your team are on vacation and leave",
   "Review": "Review",
   "All Leave History": "All Leave History",
   "You take leavesBy": "You take leavesBy",
@@ -37,9 +41,14 @@ const Map<String, String> en = {
   "Lives In": "Lives In",
   "Department": "Department",
   "Sart Working": "Sart Working",
+
   // atten
+  "Location Permissions Denied": "Location Permissions Denied",
+  "Location permissions are permanently denied. Please enable them in app settings":
+      "Location permissions are permanently denied. Please enable them in app settings",
   "You are": "You are",
   "SuccessFully": "Successfully",
+  "Your form have submitted and your form will be reviewed soon!": "Your form have submitted and your form will be reviewed soon!",
   "You": "You 've",
   "NOT": " NOT ",
   "in the clock-in area": "in the clock-in area",
@@ -47,7 +56,7 @@ const Map<String, String> en = {
       "Are you sure you want to Clock-in in this location?",
   "Have a productive day": "Have a productive day!",
   "Try clocking in earlier tomorrow": "Try clocking in earlier tomorrow 🥰 !",
-     "Have a good day": "Have a good day!",
+  "Have a good day": "Have a good day!",
   "Available": "Available",
   "Leave Used": "Leave Used",
   "Image": "Image",
@@ -133,11 +142,6 @@ const Map<String, String> en = {
   "Light Mode": "Light Mode",
   "Dark Mode": "Dark Mode",
 
-
-   // check text input
-"Please enter text": "Please enter text",
-
-
-
-
+  // check text input
+  "Please enter text": "Please enter text",
 };

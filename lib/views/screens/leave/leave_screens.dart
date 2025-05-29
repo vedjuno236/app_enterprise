@@ -98,6 +98,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
     super.dispose();
   }
 
+  final String currentLocale = Get.locale?.toString() ?? 'en';
   Future<void> submitForm(WidgetRef ref) async {
     setState(() {
       isLoading = true;
@@ -128,6 +129,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
         note: leaveNotifier.accordingController.text ?? '',
         document: imagePath,
       );
+
       if (response['data'] == "Insufficient leave balance") {
         setState(() {
           isLoading = false;
@@ -153,14 +155,14 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'ຂໍອະໄພ'.tr,
+                      Strings.txtError.tr,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      'ວັນລາພັກຂອງທ່ານໝົດແລ້ວ',
+                      Strings.txtYoudonotHR.tr,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
                       textAlign: TextAlign.center,
                     ),
@@ -172,19 +174,290 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
               );
             });
       }
+
+      if (response['status'] == false &&
+          response['error'] == "record not found") {
+        setState(() {
+          isLoading = false;
+        });
+        return showDialog(
+            context: context,
+            builder: (context) {
+              return AlertSuccessDialog(
+                title: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFF6563).withOpacity(.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Bootstrap.exclamation_circle_fill,
+                    color: Color(0xFFFF6563),
+                    size: SizeConfig.imageSizeMultiplier * 13,
+                  ),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      Strings.txtError.tr,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      Strings.txtYoudonotHR.tr,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                onTapOK: () {
+                  context.pop();
+                },
+              );
+            });
+      }
+
+      setState(() {
+        isLoading = false;
+      });
       // ignore: use_build_context_synchronously
       alertSuccessDialog(context);
     } on DioException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+
+      if (e.response?.data != null) {
+        final responseData = e.response!.data;
+
+        if (responseData['status'] == false &&
+            responseData['error'] == "record not found") {
+          return showDialog(
+              context: context,
+              builder: (context) {
+                return AlertSuccessDialog(
+                  title: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFF6563).withOpacity(.12),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Bootstrap.exclamation_circle_fill,
+                      color: Color(0xFFFF6563),
+                      size: SizeConfig.imageSizeMultiplier * 13,
+                    ),
+                  ),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        Strings.txtError.tr,
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        Strings.txtYoudonotHR.tr,
+                        style:
+                            Theme.of(context).textTheme.bodyLarge?.copyWith(),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                  onTapOK: () {
+                    context.pop();
+                  },
+                );
+              });
+        }
+      }
+
       final dioException = DioExceptions.fromDioError(e);
       logger.e("Error during leave: ${dioException.toString()}");
-      // ignore: use_build_context_synchronously
-      errorDialog(context: context, onError: e);
+
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertSuccessDialog(
+              title: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFF6563).withOpacity(.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Bootstrap.exclamation_circle_fill,
+                  color: Color(0xFFFF6563),
+                  size: SizeConfig.imageSizeMultiplier * 13,
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    Strings.txtError.tr,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    Strings.txtYoudonotHR.tr,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              onTapOK: () {
+                context.pop();
+              },
+            );
+          });
     } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       logger.e("Error leave: $e");
-      // ignore: use_build_context_synchronously
-      errorDialog(context: context, onError: e);
+
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertSuccessDialog(
+              title: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFF6563).withOpacity(.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Bootstrap.exclamation_circle_fill,
+                  color: Color(0xFFFF6563),
+                  size: SizeConfig.imageSizeMultiplier * 13,
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    Strings.txtError.tr,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    Strings.txtYoudonotHR.tr,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              onTapOK: () {
+                context.pop();
+              },
+            );
+          });
     }
   }
+
+  // Future<void> submitForm(WidgetRef ref) async {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   final userProvider = ref.watch(stateUserProvider);
+  //   final leaveNotifier = ref.read(leaveNotifierProvider.notifier);
+  //   final leaveProvider = ref.watch(stateLeaveProvider);
+  //   if (leaveProvider.selectedLeaveType == null) {
+  //     return;
+  //   }
+
+  //   final selectedLeaveType = leaveProvider.getLeaveTypeModel!.data!
+  //       .firstWhereOrNull((e) => e.keyWord == leaveProvider.selectedLeaveType);
+
+  //   if (selectedLeaveType == null) {
+  //     return;
+  //   }
+
+  //   final String imagePath = _imageFile != null ? _imageFile!.path : "";
+  //   final DateFormat format = DateFormat('yyyy-MM-dd HH:mm:ss');
+
+  //   try {
+  //     final response = await EnterpriseAPIService().createLeave(
+  //       userID: userProvider.getUserModel!.data!.id ?? 0,
+  //       leaveTypeId: selectedLeaveType.id,
+  //       startDate: format.format(startDate!),
+  //       endDate: format.format(endDate!),
+  //       note: leaveNotifier.accordingController.text ?? '',
+  //       document: imagePath,
+  //     );
+
+  //    if (response['data'] == "Insufficient leave balance") {
+  //       setState(() {
+  //         isLoading = false;
+  //       });
+  //       return showDialog(
+  //           context: context,
+  //           builder: (context) {
+  //             return AlertSuccessDialog(
+  //               title: Container(
+  //                 padding: const EdgeInsets.all(10),
+  //                 decoration: BoxDecoration(
+  //                   color: Color(0xFFFF6563).withOpacity(.12),
+  //                   shape: BoxShape.circle,
+  //                 ),
+  //                 child: Icon(
+  //                   Bootstrap.exclamation_circle_fill,
+  //                   color: Color(0xFFFF6563),
+  //                   size: SizeConfig.imageSizeMultiplier * 13,
+  //                 ),
+  //               ),
+  //               content: Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   Text(
+  //                     'ຂໍອະໄພ'.tr,
+  //                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
+  //                           fontWeight: FontWeight.bold,
+  //                         ),
+  //                   ),
+  //                   const SizedBox(height: 20),
+  //                   Text(
+  //                     'ວັນລາພັກຂອງທ່ານໝົດແລ້ວ',
+  //                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
+  //                     textAlign: TextAlign.center,
+  //                   ),
+  //                 ],
+  //               ),
+  //               onTapOK: () {
+  //                 context.pop();
+  //               },
+  //             );
+  //           });
+  //     }
+  //     // ignore: use_build_context_synchronously
+  //     alertSuccessDialog(context);
+  //   } on DioException catch (e) {
+  //     final dioException = DioExceptions.fromDioError(e);
+  //     logger.e("Error during leave: ${dioException.toString()}");
+  //     // ignore: use_build_context_synchronously
+  //     errorDialog(context: context, onError: e);
+  //   } catch (e) {
+  //     logger.e("Error leave: $e");
+  //     // ignore: use_build_context_synchronously
+  //     errorDialog(context: context, onError: e);
+  //   }
+  // }
 
   Future<void> alertSuccessDialog(
     BuildContext context,
@@ -757,7 +1030,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                           dismissible: true,
                           minimumDate: DateTime.now(),
                           maximumDate:
-                              DateTime.now().add(const Duration(days: 30)),
+                              DateTime.now().add(const Duration(days: 150)),
                           endDate: endDate,
                           startDate: startDate,
                           backgroundColor: Theme.of(context).cardColor,
@@ -789,7 +1062,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                             Icons.arrow_right,
                           ),
                           hintText: startDate != null && endDate != null
-                              ? '${DateFormat("dd, MMMM", 'lo').format(startDate!)} - ${DateFormat("dd, MMMM", 'lo').format(endDate!)}'
+                              ? '${DateFormat("dd, MMMM", currentLocale).format(startDate!)} - ${DateFormat("dd, MMMM", currentLocale).format(endDate!)}'
                               : Strings.txtSelectDateNew.tr,
                           hintStyle: startDate != null && endDate != null
                               ? Theme.of(context)
@@ -1705,8 +1978,8 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                     child: Text(
                       Strings.txtSubmitForm.tr,
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            fontSize: SizeConfig.textMultiplier * 2.5,
-                          ),
+                          fontSize: SizeConfig.textMultiplier * 2.5,
+                          color: kBack87),
                     ),
                   ),
           )
@@ -1793,9 +2066,9 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
       case "LAKIT":
         return {'color': Color(0xFFF45B69), 'txt': Strings.txtLakit.tr};
       case "SICK":
-        return {'color': Color(0xFFF59E0B), 'txt': Strings.txtSick.tr};
+        return {'color': Color(0xFF23A26D), 'txt': Strings.txtSick.tr};
       case "MATERNITY":
-        return {'color': Color(0xFF23A26D), 'txt': Strings.txtMaternity.tr};
+        return {'color': Color(0xFFF59E0B), 'txt': Strings.txtMaternity.tr};
 
       default:
         return {

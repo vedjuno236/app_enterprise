@@ -163,27 +163,21 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                     borderRadius: BorderRadius.circular(12)
                     // shape: BoxShape.circle,
                     ),
-                selectedCellTextStyle: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(
-                        color: kBack87,
-                        fontSize: SizeConfig.textMultiplier * 1.9),
-                enabledCellsTextStyle: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
+                selectedCellTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: kBack87,
+                        ),
+                enabledCellsTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(),
                 enabledCellsDecoration: BoxDecoration(
                   color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
                 ),
-                disabledCellsTextStyle: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(
-                        color: Color(0xFFE4E4E7),
-                        fontSize: SizeConfig.textMultiplier * 1.9),
+                disabledCellsTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Color(0xFFE4E4E7),
+                        ),
                 disabledCellsDecoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),

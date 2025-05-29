@@ -139,7 +139,8 @@ const Map<String, String> lo = {
   "Please enter Password": "ກະລຸນາປ້ອນລະຫັດຜ່ານ",
   "Please enter PhoneNumber": "ກະລານາປ້ອນເບີໂທ",
   "Error occurred": "ເກີດຂໍ້ຜິດພາດ",
-
+"You do not have enough vacation days. Please contact HR": "ທ່ານຍັງບໍ່ທັນມີຈໍານວນວັນລາພັກ ກະລຸນາຕິດຕໍ່ຫາ HR",
+"Your vacation is over": "ວັນລາພັກຂອງທ່ານໝົດແລ້ວ",
   "Leave Duration": "ໄລຍະເວລາການລາ",
   "Select date": "ເລືອກວັນທີ",
   "Assign temporary work to": "ມອບວຽກຊົ່ວຄາວໃຫ້",

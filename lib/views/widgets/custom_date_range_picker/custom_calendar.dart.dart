@@ -84,7 +84,7 @@ class CustomCalendarState extends State<CustomCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    final String currentLocale = Get.locale?.toString() ?? 'lo';
+    final String currentLocale = Get.locale?.toString() ?? 'en';
 
     return Column(
       children: <Widget>[
@@ -315,7 +315,7 @@ class CustomCalendarState extends State<CustomCalendar> {
   }
 
   List<Widget> getDaysNameUI() {
-    final String currentLocale = Get.locale?.toString() ?? 'lo';
+    final String currentLocale = Get.locale?.toString() ?? 'en';
 
     final List<Widget> listUI = <Widget>[];
     for (int i = 0; i < 7; i++) {

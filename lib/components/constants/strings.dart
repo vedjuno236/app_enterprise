@@ -237,6 +237,7 @@ class Strings {
   static const String txtMore = "No more Data";
   static const String txtSharNow = "Share now";
   static const String txtMess = "Error occurred";
+    static const String txtError = "Error";
   static const String txtPoto = "Please attach Poto";
 
   static const String txtSuccessfully = "Successfully";
@@ -284,6 +285,8 @@ class Strings {
   static const String txtAllRequestHistory = "  All Request History ";
 
   /// leave new
+  static const  String txtYoudonotHR ="You do not have enough vacation days. Please contact HR";
+  static const String txtYourOver ="Your vacation is over";
   static const String txtTypeLeave = "leave type";
   static const String txtSelectLeave = "Please select a leave type";
   static const String txtDayS = "Date";

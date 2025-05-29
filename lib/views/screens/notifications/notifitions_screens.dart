@@ -4,7 +4,6 @@ import 'package:enterprise/components/constants/image_path.dart';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
-
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/poviders/notifition_provider/notification_user_provider.dart';
 import 'package:enterprise/components/poviders/notifition_provider/notifition_provider.dart';
@@ -49,8 +48,7 @@ class _NotifitionsNewScreensState
   bool isLoading = false;
   int userID = int.parse(SharedPrefs().getStringNow(KeyShared.keyUserId));
   bool isLoadingLeave = false;
-
-  Future fetchNotificationApi() async {
+    Future fetchNotificationApi() async {
     final dateProvider = ref.read(stateNotifitionProvider);
     DateTime? startDate = dateProvider.startDate;
     DateTime? endDate = dateProvider.endDate;
@@ -412,125 +410,144 @@ class _NotifitionsNewScreensState
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Stack(
-                                                  clipBehavior: Clip.none,
-                                                  children: [
-                                                    CircleAvatar(
-                                                      radius: SizeConfig
-                                                              .imageSizeMultiplier *
-                                                          7,
-                                                      backgroundColor: Colors
-                                                              .grey[
-                                                          200], // optional fallback color
-                                                      child: ClipOval(
-                                                        child: Image.network(
-                                                          data.profile
-                                                              .toString(),
-                                                          width: 110,
-                                                          height: 110,
-                                                          fit: BoxFit.cover,
-                                                          loadingBuilder: (context,
-                                                              child,
-                                                              loadingProgress) {
-                                                            if (loadingProgress ==
-                                                                null)
-                                                              return child;
-                                                            return const Center(
-                                                              child:
-                                                                  LoadingPlatformV1(),
-                                                            );
-                                                          },
-                                                          errorBuilder:
-                                                              (context, error,
-                                                                  stackTrace) {
-                                                            return const Icon(
-                                                                Icons.error,
-                                                                size: 40,
-                                                                color:
-                                                                    Colors.red);
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Positioned(
-                                                      right: -6,
-                                                      bottom: 0,
-                                                      child: CircleAvatar(
+                                            Flexible(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Stack(
+                                                    clipBehavior: Clip.none,
+                                                    children: [
+                                                      CircleAvatar(
                                                         radius: SizeConfig
-                                                                .heightMultiplier *
-                                                            1.4,
-                                                        backgroundColor: color,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(4.0),
-                                                          child:
-                                                              CachedNetworkImage(
-                                                            imageUrl:
-                                                                data.logo ?? '',
-                                                            progressIndicatorBuilder:
-                                                                (context, url,
-                                                                        downloadProgress) =>
-                                                                    const LoadingPlatformV1(),
-                                                            errorWidget: (context,
-                                                                    url,
-                                                                    error) =>
-                                                                const Icon(Icons
-                                                                    .error),
-                                                            color: Colors.white,
+                                                                .imageSizeMultiplier *
+                                                            7,
+                                                        backgroundColor: Colors
+                                                                .grey[
+                                                            200], // optional fallback color
+                                                        child: ClipOval(
+                                                          child: Image.network(
+                                                            data.profile
+                                                                .toString(),
+                                                            width: 110,
+                                                            height: 110,
+                                                            fit: BoxFit.cover,
+                                                            loadingBuilder:
+                                                                (context, child,
+                                                                    loadingProgress) {
+                                                              if (loadingProgress ==
+                                                                  null)
+                                                                return child;
+                                                              return const Center(
+                                                                child:
+                                                                    LoadingPlatformV1(),
+                                                              );
+                                                            },
+                                                            errorBuilder:
+                                                                (context, error,
+                                                                    stackTrace) {
+                                                              return const Icon(
+                                                                  Icons.error,
+                                                                  size: 40,
+                                                                  color: Colors
+                                                                      .red);
+                                                            },
                                                           ),
                                                         ),
                                                       ),
+                                                      Positioned(
+                                                        right: -6,
+                                                        bottom: 0,
+                                                        child: CircleAvatar(
+                                                          radius: SizeConfig
+                                                                  .heightMultiplier *
+                                                              1.4,
+                                                          backgroundColor:
+                                                              color,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(4.0),
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              imageUrl:
+                                                                  data.logo ??
+                                                                      '',
+                                                              progressIndicatorBuilder:
+                                                                  (context, url,
+                                                                          downloadProgress) =>
+                                                                      const LoadingPlatformV1(),
+                                                              errorWidget: (context,
+                                                                      url,
+                                                                      error) =>
+                                                                  const Icon(Icons
+                                                                      .error),
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(width: 14),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          data.username ?? '',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleMedium!
+                                                                  .copyWith(),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 5),
+                                                        Text(
+                                                          // data.typeName ?? '',
+                                                          txt,
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .titleMedium!
+                                                              .copyWith(
+                                                                  color: const Color(
+                                                                      0xFF99A1BE),
+                                                                  fontSize:
+                                                                      SizeConfig
+                                                                              .textMultiplier *
+                                                                          2),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 5),
+                                                        Text(
+                                                          'On ${DateFormatUtil.formatDD(DateTime.parse(data.startDate ?? ''))}-${DateFormatUtil.formatddMMy(DateTime.parse(data.endDate ?? ''))}',
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .titleMedium!
+                                                              .copyWith(
+                                                                  color: const Color(
+                                                                      0xFF99A1BE),
+                                                                  fontSize:
+                                                                      SizeConfig
+                                                                              .textMultiplier *
+                                                                          2),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
-                                                const SizedBox(width: 14),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      data.username ?? '',
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .titleMedium!
-                                                          .copyWith(),
-                                                    ),
-                                                    const SizedBox(height: 5),
-                                                    Text(
-                                                      // data.typeName ?? '',
-                                                      txt,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .titleMedium!
-                                                          .copyWith(
-                                                              color: const Color(
-                                                                  0xFF99A1BE),
-                                                              fontSize: SizeConfig
-                                                                      .textMultiplier *
-                                                                  2),
-                                                    ),
-                                                    const SizedBox(height: 5),
-                                                    Text(
-                                                      'On ${DateFormatUtil.formatDD(DateTime.parse(data.startDate ?? ''))}-${DateFormatUtil.formatddMMy(DateTime.parse(data.endDate ?? ''))}',
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .titleMedium!
-                                                          .copyWith(
-                                                              color: const Color(
-                                                                  0xFF99A1BE),
-                                                              fontSize: SizeConfig
-                                                                      .textMultiplier *
-                                                                  4),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                             SingleChildScrollView(
                                               scrollDirection: Axis.horizontal,
@@ -2182,6 +2199,8 @@ class _NotifitionsNewScreensState
                                       padding:
                                           const EdgeInsets.only(bottom: 8.0),
                                       child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           SingleChildScrollView(
                                             scrollDirection: Axis.horizontal,
@@ -2249,8 +2268,10 @@ class _NotifitionsNewScreensState
                                                     ),
                                                   ],
                                                 ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
 
-                                                // Approver Info
                                                 Row(
                                                   children: [
                                                     Text(Strings.txtBy.tr,

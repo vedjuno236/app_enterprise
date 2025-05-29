@@ -257,14 +257,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               fontSize: SizeConfig.textMultiplier * 2,
                             ),
                         onChanged: (phone) {
-                          if (phone.length > 7) {
+                          if (phone.length > 8) {
                             FocusScope.of(context).requestFocus(FocusNode());
                           }
                           setState(() {});
                         },
                         validator: (value) {
                           if (value!.isEmpty ||
-                              value.length < 7 ||
+                              value.length < 8 ||
                               value.contains(RegExp(r'[^\d-]'))) {
                             return Strings.txtPleaseEnterTheCorrectPhone.tr;
                           }
