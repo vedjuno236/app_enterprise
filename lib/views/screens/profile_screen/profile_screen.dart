@@ -40,18 +40,14 @@ enum AppState {
   picked,
   cropped,
 }
-
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
-
   @override
   ConsumerState createState() => _ProfileScreenState();
 }
-
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   SharedPrefs sharedPrefs = SharedPrefs();
   int userID = int.parse(SharedPrefs().getStringNow(KeyShared.keyUserId));
-
   bool isLoadingUser = false;
   Future fetchUserApi() async {
     setState(() {

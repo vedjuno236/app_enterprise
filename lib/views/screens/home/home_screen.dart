@@ -54,11 +54,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           }
         });
         break;
-      case 'leave':
+      case 'Leave Notification':
         Future.delayed(const Duration(milliseconds: 1), () {
           if (mounted) {
             Navigator.of(context)
-                .pushNamed(PageName.notificationRoute, arguments: {"index": 1});
+                .pushNamed(PageName.notificationRoute);
           }
         });
 
@@ -102,11 +102,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           LocalNotificationServiceUserApp.display(message);
         }
         logger.d("foreground : ${notification!.title}");
+            logger.d("message : ${message.data["screen"]}");
       },
     );
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       final int messageId = int.parse(message.data['messageId']);
+      logger.d("Message opened app: messageId=$messageId, ref=${message.data}, screen=${message.data}");
       logger.d(message.data["ref"]);
       logger.d(" confirm : ${message.data["ref"] == ""}");
 

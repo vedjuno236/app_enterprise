@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -425,7 +426,35 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
               newsProvider.getNewsPaginationModel == null
                   ? Expanded(child: Center(child: _buildLoadingGrid()))
                   : newsProvider.getNewsPaginationModel!.data!.items!.isEmpty
-                      ? Center(child: Image.asset(ImagePath.imgIconCreateAcc))
+                      ? Center(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 100),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/svgs/no_noti.svg',
+                                    width: 150,
+                                    height: 150,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    ' ຍັງບໍ່ມີຂໍ້ມູນ',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(
+                                            fontSize:
+                                                SizeConfig.textMultiplier *
+                                                    2.2),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
                       : Expanded(
                           child: SmartRefresher(
                             enablePullDown: true,
@@ -495,12 +524,14 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                                           borderRadius:
                                               BorderRadius.circular(8.0),
                                           color: Theme.of(context).canvasColor,
-                                          // boxShadow: const [
-                                          //   BoxShadow(
-                                          //     color: Colors.black12,
-                                          //     blurRadius: 1.0,
-                                          //   ),
-                                          // ],
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Theme.of(context).cardColor,
+                                              blurRadius: 1.0,
+                                              spreadRadius: 1.0,
+                                            ),
+                                          ],
                                         ),
                                         child: Column(
                                           crossAxisAlignment:

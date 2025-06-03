@@ -50,7 +50,7 @@ class Strings {
   static const String txtPasswordotFound = "password wrong";
   static const String txtPhonele = "Phone len";
   static const String txttxtPhoneIsIncorrect = "PhoneIsIncorrect";
-
+static const String txtRequest= "Request";
   static const String txtRemainingWallet = "Remaining_Wallet";
   static const String txtSellerID = "Seller_ID";
   static const String txtNameOfSeller = "Name_Of_Seller";
@@ -88,7 +88,6 @@ class Strings {
   static const String txtTime = "07:35 AM";
   static const String txtFunctions = "Functions";
   static const String txtLeave = "Apply Leave";
-  static const String txtRequest = "Request ";
 
   static const String txtNews = "Announcement";
   static const String txtInformation = "Information";
@@ -149,6 +148,8 @@ class Strings {
   static const String txtImage = "Image";
   static const String txtEditLeave = "Edit Leave";
   static const String txtRequests = "Requests";
+  static const String txtForApproval = "For approval";
+
   static const String txtEnterPhoneAndScanFace = "Enter your phone number";
   static const String txtNext = "Next";
   static const String txtYourPhoneNumber = "Your phone Number";

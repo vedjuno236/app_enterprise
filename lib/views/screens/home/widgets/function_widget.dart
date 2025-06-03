@@ -79,7 +79,7 @@ class _FunctionWidgetState extends ConsumerState<FunctionWidget> {
         color: Theme.of(context).canvasColor,
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).canvasColor,
+            color: Theme.of(context).cardColor,
             blurRadius: 1.0,
             spreadRadius: 1.0,
           ),

@@ -69,6 +69,8 @@ const Map<String, String> en = {
   "Approv": "Approved",
   "Pending": "Pending",
   "Request details": "Request details",
+  "For approval": "For approval",
+  "Request": "Request",
   //
   "Home": "Home",
   "Attendance overview": "Attendance overview",

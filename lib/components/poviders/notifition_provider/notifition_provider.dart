@@ -37,5 +37,12 @@ class NotifitionProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-}
 
+  int? _selectedIndex;
+  int? get selectedIndex => _selectedIndex;
+
+  set selectedIndex(int? value) {
+    _selectedIndex = value;
+    notifyListeners();
+  }
+}
