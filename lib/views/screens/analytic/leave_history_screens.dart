@@ -12,6 +12,7 @@ import 'package:enterprise/views/widgets/text_input/text_input_custom_design.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -50,14 +51,23 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
+    Future.microtask(() async {
       ref.read(leaveHistoryProvider).selectedMonth = DateTime.now();
       sharedPrefs = SharedPrefs();
       final userIdString = sharedPrefs.getStringNow(KeyShared.keyUserId);
-      userID = int.tryParse(userIdString ?? '0') ?? 0; // Safe parsing
+      userID = int.tryParse(userIdString ?? '0') ?? 0;
+
       final initialIndex = ref.read(leaveHistoryProvider).selectedIndex;
-      final initialStatus = categories[initialIndex]['status']!;
-      fetchAllLeaveApi(status: initialStatus);
+      currentStatus = categories[initialIndex]['status']!;
+
+      final startDate = DateTime(selectedMonth.year, selectedMonth.month, 1);
+      final endDate = DateTime(selectedMonth.year, selectedMonth.month + 1, 0);
+
+      await fetchAllLeaveApi(
+        status: currentStatus,
+        startDate: DateFormat('yyyy-MM-dd').format(startDate),
+        endDate: DateFormat('yyyy-MM-dd').format(endDate),
+      );
     });
   }
 
@@ -67,19 +77,45 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
     super.dispose();
   }
 
-  Future<void> fetchAllLeaveApi({required String status}) async {
-    String formattedDate = DateFormat('yyyy-MM').format(selectedMonth);
+  Future<void> _onLoading() async {
+    final leaveHistoryNotifier = ref.watch(leaveHistoryProvider);
+    final dataAPI = leaveHistoryNotifier;
+
+    try {
+      // Calculate startDate and endDate for the selected month
+      // final startDate = DateTime(selectedMonth.year, selectedMonth.month, 1);
+      // final endDate = DateTime(selectedMonth.year, selectedMonth.month + 1, 0);
+
+      // await fetchAllLeaveApi(
+      //   status: currentStatus,
+      //   startDate: DateFormat('yyyy-MM-dd').format(startDate),
+      //   endDate: DateFormat('yyyy-MM-dd').format(endDate),
+      // );
+
+      if (dataAPI.getallLeaveHistoryModel?.data?.isEmpty ?? true) {
+        _refreshController.loadNoData();
+      } else {
+        _refreshController.loadComplete();
+      }
+    } catch (e) {
+      _refreshController.loadFailed();
+      errorDialog(context: context, onError: e); // Show error to user
+    }
+  }
+
+  Future<void> fetchAllLeaveApi(
+      {required String status, required startDate, required endDate}) async {
     setState(() {
       isLoadingLeave = true;
       currentStatus = status;
     });
-
     try {
       final value = await EnterpriseAPIService().callAllLeaveHistory(
         UserId: userID,
         LeaveTypeID: 0,
         Status: status,
-        month: formattedDate,
+        start_date: startDate,
+        end_date: endDate,
       );
       ref
           .read(leaveHistoryProvider.notifier)
@@ -96,10 +132,11 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
 
   Future<void> _onRefresh() async {
     try {
-      await fetchAllLeaveApi(status: currentStatus);
+   
       _refreshController.refreshCompleted();
     } catch (e) {
       _refreshController.refreshFailed();
+      errorDialog(context: context, onError: e); // Show error to user
     }
   }
 
@@ -186,9 +223,16 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                 backgroundColor: darkTheme.darkTheme ? kBack : kYellowColor,
               ),
               onPressed: () {
-                ref.read(leaveHistoryProvider.notifier).selectedMonth =
-                    selectedMonth;
-                fetchAllLeaveApi(status: currentStatus);
+                // ref.read(leaveHistoryProvider.notifier).selectedMonth =
+                //     selectedMonth;
+                // fetchAllLeaveApi(status: currentStatus);
+                final provider = ref.read(leaveHistoryProvider.notifier);
+                provider.selectedMonth = selectedMonth;
+                fetchAllLeaveApi(
+                    startDate:
+                        DateFormat('yyyy-MM-dd').format(provider.startDate),
+                    endDate: DateFormat('yyyy-MM-dd').format(provider.endDate),
+                    status: '');
                 context.pop();
               },
               child: Text(
@@ -339,7 +383,16 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                           ref
                               .read(leaveHistoryProvider.notifier)
                               .updateSelectedIndex(index);
-                          fetchAllLeaveApi(status: item['status']!);
+                          final startDate = DateTime(
+                              selectedMonth.year, selectedMonth.month, 1);
+                          final endDate = DateTime(
+                              selectedMonth.year, selectedMonth.month + 1, 0);
+                          fetchAllLeaveApi(
+                            status: item['status']!,
+                            startDate:
+                                DateFormat('yyyy-MM-dd').format(startDate),
+                            endDate: DateFormat('yyyy-MM-dd').format(endDate),
+                          );
                         },
                         child: Container(
                           width: SizeConfig.widthMultiplier * 25,
@@ -378,12 +431,36 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
                   ? Center(child: _buildShimmerItem())
                   : dataAPI.getallLeaveHistoryModel!.data! == null ||
                           dataAPI.getallLeaveHistoryModel!.data!.isEmpty
-                      ? Center(child: Image.asset(ImagePath.imgIconCreateAcc))
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/svgs/nodata.svg',
+                                width: 150,
+                                height: 150,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                ' ຍັງບໍ່ມີຂໍ້ມູນ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                        fontSize:
+                                            SizeConfig.textMultiplier * 2.2),
+                              )
+                            ],
+                          ),
+                        )
                       : SmartRefresher(
                           enablePullDown: true,
                           enablePullUp: true,
                           controller: _refreshController,
                           onRefresh: _onRefresh,
+                          onLoading: _onLoading,
                           header: const WaterDropMaterialHeader(
                             backgroundColor: kYellowFirstColor,
                             color: kTextWhiteColor,
@@ -1169,9 +1246,9 @@ Map<String, dynamic> getItemColor(String? keywrd) {
     case "LAKIT":
       return {'color': const Color(0xFFF45B69), 'txt': Strings.txtLakit.tr};
     case "SICK":
-      return {'color': const Color(0xFFF59E0B), 'txt': Strings.txtSick.tr};
+      return {'color': const Color(0xFF23A26D), 'txt': Strings.txtSick.tr};
     case "MATERNITY":
-      return {'color': const Color(0xFF23A26D), 'txt': Strings.txtMaternity.tr};
+      return {'color': const Color(0xFFF59E0B), 'txt': Strings.txtMaternity.tr};
     default:
       return {'color': Colors.blueAccent, 'txt': 'Unknown'};
   }

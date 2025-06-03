@@ -175,6 +175,7 @@ class Strings {
   static const String txtApproved = "Approved";
   static const String txtRejected = "Rejected";
   static const String txtWaiting = "Waiting";
+  static const String txtPending ="Pending";
   static const String txtRequestdetails = "Request details";
 
   static const String txtApprovals = "Approvals";
@@ -227,6 +228,7 @@ class Strings {
       "Are you sure you want to Clock-in in this location";
   static const String txtClockInArea = "in the clock-in area";
   static const String txtYouAre = "You are";
+  static const String txtYouAreS = "You areS";
   static const String txtNot = "NOT";
 
   static const String txtPull = "";

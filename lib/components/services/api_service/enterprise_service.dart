@@ -456,18 +456,21 @@ class EnterpriseAPIService {
     }
   }
 
-  Future callAllLeaveHistory(
-      {required UserId,
-      required LeaveTypeID,
-      required Status,
-      required month}) async {
+  Future callAllLeaveHistory({
+    required UserId,
+    required LeaveTypeID,
+    required Status,
+    required start_date,
+    required end_date,
+  }) async {
     String url = APIPathHelper.getValue(ApiPath.allLeaveHistory);
 
     Map body = {
       'user_id': UserId,
       'leave_type_id': LeaveTypeID,
       'status': Status,
-      "month": month,
+      "start_date": start_date,
+      "end_date": end_date,
     };
     response = await _dio!.post(
       url,

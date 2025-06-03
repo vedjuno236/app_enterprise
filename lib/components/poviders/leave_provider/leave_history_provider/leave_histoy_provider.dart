@@ -28,21 +28,36 @@ class LeaveHistoryProvider with ChangeNotifier {
     }
   }
 
-  DateTime? _selectedMonth;
 
-  String _selectedMonthText = Strings.txtThisMonth;
 
+    DateTime? _selectedMonth;
+  // String _selectedMonthText = Strings.txtThisMonth;
+  String _selectedMonthText = '';
+
+  DateTime _startDate;
+  DateTime _endDate;
+  int? _selectedIndex;
+
+  LeaveHistoryProvider()
+      : _startDate = DateTime(DateTime.now().year, DateTime.now().month, 1),
+        _endDate = DateTime(DateTime.now().year, DateTime.now().month + 1, 0) {
+    _selectedMonth = DateTime.now();
+  }
   // Getters
   DateTime? get selectedMonth => _selectedMonth;
-
   String get selectedMonthText => _selectedMonthText;
+  DateTime get startDate => _startDate;
+  DateTime get endDate => _endDate;
 
-  // Setters
+  // Methods
   set selectedMonth(DateTime? month) {
-    _selectedMonth = month;
-    // _selectedMonthText = DateFormat.MMMM().format(month!);
-    _selectedMonthText = DateFormatUtil.formatM(month!);
-    notifyListeners();
+    if (month != null) {
+      _selectedMonth = month;
+      _selectedMonthText = DateFormatUtil.formatM(month);
+      _startDate = DateTime(month.year, month.month, 1);
+      _endDate = DateTime(month.year, month.month + 1, 0);
+      notifyListeners();
+    }
   }
 }
 

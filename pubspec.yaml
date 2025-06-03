@@ -1,12 +1,11 @@
 name: enterprise
 description: "App enterprise"
-publish_to: "none" 
+publish_to: "none"
 
 version: 1.0.0+8
 
 environment:
   sdk: ^3.5.2
-
 
 dependencies:
   flutter:
@@ -67,7 +66,7 @@ dependencies:
   flutter_pdfview: ^1.4.0+1
   # syncfusion_flutter_pdfviewer: ^27.2.5
 flutter_launcher_icons:
-  android: "launcher_icon"
+  android: "ic_launcher"
   ios: true
   image_path: "assets/logo.png"
 dev_dependencies:
@@ -85,7 +84,6 @@ flutter:
     - assets/lottie/
     - assets/logo/
   fonts:
- 
     - family: NotoSansLao
       fonts:
         - asset: assets/fonts/NotoSansLao-Bold.ttf

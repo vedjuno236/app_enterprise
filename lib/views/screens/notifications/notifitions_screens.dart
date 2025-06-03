@@ -5,7 +5,7 @@ import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
-import 'package:enterprise/components/poviders/notifition_provider/notification_user_provider.dart';
+import 'package:enterprise/components/poviders/leave_provider/leave_history_provider/leave_histoy_provider.dart';
 import 'package:enterprise/components/poviders/notifition_provider/notifition_provider.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
 import 'package:enterprise/components/styles/size_config.dart';
@@ -21,6 +21,7 @@ import 'package:enterprise/views/widgets/text_input/text_input_custom_design.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -31,7 +32,6 @@ import 'package:widgets_easier/widgets_easier.dart';
 
 class NotificationsNewScreens extends ConsumerStatefulWidget {
   const NotificationsNewScreens({super.key});
-
   @override
   ConsumerState<NotificationsNewScreens> createState() =>
       _NotifitionsNewScreensState();
@@ -43,16 +43,14 @@ class _NotifitionsNewScreensState
       RefreshController(initialRefresh: false);
   final RefreshController _refreshControllerUser =
       RefreshController(initialRefresh: false);
-
   SharedPrefs sharedPrefs = SharedPrefs();
   bool isLoading = false;
   int userID = int.parse(SharedPrefs().getStringNow(KeyShared.keyUserId));
   bool isLoadingLeave = false;
-    Future fetchNotificationApi() async {
+  Future fetchNotificationApi() async {
     final dateProvider = ref.read(stateNotifitionProvider);
     DateTime? startDate = dateProvider.startDate;
     DateTime? endDate = dateProvider.endDate;
-
     String formattedStartDate;
     String formattedEndDate;
     if (startDate == null || endDate == null) {
@@ -61,25 +59,21 @@ class _NotifitionsNewScreensState
       final lastDayOfWeek =
           now.add(Duration(days: DateTime.daysPerWeek - now.weekday));
       final nextWeekEnd = lastDayOfWeek.add(const Duration(days: 7));
-
       formattedStartDate = DateFormat('yyyy-MM-dd').format(twoWeeksAgo);
       formattedEndDate = DateFormat('yyyy-MM-dd').format(nextWeekEnd);
     } else {
       formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate);
       formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate);
     }
-
     setState(() {
       isLoading = true;
     });
-
     try {
       final value = await EnterpriseAPIService().callNotification(
         token: sharedPrefs.getStringNow(KeyShared.keyToken),
         start_date: formattedStartDate,
         end_date: formattedEndDate,
       );
-
       ref
           .read(stateNotifitionProvider.notifier)
           .setNotificationModel(value: value);
@@ -95,21 +89,22 @@ class _NotifitionsNewScreensState
     }
   }
 
-  DateTime selectedMonth = DateTime.now();
-
-  Future fetchNotificationApiUser() async {
+  DateTime selectedMonthUser = DateTime.now();
+  Future fetchNotificationApiUser(
+      {required startDate, required endDate}) async {
     setState(() {
       isLoadingLeave = true;
     });
-
     EnterpriseAPIService()
-        .callNotificationUser(
-      userid: userID,
+        .callAllLeaveHistory(
+      UserId: userID,
+      LeaveTypeID: 0,
+      Status: '',
+      start_date: startDate,
+      end_date: endDate,
     )
         .then((value) {
-      ref
-          .watch(stateNotifitionUserProvider)
-          .setNotificationUserModel(value: value);
+      ref.watch(leaveHistoryProvider).setallLeaveHistoryModel(value: value);
     }).catchError((onError) {
       errorDialog(
         // ignore: use_build_context_synchronously
@@ -121,14 +116,66 @@ class _NotifitionsNewScreensState
             }));
   }
 
+  Future<void> _onLoadingUserNoti() async {
+    final notiProverUser = ref.watch(leaveHistoryProvider);
+
+    final dataAPI = notiProverUser;
+
+    try {
+      // final startDate = DateTime(selectedMonthUser.year, selectedMonthUser.month, 1);
+      // final endDate = DateTime(selectedMonthUser.year, selectedMonthUser.month + 1, 0);
+
+      // await fetchNotificationApiUser(
+      //   startDate: DateFormat('yyyy-MM-dd').format(startDate),
+      //   endDate: DateFormat('yyyy-MM-dd').format(endDate),
+      // );
+      if (dataAPI.getallLeaveHistoryModel!.data!.isEmpty) {
+        _refreshControllerUser.loadNoData();
+      } else {
+        _refreshControllerUser.loadComplete();
+      }
+    } catch (e) {
+      _refreshControllerUser.loadFailed();
+    }
+  }
+
+  Future<void> _onLoadingNoti() async {
+    final notiProvider = ref.watch(stateNotifitionProvider);
+    final dataAPI = notiProvider;
+
+    try {
+      await fetchNotificationApi();
+
+      if (dataAPI.getNotificationModel!.data!.isEmpty) {
+        _refreshController.loadNoData();
+      } else {
+        _refreshController.loadComplete();
+      }
+    } catch (e) {
+      _refreshController.loadFailed();
+    }
+  }
+
   Future<void> _onRefresh() async {
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
 
       _refreshController.refreshCompleted();
-      _refreshControllerUser.refreshCompleted();
+      _refreshController.refreshCompleted();
     } catch (e) {
       _refreshController.refreshFailed();
+      _refreshController.refreshCompleted();
+    }
+  }
+
+  Future<void> _onRefreshUser() async {
+    try {
+      await Future.delayed(const Duration(milliseconds: 1000));
+
+      _refreshControllerUser.refreshCompleted();
+      _refreshControllerUser.refreshCompleted();
+    } catch (e) {
+      _refreshControllerUser.refreshFailed();
       _refreshControllerUser.refreshCompleted();
     }
   }
@@ -136,11 +183,16 @@ class _NotifitionsNewScreensState
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
+    Future.microtask(() async {
       ref.read(stateNotifitionProvider).selectedMonth = DateTime.now();
-
-      fetchNotificationApiUser();
       fetchNotificationApi();
+
+      ref.read(leaveHistoryProvider).selectedMonth = DateTime.now();
+      final startDate = DateTime(selectedMonthUser.year, selectedMonthUser.month, 1);
+      final endDate = DateTime(selectedMonthUser.year, selectedMonthUser.month + 1, 0);
+      await fetchNotificationApiUser(
+          startDate: DateFormat('yyyy-MM-dd').format(startDate),
+          endDate: DateFormat('yyyy-MM-dd').format(endDate));
     });
   }
 
@@ -249,10 +301,128 @@ class _NotifitionsNewScreensState
     );
   }
 
+
+  void showDateDialogUser(
+    BuildContext context,
+  ) {
+    final dateProvider = ref.read(leaveHistoryProvider);
+    DateTime initialDate = dateProvider.selectedMonth ?? DateTime.now();
+    DateTime now = DateTime.now();
+    DateTime maxDate = DateTime(now.year, now.month + 1, 0);
+    final darkTheme = ref.watch(darkThemeProviderProvider);
+  DateTime selectedMonthUser = DateTime.now();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          elevation: 2,
+          shadowColor: kYellowFirstColor,
+          backgroundColor: Theme.of(context).canvasColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          content: SizedBox(
+              height: 300,
+              width: 450,
+              child: MonthPicker(
+                splashRadius: 10,
+                selectedCellDecoration: BoxDecoration(
+                    color: kYellowFirstColor,
+                    borderRadius: BorderRadius.circular(12)
+                    // shape: BoxShape.circle,
+                    ),
+                selectedCellTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: kBack87,
+                        ),
+                enabledCellsTextStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
+                enabledCellsDecoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+                ),
+                disabledCellsTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Color(0xFFE4E4E7),
+                        ),
+                disabledCellsDecoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    width: 1,
+                    color: Color(0xFFEDEFF7),
+                  ),
+                ),
+                currentDateTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: kBack87,
+                        ),
+                currentDateDecoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Color(0xFFEDEFF7)),
+                    borderRadius: BorderRadius.circular(12)),
+                splashColor: kYellowFirstColor,
+                slidersColor: kBack,
+                centerLeadingDate: true,
+                minDate: DateTime(2000),
+                maxDate: maxDate,
+                currentDate: initialDate,
+                selectedDate: initialDate,
+                onDateSelected: (month) {
+                  selectedMonthUser = month;
+                },
+              )),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                backgroundColor:
+                    darkTheme.darkTheme ? kGreyBGColor.withAlpha(50) : kGary,
+              ),
+              child: Text(
+                Strings.txtCancel.tr,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 2.2),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                backgroundColor: darkTheme.darkTheme ? kBack : kYellowColor,
+              ),
+              onPressed: () {
+                final provider = ref.read(leaveHistoryProvider.notifier);
+                provider.selectedMonth = selectedMonthUser;
+                fetchNotificationApiUser(
+                  startDate:
+                      DateFormat('yyyy-MM-dd').format(provider.startDate),
+                  endDate: DateFormat('yyyy-MM-dd').format(provider.endDate),
+                );
+                context.pop();
+              },
+              child: Text(
+                Strings.txtOkay.tr,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(fontSize: SizeConfig.textMultiplier * 2.2),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final notiProvider = ref.watch(stateNotifitionProvider);
-    final notiProverUser = ref.watch(stateNotifitionUserProvider);
+    final notiProverUser = ref.watch(leaveHistoryProvider);
 
     int totalLeaveDaysHR = 0;
     if (notiProvider.getNotificationModel != null &&
@@ -261,10 +431,9 @@ class _NotifitionsNewScreensState
     }
 
     int totalLeaveDaysUser = 0;
-    if (notiProverUser.getNotificationUserModel != null &&
-        notiProverUser.getNotificationUserModel!.data != null) {
-      totalLeaveDaysUser =
-          notiProverUser.getNotificationUserModel!.data!.length;
+    if (notiProverUser.getallLeaveHistoryModel != null &&
+        notiProverUser.getallLeaveHistoryModel!.data != null) {
+      totalLeaveDaysUser = notiProverUser.getallLeaveHistoryModel!.data!.length;
     }
     final darkTheme = ref.watch(darkThemeProviderProvider);
 
@@ -272,33 +441,51 @@ class _NotifitionsNewScreensState
     return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-            elevation: 0,
-            flexibleSpace: const AppbarWidget(),
-            title: AnimatedTextAppBarWidget(
-              text: Strings.txtAllNotifications.tr,
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(),
-            ),
-            actions: [
-              if (role == "HR" || role == "MANAGER") ...[
-                GestureDetector(
-                  onTap: () {
-                    showDateDialog(context, ref);
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 20),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          IonIcons.ellipsis_vertical,
-                          color: darkTheme.darkTheme ? kTextWhiteColor : kBack,
-                        ),
-                      ],
-                    ),
+          elevation: 0,
+          flexibleSpace: const AppbarWidget(),
+          title: AnimatedTextAppBarWidget(
+            text: Strings.txtAllNotifications.tr,
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(),
+          ),
+          actions: [
+            if (role == "HR" || role == "MANAGER")
+              GestureDetector(
+                onTap: () {
+                  showDateDialog(context, ref);
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        IonIcons.ellipsis_vertical,
+                        color: darkTheme.darkTheme ? kTextWhiteColor : kBack,
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ]),
+              )
+            else
+              GestureDetector(
+                onTap: () {
+                  showDateDialogUser(context);
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        IonIcons.ellipsis_vertical,
+                        color: darkTheme.darkTheme ? kTextWhiteColor : kBack,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
         body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -342,6 +529,7 @@ class _NotifitionsNewScreensState
                               enablePullUp: true,
                               controller: _refreshController,
                               onRefresh: _onRefresh,
+                              onLoading: _onLoadingNoti,
                               header: const WaterDropMaterialHeader(
                                 backgroundColor: kYellowFirstColor,
                                 color: kTextWhiteColor,
@@ -831,17 +1019,46 @@ class _NotifitionsNewScreensState
                     duration: 600.ms,
                     curve: Curves.easeInOutCubic),
                 const SizedBox(height: 10),
-                notiProverUser.getNotificationUserModel == null
+                notiProverUser.getallLeaveHistoryModel == null
                     ? Expanded(child: Center(child: _buildShimmerItem(context)))
-                    : notiProverUser.getNotificationUserModel!.data!.isEmpty ??
+                    : notiProverUser.getallLeaveHistoryModel!.data!.isEmpty ??
                             true
-                        ? Center(child: Image.asset(ImagePath.imgIconCreateAcc))
+                        ? Center(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 100),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/svgs/no_noti.svg',
+                                    width: 150,
+                                    height: 150,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    ' ຍັງບໍ່ມີຂໍ້ມູນ',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(
+                                            fontSize:
+                                                SizeConfig.textMultiplier *
+                                                    2.2),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
                         : Expanded(
                             child: SmartRefresher(
                               enablePullDown: true,
                               enablePullUp: true,
                               controller: _refreshControllerUser,
-                              onRefresh: _onRefresh,
+                              onRefresh: _onRefreshUser,
+                              onLoading: _onLoadingUserNoti,
                               header: const WaterDropMaterialHeader(
                                 backgroundColor: kYellowFirstColor,
                                 color: kTextWhiteColor,
@@ -873,10 +1090,10 @@ class _NotifitionsNewScreensState
                                 physics: const ClampingScrollPhysics(),
                                 padding: EdgeInsets.zero,
                                 itemCount: notiProverUser
-                                    .getNotificationUserModel!.data!.length,
+                                    .getallLeaveHistoryModel!.data!.length,
                                 itemBuilder: (context, index) {
                                   final data = notiProverUser
-                                      .getNotificationUserModel!.data![index];
+                                      .getallLeaveHistoryModel!.data![index];
                                   var txtSattus = getItemColorAndIcon(
                                       data.keyWord.toString());
                                   String txt = txtSattus['txt'];
@@ -885,6 +1102,7 @@ class _NotifitionsNewScreensState
                                   Color colorStatus = dataStatus['color'];
                                   String txtStatus = dataStatus['txt'];
 
+                                  Color color = txtSattus['color'];
                                   Icon iconStatus = dataStatus['icon'];
                                   if (data == null) {
                                     return const SizedBox.shrink();
@@ -906,168 +1124,9 @@ class _NotifitionsNewScreensState
                                         child: Column(
                                           children: [
                                             Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                // Row(
-                                                //   mainAxisAlignment:
-                                                //       MainAxisAlignment
-                                                //           .spaceBetween,
-                                                //   children: [
-                                                //     Row(
-                                                //       children: [
-                                                //         CircleAvatar(
-                                                //           radius: SizeConfig
-                                                //                   .imageSizeMultiplier *
-                                                //               7,
-                                                //           backgroundColor: Colors
-                                                //                   .grey[
-                                                //               200], // optional fallback color
-                                                //           child: ClipOval(
-                                                //             child:
-                                                //                 Image.network(
-                                                //               data.profile
-                                                //                   .toString(),
-                                                //               width: 110,
-                                                //               height: 110,
-                                                //               fit: BoxFit.cover,
-                                                //               loadingBuilder:
-                                                //                   (context,
-                                                //                       child,
-                                                //                       loadingProgress) {
-                                                //                 if (loadingProgress ==
-                                                //                     null)
-                                                //                   return child;
-                                                //                 return const Center(
-                                                //                   child:
-                                                //                       LoadingPlatformV1(),
-                                                //                 );
-                                                //               },
-                                                //               errorBuilder:
-                                                //                   (context,
-                                                //                       error,
-                                                //                       stackTrace) {
-                                                //                 return const Icon(
-                                                //                     Icons.error,
-                                                //                     size: 40,
-                                                //                     color: Colors
-                                                //                         .red);
-                                                //               },
-                                                //             ),
-                                                //           ),
-                                                //         ),
-                                                //         const SizedBox(
-                                                //           width: 15,
-                                                //         ),
-                                                //         Column(
-                                                //           crossAxisAlignment:
-                                                //               CrossAxisAlignment
-                                                //                   .start,
-                                                //           children: [
-                                                //             Text(
-                                                //               // data.typeName.toString(),
-                                                //               data.username
-                                                //                   .toString(),
-                                                //               style: Theme.of(
-                                                //                       context)
-                                                //                   .textTheme
-                                                //                   .bodyLarge!
-                                                //                   .copyWith(),
-                                                //             ),
-                                                //             Text(
-                                                //               // data.typeName.toString(),
-                                                //               '${txtStatus} ${txt}',
-                                                //               style: Theme.of(
-                                                //                       context)
-                                                //                   .textTheme
-                                                //                   .bodyLarge!
-                                                //                   .copyWith(
-                                                //                     color:
-                                                //                         const Color(
-                                                //                       0xFF99A1BE,
-                                                //                     ),
-                                                //                     fontSize:
-                                                //                         SizeConfig.textMultiplier *
-                                                //                             2,
-                                                //                   ),
-                                                //             ),
-                                                //             Text(
-                                                //               'On ${DateFormatUtil.formatDD(DateTime.parse(data.startDate.toString()))}-${DateFormatUtil.formatddMMy(DateTime.parse(data.endDate.toString()))}',
-                                                //               style: Theme.of(
-                                                //                       context)
-                                                //                   .textTheme
-                                                //                   .bodyLarge!
-                                                //                   .copyWith(
-                                                //                     color: const Color(
-                                                //                         0xFF99A1BE),
-                                                //                     fontSize:
-                                                //                         SizeConfig.textMultiplier *
-                                                //                             5,
-                                                //                   ),
-                                                //               overflow:
-                                                //                   TextOverflow
-                                                //                       .ellipsis,
-                                                //             ),
-                                                //           ],
-                                                //         ),
-                                                //       ],
-                                                //     ),
-                                                //     SizedBox(
-                                                //       width: 10,
-                                                //     ),
-                                                //     SizedBox(
-                                                //       height: SizeConfig
-                                                //               .heightMultiplier *
-                                                //           4.5,
-                                                //       child: OutlinedButton(
-                                                //         onPressed: () async {
-                                                //           widgetBottomSheetUser(
-                                                //               context, data);
-                                                //         },
-                                                //         style: OutlinedButton
-                                                //             .styleFrom(
-                                                //                 side: BorderSide(
-                                                //                     color:
-                                                //                         colorStatus),
-                                                //                 shape:
-                                                //                     RoundedRectangleBorder(
-                                                //                   borderRadius:
-                                                //                       BorderRadius
-                                                //                           .circular(
-                                                //                               50),
-                                                //                 ),
-                                                //                 padding:
-                                                //                     EdgeInsets
-                                                //                         .all(8),
-                                                //                 backgroundColor:
-                                                //                     colorStatus),
-                                                //         child: Row(
-                                                //           mainAxisSize:
-                                                //               MainAxisSize.min,
-                                                //           children: [
-                                                //             iconStatus,
-                                                //             const SizedBox(
-                                                //                 width: 5),
-                                                //             Text(
-                                                //               txtStatus
-                                                //                   .toString(),
-                                                //               style: Theme.of(
-                                                //                       context)
-                                                //                   .textTheme
-                                                //                   .bodyMedium
-                                                //                   ?.copyWith(
-                                                //                     color:
-                                                //                         kTextWhiteColor,
-                                                //                     fontSize:
-                                                //                         SizeConfig.textMultiplier *
-                                                //                             1.5,
-                                                //                   ),
-                                                //             ),
-                                                //           ],
-                                                //         ),
-                                                //       ),
-                                                //     ),
-                                                //   ],
-                                                // ),
-
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
@@ -1075,50 +1134,97 @@ class _NotifitionsNewScreensState
                                                   children: [
                                                     Flexible(
                                                       child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
                                                         children: [
-                                                          CircleAvatar(
-                                                            radius: SizeConfig
-                                                                    .imageSizeMultiplier *
-                                                                7,
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .grey[200],
-                                                            child: ClipOval(
-                                                              child:
-                                                                  Image.network(
-                                                                data.profile
-                                                                    .toString(),
-                                                                width: 110,
-                                                                height: 110,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                                loadingBuilder:
-                                                                    (context,
-                                                                        child,
-                                                                        loadingProgress) {
-                                                                  if (loadingProgress ==
-                                                                      null)
-                                                                    return child;
-                                                                  return const Center(
-                                                                      child:
-                                                                          LoadingPlatformV1());
-                                                                },
-                                                                errorBuilder:
-                                                                    (context,
-                                                                        error,
-                                                                        stackTrace) {
-                                                                  return const Icon(
-                                                                      Icons
-                                                                          .error,
-                                                                      size: 40,
-                                                                      color: Colors
-                                                                          .red);
-                                                                },
+                                                          Stack(
+                                                            clipBehavior:
+                                                                Clip.none,
+                                                            children: [
+                                                              CircleAvatar(
+                                                                radius: SizeConfig
+                                                                        .imageSizeMultiplier *
+                                                                    9,
+                                                                backgroundColor:
+                                                                    Colors.grey[
+                                                                        200], // optional fallback color
+                                                                child: ClipOval(
+                                                                  child: Image
+                                                                      .network(
+                                                                    data.profile
+                                                                        .toString(),
+                                                                    width: 120,
+                                                                    height: 120,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                    loadingBuilder:
+                                                                        (context,
+                                                                            child,
+                                                                            loadingProgress) {
+                                                                      if (loadingProgress ==
+                                                                          null)
+                                                                        return child;
+                                                                      return const Center(
+                                                                        child:
+                                                                            LoadingPlatformV1(),
+                                                                      );
+                                                                    },
+                                                                    errorBuilder:
+                                                                        (context,
+                                                                            error,
+                                                                            stackTrace) {
+                                                                      return const Icon(
+                                                                          Icons
+                                                                              .error,
+                                                                          size:
+                                                                              40,
+                                                                          color:
+                                                                              Colors.red);
+                                                                    },
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
+                                                              Positioned(
+                                                                right: -6,
+                                                                bottom: 0,
+                                                                child:
+                                                                    CircleAvatar(
+                                                                  radius: SizeConfig
+                                                                          .heightMultiplier *
+                                                                      1.4,
+                                                                  backgroundColor:
+                                                                      color,
+                                                                  child:
+                                                                      Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .all(
+                                                                            4.0),
+                                                                    child:
+                                                                        CachedNetworkImage(
+                                                                      imageUrl:
+                                                                          data.logo ??
+                                                                              '',
+                                                                      progressIndicatorBuilder: (context,
+                                                                              url,
+                                                                              downloadProgress) =>
+                                                                          const LoadingPlatformV1(),
+                                                                      errorWidget: (context,
+                                                                              url,
+                                                                              error) =>
+                                                                          const Icon(
+                                                                              Icons.error),
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
                                                           const SizedBox(
-                                                              width: 15),
+                                                              width: 14),
                                                           Expanded(
                                                             child: Column(
                                                               crossAxisAlignment:
@@ -1126,47 +1232,45 @@ class _NotifitionsNewScreensState
                                                                       .start,
                                                               children: [
                                                                 Text(
-                                                                  data.username
-                                                                      .toString(),
+                                                                  data.username ??
+                                                                      '',
                                                                   style: Theme.of(
                                                                           context)
                                                                       .textTheme
-                                                                      .bodyLarge!
+                                                                      .titleMedium!
                                                                       .copyWith(),
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 5),
+                                                                Text(
+                                                                  // data.typeName ?? '',
+                                                                  txt,
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .titleMedium!
+                                                                      .copyWith(
+                                                                          color: const Color(
+                                                                              0xFF99A1BE),
+                                                                          fontSize:
+                                                                              SizeConfig.textMultiplier * 2),
                                                                   overflow:
                                                                       TextOverflow
                                                                           .ellipsis,
                                                                 ),
+                                                                const SizedBox(
+                                                                    height: 5),
                                                                 Text(
-                                                                  '${txtStatus} ${txt}',
+                                                                  'On ${DateFormatUtil.formatDD(DateTime.parse(data.startDate ?? ''))}-${DateFormatUtil.formatddMMy(DateTime.parse(data.endDate ?? ''))}',
                                                                   style: Theme.of(
                                                                           context)
                                                                       .textTheme
-                                                                      .bodyLarge!
+                                                                      .titleMedium!
                                                                       .copyWith(
-                                                                        color: const Color(
-                                                                            0xFF99A1BE),
-                                                                        fontSize:
-                                                                            SizeConfig.textMultiplier *
-                                                                                2,
-                                                                      ),
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                ),
-                                                                Text(
-                                                                  'On ${DateFormatUtil.formatDD(DateTime.parse(data.startDate.toString()))}-${DateFormatUtil.formatddMMy(DateTime.parse(data.endDate.toString()))}',
-                                                                  style: Theme.of(
-                                                                          context)
-                                                                      .textTheme
-                                                                      .bodyLarge!
-                                                                      .copyWith(
-                                                                        color: const Color(
-                                                                            0xFF99A1BE),
-                                                                        fontSize:
-                                                                            SizeConfig.textMultiplier *
-                                                                                2,
-                                                                      ),
+                                                                          color: const Color(
+                                                                              0xFF99A1BE),
+                                                                          fontSize:
+                                                                              SizeConfig.textMultiplier * 2),
                                                                   overflow:
                                                                       TextOverflow
                                                                           .ellipsis,
@@ -1232,6 +1336,164 @@ class _NotifitionsNewScreensState
                                                     ),
                                                   ],
                                                 ),
+                                                const Divider(
+                                                  color: kGary,
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          '${txtStatus} ${DateFormatUtil.formatddmmyyhhssmm(DateTime.parse(data.updatedAt ?? ''))}',
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .titleMedium!
+                                                              .copyWith(
+                                                                  color: const Color(
+                                                                      0xFF99A1BE),
+                                                                  fontSize:
+                                                                      SizeConfig
+                                                                              .textMultiplier *
+                                                                          1.6),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Icon(
+                                                              Bootstrap
+                                                                  .check_circle_fill,
+                                                              color:
+                                                                  colorStatus,
+                                                              size: 17,
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            Text(
+                                                              txtStatus,
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .titleMedium!
+                                                                  .copyWith(
+                                                                      color:
+                                                                          colorStatus,
+                                                                      fontSize:
+                                                                          SizeConfig.textMultiplier *
+                                                                              2),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    if (data.approvedBy !=
+                                                            null &&
+                                                        data.approvedBy!
+                                                            .isNotEmpty)
+                                                      Row(
+                                                        children: data
+                                                            .approvedBy!
+                                                            .map<Widget>(
+                                                                (approver) {
+                                                          final String
+                                                              profileUrl =
+                                                              approver.profile
+                                                                      ?.trim() ??
+                                                                  '';
+                                                          final bool
+                                                              hasValidProfile =
+                                                              profileUrl
+                                                                      .isNotEmpty &&
+                                                                  profileUrl !=
+                                                                      "https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg";
+
+                                                          return Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    right: 5),
+                                                            child: CircleAvatar(
+                                                              radius: SizeConfig
+                                                                      .imageSizeMultiplier *
+                                                                  6,
+                                                              backgroundColor:
+                                                                  kTextWhiteColor,
+                                                              child: Stack(
+                                                                clipBehavior:
+                                                                    Clip.none,
+                                                                children: [
+                                                                  CircleAvatar(
+                                                                    radius:
+                                                                        SizeConfig.imageSizeMultiplier *
+                                                                            5.5,
+                                                                    backgroundImage:
+                                                                        NetworkImage(
+                                                                      hasValidProfile
+                                                                          ? profileUrl
+                                                                          : 'https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg',
+                                                                    ),
+                                                                  ),
+                                                                  Positioned(
+                                                                    right: -6,
+                                                                    bottom: -9,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          4.0),
+                                                                      child: approver.status ==
+                                                                              "REJECTED"
+                                                                          ? const Icon(
+                                                                              Bootstrap.x_circle_fill,
+                                                                              size: 17,
+                                                                              color: Color(0xFFCE1126),
+                                                                            )
+                                                                          : const Icon(
+                                                                              AntDesign.check_circle_fill,
+                                                                              size: 17,
+                                                                              color: Color(0xFF23A26D),
+                                                                            ),
+                                                                    ),
+                                                                  ),
+                                                                  if (approver
+                                                                          .status ==
+                                                                      "REJECTED")
+                                                                    Positioned
+                                                                        .fill(
+                                                                      child:
+                                                                          Container(
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color: Colors
+                                                                              .red
+                                                                              .withOpacity(0.5),
+                                                                          shape:
+                                                                              BoxShape.circle,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }).toList(),
+                                                      ),
+                                                  ],
+                                                ),
                                               ],
                                             ),
                                           ],
@@ -1265,6 +1527,7 @@ class _NotifitionsNewScreensState
           var colorStatus = getItemColorAndIcon(leaveData.keyWord.toString());
           Color colorS = colorStatus['color'];
           Color color = dataStatus['color'];
+          String txt = colorStatus['txt'];
           Color colorSta = status['color'];
           String txtStatus = status['txt'];
           return FractionallySizedBox(
@@ -1278,333 +1541,569 @@ class _NotifitionsNewScreensState
                   ),
                   child: SingleChildScrollView(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Align(
-                                alignment: Alignment.topRight,
-                                child: Icon(Icons.close))),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 60,
-                              backgroundColor: kTextWhiteColor,
-                              child: CircleAvatar(
-                                radius: 55,
-                                backgroundColor:
-                                    Colors.grey[200], // optional fallback color
-                                child: ClipOval(
-                                  child: Image.network(
-                                    leaveData.profile.toString(),
-                                    width: 110,
-                                    height: 110,
-                                    fit: BoxFit.cover,
-                                    loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return const Center(
-                                        child: LoadingPlatformV1(),
-                                      );
-                                    },
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return const Icon(Icons.error,
-                                          size: 40, color: Colors.red);
-                                    },
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Align(
+                                  alignment: Alignment.topRight,
+                                  child: Icon(Icons.close))),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 60,
+                                backgroundColor: kTextWhiteColor,
+                                child: CircleAvatar(
+                                  radius: 55,
+                                  backgroundColor: Colors
+                                      .grey[200], // optional fallback color
+                                  child: ClipOval(
+                                    child: Image.network(
+                                      leaveData.profile.toString(),
+                                      width: 110,
+                                      height: 110,
+                                      fit: BoxFit.cover,
+                                      loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                        if (loadingProgress == null)
+                                          return child;
+                                        return const Center(
+                                          child: LoadingPlatformV1(),
+                                        );
+                                      },
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return const Icon(Icons.error,
+                                            size: 40, color: Colors.red);
+                                      },
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              leaveData.username.toString(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(),
-                            ),
-                            const SizedBox(width: 10),
-                            const CircleAvatar(
-                              radius: 8,
-                              backgroundColor: kBlueColor,
-                              child: Icon(
-                                Icons.check,
-                                color: kTextWhiteColor,
-                                size: 13,
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                leaveData.username.toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(),
+                              ),
+                              const SizedBox(width: 10),
+                              const CircleAvatar(
+                                radius: 8,
+                                backgroundColor: kBlueColor,
+                                child: Icon(
+                                  Icons.check,
+                                  color: kTextWhiteColor,
+                                  size: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            width: double.infinity,
+                            height: SizeConfig.heightMultiplier * 5,
+                            child: OutlinedButton(
+                              onPressed: () async {},
+                              style: OutlinedButton.styleFrom(
+                                  side: BorderSide(color: colorSta),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  backgroundColor: colorSta),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Bootstrap.check_circle_fill,
+                                    color: Colors.white,
+                                    size: 15,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    '$txtStatus  ${txt}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                            color: Colors.white,
+                                            fontSize:
+                                                SizeConfig.textMultiplier *
+                                                    2.2),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        SizedBox(
-                          width: double.infinity,
-                          height: SizeConfig.heightMultiplier * 5,
-                          child: OutlinedButton(
-                            onPressed: () async {},
-                            style: OutlinedButton.styleFrom(
-                                side: BorderSide(color: colorSta),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                backgroundColor: colorSta),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  Bootstrap.check_circle_fill,
-                                  color: Colors.white,
-                                  size: 15,
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  '$txtStatus  ${leaveData.typeName}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(
-                                          color: Colors.white,
-                                          fontSize:
-                                              SizeConfig.textMultiplier * 2.2),
-                                ),
-                              ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).canvasColor,
+                              borderRadius: BorderRadius.circular(15),
                             ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).canvasColor,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: SizeConfig.heightMultiplier * 2.2,
-                                      backgroundColor: colorS.withOpacity(0.10),
-                                      child: CachedNetworkImage(
-                                        imageUrl: leaveData.logo!,
-                                        progressIndicatorBuilder:
-                                            (context, url, downloadProgress) =>
-                                                LoadingPlatformV1(),
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(Icons.error),
-                                        color: colorS,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius:
+                                            SizeConfig.heightMultiplier * 2.2,
+                                        backgroundColor:
+                                            colorS.withOpacity(0.10),
+                                        child: CachedNetworkImage(
+                                          imageUrl: leaveData.logo!,
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              LoadingPlatformV1(),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                          color: colorS,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      '${DateFormatUtil.formatddMMy(DateTime.parse(leaveData.createdAt.toString()))} ',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium
-                                          ?.copyWith(
-                                              color: kGreyColor,
-                                              fontSize:
-                                                  SizeConfig.textMultiplier *
-                                                      2.2),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                    color: Theme.of(context).cardColor,
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Color(0xFFF8F9FC),
-                                        blurRadius: 1.0,
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        '${DateFormatUtil.formatddMMy(DateTime.parse(leaveData.createdAt.toString()))} ',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                                color: kGreyColor,
+                                                fontSize:
+                                                    SizeConfig.textMultiplier *
+                                                        2.2),
                                       ),
                                     ],
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        const SizedBox(width: 10),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  Strings.txtLeaveDate.tr,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleMedium!
-                                                      .copyWith(
-                                                          color: kTextGrey,
-                                                          fontSize: SizeConfig
-                                                                  .textMultiplier *
-                                                              2.2),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  '${DateFormatUtil.formatDD(DateTime.parse(leaveData.startDate.toString()))} - ${DateFormatUtil.formatdm(DateTime.parse(leaveData.endDate.toString()))} ',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleMedium!
-                                                      .copyWith(
-                                                          fontSize: SizeConfig
-                                                                  .textMultiplier *
-                                                              2.2),
-                                                ),
-                                              ],
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  Strings.txtTotalLeave.tr,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleMedium!
-                                                      .copyWith(
-                                                          color: kTextGrey,
-                                                          fontSize: SizeConfig
-                                                                  .textMultiplier *
-                                                              2.2),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                    '${leaveData.totalDays.toString()} ${Strings.txtDay.tr}',
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16.0),
+                                      color: Theme.of(context).cardColor,
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Color(0xFFF8F9FC),
+                                          blurRadius: 1.0,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const SizedBox(width: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    Strings.txtLeaveDate.tr,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleMedium!
+                                                        .copyWith(
+                                                            color: kTextGrey,
+                                                            fontSize: SizeConfig
+                                                                    .textMultiplier *
+                                                                2.2),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text(
+                                                    '${DateFormatUtil.formatDD(DateTime.parse(leaveData.startDate.toString()))} - ${DateFormatUtil.formatdm(DateTime.parse(leaveData.endDate.toString()))} ',
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .titleMedium!
                                                         .copyWith(
                                                             fontSize: SizeConfig
                                                                     .textMultiplier *
-                                                                2.2)),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                                                2.2),
+                                                  ),
+                                                ],
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    Strings.txtTotalLeave.tr,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleMedium!
+                                                        .copyWith(
+                                                            color: kTextGrey,
+                                                            fontSize: SizeConfig
+                                                                    .textMultiplier *
+                                                                2.2),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text(
+                                                      '${leaveData.totalDays.toString()} ${Strings.txtDay}'
+                                                          .tr,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .titleMedium!
+                                                          .copyWith(
+                                                              fontSize: SizeConfig
+                                                                      .textMultiplier *
+                                                                  2.2)),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 8,
-                                          backgroundColor: colorSta,
-                                          child: const Icon(
-                                            Icons.check,
-                                            color: kTextWhiteColor,
-                                            size: 13,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          '$txtStatus  ${DateFormatUtil.formatddMMy(DateTime.parse(leaveData.createdAt.toString()))} ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium!
-                                              .copyWith(
-                                                  color: colorSta,
-                                                  fontSize: SizeConfig
-                                                          .textMultiplier *
-                                                      2),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      '  ${DateFormatUtil.formatms(DateTime.parse(leaveData.createdAt.toString()))} ',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium!
-                                          .copyWith(
-                                              color: kTextGrey,
-                                              fontSize:
-                                                  SizeConfig.textMultiplier *
-                                                      2),
-                                    )
-                                  ],
-                                ),
-                              ],
+                                  const SizedBox(height: 10),
+                                  // Row(
+                                  //   mainAxisAlignment:
+                                  //       MainAxisAlignment.spaceBetween,
+                                  //   children: [
+                                  //     Row(
+                                  //       children: [
+                                  //         CircleAvatar(
+                                  //           radius: 8,
+                                  //           backgroundColor: colorSta,
+                                  //           child: const Icon(
+                                  //             Icons.check,
+                                  //             color: kTextWhiteColor,
+                                  //             size: 13,
+                                  //           ),
+                                  //         ),
+                                  //         const SizedBox(
+                                  //           width: 10,
+                                  //         ),
+                                  //         // Text(
+                                  //         //   '$txtStatus  ${DateFormatUtil.formatddMMy(DateTime.parse(leaveData.createdAt.toString()))} ',
+                                  //         //   style: Theme.of(context)
+                                  //         //       .textTheme
+                                  //         //       .titleMedium!
+                                  //         //       .copyWith(
+                                  //         //           color: colorSta,
+                                  //         //           fontSize: SizeConfig
+                                  //         //                   .textMultiplier *
+                                  //         //               2),
+                                  //         // ),
+                                  //       ],
+                                  //     ),
+                                  //     // Text(
+                                  //     //   '  ${DateFormatUtil.formatms(DateTime.parse(leaveData.updatedAt.toString()))} ',
+                                  //     //   style: Theme.of(context)
+                                  //     //       .textTheme
+                                  //     //       .titleMedium!
+                                  //     //       .copyWith(
+                                  //     //           color: kTextGrey,
+                                  //     //           fontSize:
+                                  //     //               SizeConfig.textMultiplier *
+                                  //     //                   2),
+                                  //     // )
+                                  //   ],
+                                  // ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        if (leaveData.comment != null &&
-                            leaveData.comment.isNotEmpty) ...[
-                          Text(
-                            'ເຫດຜົນສໍາລັບການປະຕິເສດ',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 2),
                           ),
                           const SizedBox(
                             height: 10,
                           ),
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                color: Color(0xFFFCE6E4),
-                                // color: Theme.of(context).canvasColor,
+                          // if (leaveData.comment != null &&
+                          //     leaveData.comment.isNotEmpty) ...[
+                          //   Text(
+                          //     'ເຫດຜົນສໍາລັບການປະຕິເສດ',
+                          //     style: Theme.of(context)
+                          //         .textTheme
+                          //         .titleMedium!
+                          //         .copyWith(
+                          //             fontSize: SizeConfig.textMultiplier * 2),
+                          //   ),
+                          //   const SizedBox(
+                          //     height: 10,
+                          //   ),
+                          //   Container(
+                          //     width: double.infinity,
+                          //     decoration: BoxDecoration(
+                          //         color: Color(0xFFFCE6E4),
+                          //         // color: Theme.of(context).canvasColor,
+                          //         borderRadius: BorderRadius.circular(10),
+                          //         border: Border.all(color: Color(0xFFCE1126))),
+                          //     child: Padding(
+                          //       padding: const EdgeInsets.all(8.0),
+                          //       child: Text(
+                          //         leaveData.comment.toString(),
+                          //         style: Theme.of(context)
+                          //             .textTheme
+                          //             .bodyMedium!
+                          //             .copyWith(
+                          //                 color: kBack87,
+                          //                 fontSize:
+                          //                     SizeConfig.textMultiplier * 2.2),
+                          //       ),
+                          //     ),
+                          //   )
+                          // ]
+                          if (leaveData.approvedBy != null &&
+                              leaveData.approvedBy!.isNotEmpty) ...[
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).canvasColor,
                                 borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Color(0xFFCE1126))),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                leaveData.comment.toString(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                        color: kBack87,
-                                        fontSize:
-                                            SizeConfig.textMultiplier * 2.2),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ...leaveData.approvedBy!.map((approver) {
+                                      // Determine status text and color
+                                      final statusText =
+                                          approver.status == "APPROVED"
+                                              ? Strings.txtApproved.tr
+                                              : approver.status == "REJECTED"
+                                                  ? Strings.txtRejected.tr
+                                                  : Strings.txtWaiting.tr;
+
+                                      final statusColor = approver.status ==
+                                              "APPROVED"
+                                          ? Colors.green
+                                          : approver.status == "REJECTED"
+                                              ? Colors.red
+                                              : Colors
+                                                  .orange; // Color for PENDING
+
+                                      final updatedAt = leaveData.updatedAt !=
+                                              null
+                                          ? DateFormatUtil.formatddMMy(
+                                              DateTime.parse(leaveData.updatedAt
+                                                  .toString()))
+                                          : '';
+
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  // Status Indicator
+                                                  Row(
+                                                    children: [
+                                                      if (approver.status ==
+                                                              "APPROVED" ||
+                                                          approver.status ==
+                                                              "REJECTED")
+                                                        CircleAvatar(
+                                                          radius: SizeConfig
+                                                                  .heightMultiplier *
+                                                              1.2,
+                                                          backgroundColor:
+                                                              statusColor,
+                                                          child: Icon(
+                                                            approver.status ==
+                                                                    "APPROVED"
+                                                                ? Icons.check
+                                                                : Icons.close,
+                                                            size: SizeConfig
+                                                                    .imageSizeMultiplier *
+                                                                4,
+                                                            color:
+                                                                kTextWhiteColor,
+                                                          ),
+                                                        ),
+                                                      if (approver.status ==
+                                                          "PENDING")
+                                                        CircleAvatar(
+                                                          radius: SizeConfig
+                                                                  .heightMultiplier *
+                                                              1.2,
+                                                          backgroundColor:
+                                                              statusColor,
+                                                          child: Icon(
+                                                            approver.status ==
+                                                                    "PENDING"
+                                                                ? Icons.check
+                                                                : Icons.close,
+                                                            size: SizeConfig
+                                                                    .imageSizeMultiplier *
+                                                                4,
+                                                            color:
+                                                                kTextWhiteColor,
+                                                          ),
+                                                        ),
+                                                      const SizedBox(width: 10),
+                                                      Text(
+                                                        '${approver.status == "PENDING " ? statusText : Strings.txtApprov.tr} $updatedAt',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall!
+                                                            .copyWith(
+                                                                color:
+                                                                    statusColor,
+                                                                fontSize: SizeConfig
+                                                                        .textMultiplier *
+                                                                    2),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        Strings.txtBy.tr,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleMedium!
+                                                            .copyWith(
+                                                                fontSize: SizeConfig
+                                                                        .textMultiplier *
+                                                                    2),
+                                                      ),
+                                                      const SizedBox(width: 5),
+                                                      CircleAvatar(
+                                                        radius: SizeConfig
+                                                                .heightMultiplier *
+                                                            2,
+                                                        backgroundImage:
+                                                            NetworkImage(
+                                                          approver.profile
+                                                                      ?.isNotEmpty ==
+                                                                  true
+                                                              ? approver
+                                                                  .profile!
+                                                              : "https://kpl.gov.la/Media/Upload/News/Thumb/2023/04/20/200423--600--111.jpg",
+                                                        ),
+                                                        onBackgroundImageError:
+                                                            (_, __) =>
+                                                                const Icon(Icons
+                                                                    .error),
+                                                      ),
+                                                      const SizedBox(width: 5),
+                                                      ConstrainedBox(
+                                                        constraints:
+                                                            BoxConstraints(
+                                                          maxWidth: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.3,
+                                                        ),
+                                                        child: Text(
+                                                          approver.username ??
+                                                              'Unknown',
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .titleMedium!
+                                                              .copyWith(
+                                                                  fontSize:
+                                                                      SizeConfig
+                                                                              .textMultiplier *
+                                                                          2),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const Divider(color: kGary),
+                                            if ((approver.comment ?? '')
+                                                .isNotEmpty) ...[
+                                              Container(
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                    color: approver.status ==
+                                                            "REJECTED"
+                                                        ? const Color(
+                                                            0xFFFCE6E4)
+                                                        : const Color(
+                                                            0xFFE4FCE4),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    border: Border.all(
+                                                      color: approver.status ==
+                                                              "REJECTED"
+                                                          ? const Color(
+                                                              0xFFCE1126)
+                                                          : const Color(
+                                                              0xFF4CAF50),
+                                                    )),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        approver.comment!,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleMedium!
+                                                            .copyWith(
+                                                                fontSize: SizeConfig
+                                                                        .textMultiplier *
+                                                                    2,
+                                                                color: kBack87),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ],
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ],
+                                ),
                               ),
                             ),
-                          )
-                        ]
-                      ],
-                    ),
+                          ],
+                        ]),
                   )));
         });
   }
@@ -1635,7 +2134,7 @@ class _NotifitionsNewScreensState
       case "PENDING":
         return {
           'color': const Color(0xFFFFCE08),
-          'txt': Strings.txtWaiting.tr,
+          'txt': Strings.txtPending.tr,
           'icon': const Icon(
             Bootstrap.check_circle_fill,
             color: Colors.white,
@@ -1805,7 +2304,7 @@ class _NotifitionsNewScreensState
                                   width: 10,
                                 ),
                                 Text(
-                                  'ທ່ານໄດ້${txtButton.toString()}',
+                                  '${Strings.txtYouAreS.tr} ${txtButton.toString()}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium
@@ -2019,7 +2518,8 @@ class _NotifitionsNewScreensState
                             text: Strings.txtRequestdetails.tr,
                             children: [
                               TextSpan(
-                                text: leaveData.typeName,
+                                // text: leaveData.typeName,
+                                text: txt,
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleLarge!
@@ -3119,7 +3619,7 @@ class _NotifitionsNewScreensState
                             text: Strings.txtRequestdetails.tr,
                             children: [
                               TextSpan(
-                                text: leaveData.typeName,
+                                text: txt,
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleLarge!
@@ -3273,9 +3773,9 @@ Map<String, dynamic> getItemColorAndIcon(String keywrd) {
     case "LAKIT":
       return {'color': Color(0xFFF45B69), 'txt': Strings.txtLakit.tr};
     case "SICK":
-      return {'color': Color(0xFFF59E0B), 'txt': Strings.txtSick.tr};
+      return {'color': Color(0xFF23A26D), 'txt': Strings.txtSick.tr};
     case "MATERNITY":
-      return {'color': Color(0xFF23A26D), 'txt': Strings.txtMaternity.tr};
+      return {'color': Color(0xFFF59E0B), 'txt': Strings.txtMaternity.tr};
 
     default:
       return {

@@ -45,19 +45,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       LocalNotificationServiceUserApp();
   Future redirectScreen({screenToNavigate}) async {
     debugPrint("modalRoute : $screenToNavigate");
-
     switch (screenToNavigate) {
       case 'attendance':
-        Future.delayed(const Duration(milliseconds: 2), () {
+        Future.delayed(const Duration(milliseconds: 1), () {
           if (mounted) {
             Navigator.of(context).pushNamed(PageName.navigatorBarScreenRoute,
                 arguments: {"index": 0});
           }
         });
-
         break;
       case 'leave':
-        Future.delayed(const Duration(milliseconds: 2), () {
+        Future.delayed(const Duration(milliseconds: 1), () {
           if (mounted) {
             Navigator.of(context)
                 .pushNamed(PageName.notificationRoute, arguments: {"index": 1});
@@ -66,7 +64,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
         break;
       case 'SetAccountScreen':
-        Future.delayed(const Duration(milliseconds: 2), () {
+        Future.delayed(const Duration(milliseconds: 1), () {
           // if (mounted) {
           //   Navigator.pushNamed(context, AppRoutes.bankAccountRoute);
           // }
@@ -106,10 +104,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         logger.d("foreground : ${notification!.title}");
       },
     );
+
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       final int messageId = int.parse(message.data['messageId']);
       logger.d(message.data["ref"]);
-      logger.d(" confirm : ${message.data["ref"] == "TOP_UP"}");
+      logger.d(" confirm : ${message.data["ref"] == ""}");
 
       redirectScreen(screenToNavigate: message.data["screen"]);
     });

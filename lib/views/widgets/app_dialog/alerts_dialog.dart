@@ -32,63 +32,61 @@ class AlertCustomDialog extends StatelessWidget {
       title: Center(child: title),
       content: content,
       actions: [
-        GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 35,
-              vertical: 10,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  offset: const Offset(2, 4),
-                  blurRadius: 10,
-                  color: Colors.grey.withOpacity(.2),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    color: Color(0xFFE4E4E7),
+                  ),
+                  child: Text(
+                    Strings.txtCancel.tr,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(fontSize: SizeConfig.textMultiplier * 2),
+                  ),
                 ),
-              ],
+              ),
             ),
-            child: Text(
-              Strings.txtCancel.tr,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(fontSize: SizeConfig.textMultiplier * 2),
+            const SizedBox(
+              width: 5,
             ),
-          ),
-        ),
-        GestureDetector(
-          onTap: onTapOK,
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 35,
-              vertical: 10,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              color: orangeColor,
-              boxShadow: [
-                BoxShadow(
-                  offset: const Offset(2, 4),
-                  blurRadius: 10,
-                  color: Colors.grey.withOpacity(.2),
+            GestureDetector(
+              onTap: onTapOK,
+              child: Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    color: kYellowColor,
+                  ),
+                  child: Text(
+                    Strings.txtOkay.tr,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(fontSize: SizeConfig.textMultiplier * 2),
+                  ),
                 ),
-              ],
+              ),
             ),
-            child: Text(
-              Strings.txtOkay.tr,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(fontSize: SizeConfig.textMultiplier * 2),
-            ),
-          ),
+          ],
         )
       ],
     );

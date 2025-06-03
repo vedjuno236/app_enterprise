@@ -25,7 +25,7 @@ const Map<String, String> en = {
   "Choose Image": "Choose Image",
   "Reason": "Reason",
   "Status": "Status",
-  
+  "You areS": "You are",
   "By": "By",
   "You do not have enough vacation days. Please contact HR": "You do not have enough vacation days. Please contact HR.",
   "Your vacation is over": "Your vacation is over.",
@@ -67,6 +67,7 @@ const Map<String, String> en = {
   "Waiting": "Waiting for approval ",
   "Reject": "Reject",
   "Approv": "Approved",
+  "Pending": "Pending",
   "Request details": "Request details",
   //
   "Home": "Home",

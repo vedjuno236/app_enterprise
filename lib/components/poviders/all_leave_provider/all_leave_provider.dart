@@ -17,7 +17,7 @@ class AllLeaveProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  AllLeaveModel? _AllLeaveModel;
+
   DateTime? _selectedMonth;
   // String _selectedMonthText = Strings.txtThisMonth;
   String _selectedMonthText = '';
@@ -31,17 +31,13 @@ class AllLeaveProvider with ChangeNotifier {
         _endDate = DateTime(DateTime.now().year, DateTime.now().month + 1, 0) {
     _selectedMonth = DateTime.now();
   }
-
   // Getters
-
   DateTime? get selectedMonth => _selectedMonth;
   String get selectedMonthText => _selectedMonthText;
   DateTime get startDate => _startDate;
   DateTime get endDate => _endDate;
   int? get selectedIndex => _selectedIndex;
-
   // Methods
-
   set selectedMonth(DateTime? month) {
     if (month != null) {
       _selectedMonth = month;
@@ -57,15 +53,15 @@ class AllLeaveProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void resetSelectedMonth() {
-    _selectedMonth = null;
-    _selectedMonthText = Strings.txtThisMonth;
+  // void resetSelectedMonth() {
+  //   _selectedMonth = null;
+  //   _selectedMonthText = Strings.txtThisMonth;
 
-    final now = DateTime.now();
-    _startDate = DateTime(now.year, now.month, 1);
-    _endDate = DateTime(now.year, now.month + 1, 0);
-    notifyListeners();
-  }
+  //   final now = DateTime.now();
+  //   _startDate = DateTime(now.year, now.month, 1);
+  //   _endDate = DateTime(now.year, now.month + 1, 0);
+  //   notifyListeners();
+  // }
 
   int selectedIndexOnleave = 0;
 

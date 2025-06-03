@@ -305,9 +305,9 @@ class _AllLeaveScreenState extends ConsumerState<AllLeaveScreen> {
       case "LAKIT":
         return {'color': Color(0xFFF45B69), 'txt': Strings.txtLakit.tr};
       case "SICK":
-        return {'color': Color(0xFFF59E0B), 'txt': Strings.txtSick.tr};
+        return {'color': Color(0xFF23A26D), 'txt': Strings.txtSick.tr};
       case "MATERNITY":
-        return {'color': Color(0xFF23A26D), 'txt': Strings.txtMaternity.tr};
+        return {'color': Color(0xFFF59E0B), 'txt': Strings.txtMaternity.tr};
 
       default:
         return {

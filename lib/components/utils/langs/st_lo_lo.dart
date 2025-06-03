@@ -14,6 +14,7 @@ const Map<String, String> lo = {
   "Announcement": "ຂ່າວສານຕ່າງໆ",
   "Profile": "ໂປຣໄຟລ",
   "Confirm": "ຕົກລົງ",
+  "Pending": "ລໍຖ້າອະນຸມັດ",
   "You Clocked": "",
   "Slide to Clock Out": "ເລື່ອນເພື່ອເຂົ້າວຽກ",
   "Slide to Clock In": "ເລື່ອນເພື່ອເລີກວຽກ",
@@ -91,6 +92,7 @@ const Map<String, String> lo = {
 //
   "Ok": "ຕົກລົງ",
   "You are": "ທ່ານ",
+  "You areS": "ທ່ານໄດ້",
   "NOT": " ບໍ່ໄດ້ ",
   "in the clock-in area": "ຢູ່ໃນສະຖານທີ່ເຂົ້າວຽກ!",
   "Are you sure you want to Clock-in in this location":
@@ -139,8 +141,9 @@ const Map<String, String> lo = {
   "Please enter Password": "ກະລຸນາປ້ອນລະຫັດຜ່ານ",
   "Please enter PhoneNumber": "ກະລານາປ້ອນເບີໂທ",
   "Error occurred": "ເກີດຂໍ້ຜິດພາດ",
-"You do not have enough vacation days. Please contact HR": "ທ່ານຍັງບໍ່ທັນມີຈໍານວນວັນລາພັກ ກະລຸນາຕິດຕໍ່ຫາ HR",
-"Your vacation is over": "ວັນລາພັກຂອງທ່ານໝົດແລ້ວ",
+  "You do not have enough vacation days. Please contact HR":
+      "ທ່ານຍັງບໍ່ທັນມີຈໍານວນວັນລາພັກ ກະລຸນາຕິດຕໍ່ຫາ HR",
+  "Your vacation is over": "ວັນລາພັກຂອງທ່ານໝົດແລ້ວ",
   "Leave Duration": "ໄລຍະເວລາການລາ",
   "Select date": "ເລືອກວັນທີ",
   "Assign temporary work to": "ມອບວຽກຊົ່ວຄາວໃຫ້",
@@ -186,7 +189,7 @@ const Map<String, String> lo = {
   ///
   "Location Permissions Denied": "ການອະນຸຍາດສະຖານທີ່ຖືກປະຕິເສດ",
   "Location permissions are permanently denied. Please enable them in app settings":
-      "ການອະນຸຍາດສະຖານທີ່ຖືກປະຕິເສດຢ່າງຖາວອນ. ກະລຸນາເປີດໃຊ້ພວກມັນໃນການຕັ້ງຄ່າແອັບ",
+      "ການອະນຸຍາດສະຖານທີ່ຖືກປະຕິເສດຢ່າງຖາວອນ. ກະລຸນາເປີດໃຊ້ໃນການຕັ້ງຄ່າແອັບ",
 
   ///profile
   "Lives In": " ອາໄສຢູ່",

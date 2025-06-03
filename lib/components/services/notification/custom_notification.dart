@@ -7,7 +7,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 void initializeNotifications(GoRouter router) async {
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings('@mipmap/launcher_icon');
 
   const InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,

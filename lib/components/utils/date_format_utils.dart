@@ -140,14 +140,18 @@ class DateFormatUtil {
     final formatter = DateFormat('hh:mm a', locale ?? 'en');
     return formatter.format(date);
   }
+    static String formatddmmyyhhssmm(DateTime date, {String? locale}) {
+    final formatter = DateFormat('dd-MMMM-yyyy HH:mm:ss', locale ?? currentLocale);
+    return formatter.format(date);
+  }
 
   static String formatms(DateTime date, {String? locale}) {
-    final formatter = DateFormat('HH:mm:ss ', locale ?? 'en');
+    final formatter = DateFormat('HH:mm:ss ', locale ?? currentLocale);
     return formatter.format(date);
   }
 
   static String formatdm(DateTime date, {String? locale}) {
-    final formatter = DateFormat('dd MMMM', locale ?? 'en');
+    final formatter = DateFormat('dd MMMM', locale ?? currentLocale);
     return formatter.format(date);
   }
 

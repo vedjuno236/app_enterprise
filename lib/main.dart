@@ -14,7 +14,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -23,14 +22,12 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-// final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
 // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 //     FlutterLocalNotificationsPlugin();
 
 // String? initialNotificationPayload;
-// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 //   if (message.notification != null) {
 //     flutterLocalNotificationsPlugin.show(
 //       message.notification!.hashCode,
@@ -81,9 +78,10 @@ void main() async {
     statusBarColor: Colors.transparent,
   ));
 
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // await FirebaseMessaging.instance.subscribeToTopic('attendance');
+
+
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // // Initialize local notifications with iOS settings
   // const AndroidInitializationSettings initializationSettingsAndroid =
@@ -103,10 +101,6 @@ void main() async {
   //   onDidReceiveNotificationResponse:
   //       (NotificationResponse notificationResponse) async {
   //     initialNotificationPayload = notificationResponse.payload;
-
-  //     Future.delayed(const Duration(milliseconds: 100), () {
-  //       router.goNamed(PageName.applyLeavesScreenRoute);
-  //     });
   //   },
   // );
 
@@ -131,7 +125,7 @@ void main() async {
   // );
 
   // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-  //   alert: true,
+  //    alert: true,
   //   badge: true,
   //   sound: true,
   // );
@@ -157,15 +151,16 @@ void main() async {
   //       payload: message.data['type'],
   //     );
   //   }
-  // });
-
-  AndroidNotificationChannel? channel;
+  // }
+  // );
+ AndroidNotificationChannel? channel;
   if (kIsWeb) {
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   } else {
     await Firebase.initializeApp();
 
+    //set for Log analytics screen view
     FirebaseAnalytics.instance.logAppOpen();
   }
 
@@ -184,10 +179,13 @@ void main() async {
 
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
+   
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
+
+
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
       alert: true,
@@ -195,13 +193,15 @@ void main() async {
       sound: true,
     );
   }
-  // await FirebaseMessaging.instance.subscribeToTopic('attendance');
+
+
   await Firebase.initializeApp();
   FirebaseAnalytics.instance.logAppOpen();
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   await SharedPrefs().init();
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  logger.d('FCM Token: $fcmToken');
+  // final fcmToken = await FirebaseMessaging.instance.getToken();
+  // logger.d('FCM Token: $fcmToken');
+
   FirebaseAnalytics.instance.logAppOpen();
   await SharedPrefs().init();
   runApp(const ProviderScope(child: App()));
@@ -212,11 +212,13 @@ void main() async {
     ),
   );
 }
+
 class App extends ConsumerStatefulWidget {
   const App({Key? key}) : super(key: key);
   @override
   ConsumerState<App> createState() => _AppState();
 }
+
 class _AppState extends ConsumerState<App> {
   DarkThemePreference darkThemePreference = DarkThemePreference();
   // void initState() {

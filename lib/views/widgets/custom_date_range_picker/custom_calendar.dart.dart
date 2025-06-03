@@ -254,7 +254,6 @@ class CustomCalendarState extends State<CustomCalendar> {
                     TextFormField(
                       enabled: false,
                       decoration: InputDecoration(
-                       
                         labelText: endDate != null
                             ? DateFormatUtil.formatC(endDate!)
                             : startDate != null
@@ -465,7 +464,7 @@ class CustomCalendarState extends State<CustomCalendar> {
                                                     date.month
                                                 ? Theme.of(context)
                                                     .primaryColorLight
-                                                : kG,
+                                                : kGreyColor2,
                                 fontSize:
                                     MediaQuery.of(context).size.width > 360
                                         ? 18

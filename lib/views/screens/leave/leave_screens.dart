@@ -1552,12 +1552,12 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                                               DateFormat(
                                                                       'yyyy-MM-dd HH:mm:ss')
                                                                   .format(
-                                                                      startDate!);
+                                                                      endDate!);
                                                           final formattedTime =
                                                               DateFormat(
                                                                       'HH:mm')
                                                                   .format(
-                                                                      startDate!);
+                                                                      endDate!);
                                                           leaveNotifier
                                                               .endTimeController
                                                               .text = formattedTime;

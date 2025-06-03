@@ -21,6 +21,7 @@ import 'package:enterprise/views/widgets/text_input/text_input_custom_design.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -45,21 +46,21 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
   bool isLoadingLeave = false;
   SharedPrefs sharedPrefs = SharedPrefs();
   int userID = int.parse(SharedPrefs().getStringNow(KeyShared.keyUserId));
-  Future fetchAllLeaveApi() async {
-    String formattedDate = DateFormat('yyyy-MM').format(selectedMonth);
+  Future fetchAllLeaveApi({required startDate, required endDate}) async {
     setState(() {
       isLoadingLeave = true;
     });
 
     EnterpriseAPIService()
         .callAllLeaveHistory(
-            UserId: userID,
-            LeaveTypeID: widget.data.id,
-            Status: '',
-            month: formattedDate)
+      UserId: userID,
+      LeaveTypeID: widget.data.id,
+      Status: '',
+      start_date: startDate,
+      end_date: endDate,
+    )
         .then((value) {
       ref.watch(leaveHistoryProvider).setallLeaveHistoryModel(value: value);
-      logger.d(value);
     }).catchError((onError) {
       errorDialog(
         context: context,
@@ -69,6 +70,22 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
     }).whenComplete(() => setState(() {
               isLoadingLeave = false;
             }));
+  }
+
+  Future<void> _onLoading() async {
+    final leaveHistoryNotifier = ref.watch(leaveHistoryProvider);
+    final dataAPI = leaveHistoryNotifier;
+
+    try {
+     
+      if (dataAPI.getallLeaveHistoryModel!.data!.isEmpty) {
+        _refreshController.loadNoData();
+      } else {
+        _refreshController.loadComplete();
+      }
+    } catch (e) {
+      _refreshController.loadFailed();
+    }
   }
 
   Future<void> _onRefresh() async {
@@ -176,9 +193,16 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                 backgroundColor: darkTheme.darkTheme ? kBack : kYellowColor,
               ),
               onPressed: () {
-                ref.read(leaveHistoryProvider.notifier).selectedMonth =
-                    selectedMonth;
-                fetchAllLeaveApi();
+                // ref.read(leaveHistoryProvider.notifier).selectedMonth =
+                //     selectedMonth;
+                // fetchAllLeaveApi();
+                final provider = ref.read(leaveHistoryProvider.notifier);
+                provider.selectedMonth = selectedMonth;
+                fetchAllLeaveApi(
+                  startDate:
+                      DateFormat('yyyy-MM-dd').format(provider.startDate),
+                  endDate: DateFormat('yyyy-MM-dd').format(provider.endDate),
+                );
                 context.pop();
               },
               child: Text(
@@ -198,10 +222,15 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
+    Future.microtask(() async {
       ref.read(leaveHistoryProvider).selectedMonth = DateTime.now();
+      final startDate = DateTime(selectedMonth.year, selectedMonth.month, 1);
+      final endDate = DateTime(selectedMonth.year, selectedMonth.month + 1, 0);
 
-      fetchAllLeaveApi();
+      await fetchAllLeaveApi(
+        startDate: DateFormat('yyyy-MM-dd').format(startDate),
+        endDate: DateFormat('yyyy-MM-dd').format(endDate),
+      );
     });
   }
 
@@ -217,6 +246,7 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
     final darkTheme = ref.watch(darkThemeProviderProvider);
 
     return Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           elevation: 0,
           flexibleSpace: const AppbarWidget(),
@@ -440,12 +470,36 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                       ? Center(child: _buildShimmerItem())
                       : dataAPI.getallLeaveHistoryModel!.data!.isEmpty
                           ? Center(
-                              child: Image.asset(ImagePath.imgIconCreateAcc))
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/svgs/nodata.svg',
+                                    width: 150,
+                                    height: 150,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    ' ຍັງບໍ່ມີຂໍ້ມູນ',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(
+                                            fontSize:
+                                                SizeConfig.textMultiplier *
+                                                    2.2),
+                                  )
+                                ],
+                              ),
+                            )
                           : SmartRefresher(
                               enablePullDown: true,
                               enablePullUp: true,
                               controller: _refreshController,
                               onRefresh: _onRefresh,
+                              onLoading: _onLoading,
                               header: const WaterDropMaterialHeader(
                                 backgroundColor: kYellowFirstColor,
                                 color: kTextWhiteColor,
@@ -517,8 +571,8 @@ class _AmlsLeaveScreensState extends ConsumerState<AmlsLeaveScreens> {
                                                 dataAPI.getallLeaveHistoryModel!
                                                     .data!.isEmpty
                                             ? Center(
-                                                child: Image.asset(
-                                                    ImagePath.imgIconCreateAcc))
+                                                child: SvgPicture.asset(
+                                                    'assets/svgs/no_data.svg'))
                                             : Padding(
                                                 padding:
                                                     const EdgeInsets.symmetric(
@@ -1269,9 +1323,9 @@ Map<String, dynamic> getItemColor(String keywrd) {
     case "LAKIT":
       return {'color': Color(0xFFF45B69), 'txt': Strings.txtLakit.tr};
     case "SICK":
-      return {'color': Color(0xFFF59E0B), 'txt': Strings.txtSick.tr};
+      return {'color': Color(0xFF23A26D), 'txt': Strings.txtSick.tr};
     case "MATERNITY":
-      return {'color': Color(0xFF23A26D), 'txt': Strings.txtMaternity.tr};
+      return {'color': Color(0xFFF59E0B), 'txt': Strings.txtMaternity.tr};
 
     default:
       return {

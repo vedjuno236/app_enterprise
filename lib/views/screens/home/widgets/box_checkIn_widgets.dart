@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 import 'dart:io';
 
@@ -76,6 +74,7 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
     _getLocation();
   }
 
+  ///ຕອນ clock
   Future<bool> _requestLocationPermission(BuildContext context) async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -83,18 +82,7 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       // ScaffoldMessenger.of(context).showSnackBar(
-      //     const SnackBar(content: Text('Location service is disabled.')));
-      return false;
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return false;
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
+      //     const SnackBar(content: Text('Location service is disabled!!!.')));
       if (Platform.isIOS) {
         showCupertinoDialog(
           context: context,
@@ -124,6 +112,54 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
             content: Text(
               Strings.txtLocationPermissionssettings.tr,
               style: Theme.of(context).textTheme.bodySmall!.copyWith(),
+            ),
+            onTapOK: () {
+              openAppSettings();
+              Navigator.pop(context);
+            },
+          ),
+        );
+      }
+      return false;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      if (Platform.isIOS) {
+        showCupertinoDialog(
+          context: context,
+          builder: (context) => AlertIOSDialog(
+            title: Text(
+              Strings.txtLocationPermissions.tr,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+            ),
+            content: Text(
+              Strings.txtLocationPermissionssettings.tr,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
+            ),
+            onPressed: () {
+              openAppSettings();
+              Navigator.pop(context);
+            },
+          ),
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => AlertCustomDialog(
+            title: Text(
+              Strings.txtLocationPermissions.tr,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+            ),
+            content: Text(
+              Strings.txtLocationPermissionssettings.tr,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
             ),
             onTapOK: () {
               openAppSettings();
@@ -166,146 +202,138 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
     return await Geolocator.getCurrentPosition();
   }
 
- 
-
-  // Future<void> _getLocation() async {
-  //   try {
-  //     locationPosition = await Geolocator.getCurrentPosition(
-  //       desiredAccuracy: LocationAccuracy.high,
-  //       timeLimit: const Duration(seconds: 10),
-  //     ).timeout(const Duration(seconds: 10), onTimeout: () {
-  //       throw TimeoutException("Location retrieval timed out");
-  //     });
-
-  //     if (!mounted) return;
-
-  //     logger.i(
-  //         "User location: ${locationPosition.latitude}, ${locationPosition.longitude}");
-
-  //     final locationProvider =
-  //         ref.read(stateLocationProvider).getConditionSettingModel;
-  //     if (locationProvider?.data == null) {
-  //       logger.e("Invalid location data from provider");
-  //       return;
-  //     }
-
-  //     final data = locationProvider!.data!;
-  //     final targetLatitude = data.officeLat;
-  //     final targetLongitude = data.officeLong;
-  //     final allowedDistance = data.radius;
-
-  //     if (targetLatitude == null ||
-  //         targetLongitude == null ||
-  //         allowedDistance == null) {
-  //       logger.e(
-  //           "Missing location parameters: lat=$targetLatitude, long=$targetLongitude, radius=$allowedDistance");
-  //       return;
-  //     }
-
-  //     final distanceInMeters = Geolocator.distanceBetween(
-  //       locationPosition.latitude,
-  //       locationPosition.longitude,
-  //       targetLatitude,
-  //       targetLongitude,
-  //     );
-
-  //     isValidLocation = distanceInMeters <= allowedDistance;
-  //     logger.d(
-  //         "Valid location: $isValidLocation (Distance: $distanceInMeters meters)");
-  //   } catch (e) {
-  //     logger.e("Error getting location: $e");
-  //     rethrow;
-  //   }
-  // }
-
-
-
+  ///  open loaction  enable ຕອນເປີດແອັບມາ
   Future<void> _getLocation() async {
-  try {
-    // Check location services
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      logger.e("Location services are disabled");
-      if (mounted) {
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   const SnackBar(content: Text("Please enable location services.")),
-        // );
-      }
-      return;
-    }
-
-    // Check permissions
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        logger.e("Location permission denied");
+    try {
+      // Check location services
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        logger.e("Location services are disabled");
         if (mounted) {
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   const SnackBar(content: Text("Location permission is required.")),
-          // );
+          if (Platform.isIOS) {
+            showCupertinoDialog(
+              context: context,
+              builder: (context) => AlertIOSDialog(
+                title: Text(
+                  Strings.txtLocationPermissions.tr,
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+                ),
+                content: Text(
+                  Strings.txtLocationPermissionssettings.tr,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
+                ),
+                onPressed: () async {
+                  // await Geolocator.openLocationSettings().whenComplete(() {
+                  //   Navigator.pop(context);
+                  // });
+                  openAppSettings();
+                  Navigator.pop(context);
+                },
+              ),
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (context) => AlertCustomDialog(
+                title: Text(
+                  Strings.txtLocationPermissions.tr,
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+                ),
+                content: Text(
+                  Strings.txtLocationPermissionssettings.tr,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
+                ),
+                onTapOK: () async {
+                  openAppSettings();
+                  Navigator.pop(context);
+                  //   await Geolocator.openLocationSettings().whenComplete(() {
+                  //   Navigator.pop(context);
+                  // });
+                },
+              ),
+            );
+          }
         }
         return;
       }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      logger.e("Location permission permanently denied");
-      if (mounted) {
+
+      // Check permissions
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          logger.e("Location permission denied");
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Location permission is required.")),
+            );
+          }
+          return;
+        }
+      }
+      if (permission == LocationPermission.deniedForever) {
+        logger.e("Location permission permanently denied");
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text("Please enable location in app settings.")),
+          );
+        }
+        return;
+      }
+
+      // Get location
+      locationPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+        timeLimit: const Duration(seconds: 15),
+      );
+
+      if (!mounted) return;
+
+      logger.i(
+          "User location: ${locationPosition.latitude}, ${locationPosition.longitude}");
+
+      final locationProvider =
+          ref.read(stateLocationProvider).getConditionSettingModel;
+      if (locationProvider?.data == null) {
+        logger.e("Invalid location data from provider");
+        return;
+      }
+
+      final data = locationProvider!.data!;
+      final targetLatitude = data.officeLat;
+      final targetLongitude = data.officeLong;
+      final allowedDistance = data.radius;
+
+      if (targetLatitude == null ||
+          targetLongitude == null ||
+          allowedDistance == null) {
+        logger.e(
+            "Missing location parameters: lat=$targetLatitude, long=$targetLongitude, radius=$allowedDistance");
+        return;
+      }
+
+      final distanceInMeters = Geolocator.distanceBetween(
+        locationPosition.latitude,
+        locationPosition.longitude,
+        targetLatitude,
+        targetLongitude,
+      );
+
+      isValidLocation = distanceInMeters <= allowedDistance;
+      logger.d(
+          "Valid location: $isValidLocation (Distance: $distanceInMeters meters)");
+    } catch (e) {
+      logger.e("Error getting location: $e");
+      if (e is TimeoutException && mounted) {
         // ScaffoldMessenger.of(context).showSnackBar(
-        //   const SnackBar(content: Text("Please enable location in app settings.")),
+        //   const SnackBar(content: Text("Unable to get location. Please try again.")),
         // );
       }
-      return;
-    }
-
-    // Get location
-    locationPosition = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-      timeLimit: const Duration(seconds: 15),
-    );
-
-    if (!mounted) return;
-
-    logger.i("User location: ${locationPosition.latitude}, ${locationPosition.longitude}");
-
-    final locationProvider = ref.read(stateLocationProvider).getConditionSettingModel;
-    if (locationProvider?.data == null) {
-      logger.e("Invalid location data from provider");
-      return;
-    }
-
-    final data = locationProvider!.data!;
-    final targetLatitude = data.officeLat;
-    final targetLongitude = data.officeLong;
-    final allowedDistance = data.radius;
-
-    if (targetLatitude == null || targetLongitude == null || allowedDistance == null) {
-      logger.e("Missing location parameters: lat=$targetLatitude, long=$targetLongitude, radius=$allowedDistance");
-      return;
-    }
-
-    final distanceInMeters = Geolocator.distanceBetween(
-      locationPosition.latitude,
-      locationPosition.longitude,
-      targetLatitude,
-      targetLongitude,
-    );
-
-    isValidLocation = distanceInMeters <= allowedDistance;
-    logger.d("Valid location: $isValidLocation (Distance: $distanceInMeters meters)");
-  } catch (e) {
-    logger.e("Error getting location: $e");
-    if (e is TimeoutException && mounted) {
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(content: Text("Unable to get location. Please try again.")),
-      // );
     }
   }
-}
-
   Future<void> clockInOutService() async {
     int userID = int.parse(SharedPrefs().getStringNow(KeyShared.keyUserId));
-
     try {
       final keyword = isValidLocation ? "OFFICE" : "REMOTE";
       String? imagePath;
