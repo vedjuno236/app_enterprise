@@ -606,4 +606,25 @@ class EnterpriseAPIService {
       throw Exception('Failed to updateLeaveNoti');
     }
   }
+
+    Future cllbooleancheckInOut({
+    required userid,
+  }) async {
+    String url = APIPathHelper.getValue(ApiPath.checkbooleaninout);
+    Map body = {
+      'user_id': userid,
+    };
+    response = await _dio!.post(
+      url,
+      data: body,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    return response.data;
+  }
+
 }

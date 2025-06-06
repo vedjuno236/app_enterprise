@@ -1,5 +1,6 @@
 
 import 'package:enterprise/components/models/analytic_model/leave_type_model.dart';
+import 'package:enterprise/views/screens/analytic/analytic_screen.dart';
 import 'package:enterprise/views/screens/analytic/leave_history_screens.dart';
 import 'package:enterprise/views/screens/on_leaves/on_lave_screen.dart';
 import 'package:enterprise/views/screens/requestOT/requestOT_screens.dart';
@@ -59,6 +60,7 @@ abstract class PageName {
   static const String grossIncome = '/gross_income_screen';
   static const String deductions = '/deductions_screen';
   static const String policiesScreensRoute = '/policies_screens';
+  static const String analyticScreenRoute = '/analytic_screens_route';
 
   static const String informationScreenRoute = '/information_screen';
   static const String structureScreenRoute = '/structure_screen';
@@ -132,6 +134,9 @@ GoRouter router = GoRouter(
       builder: (context, state) => const HomeScreenPage(),
       // routes: ,
     ),
+    GoRoute(path: PageName.analyticScreenRoute,
+   builder: (context, state) => const AnalyticScreen(),),
+    
     GoRoute(
       path: PageName.login,
       builder: (conext, state) => const LoginScreen(),

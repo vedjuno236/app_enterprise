@@ -316,7 +316,6 @@ class _NotifitionsNewScreensState
       "keyword": "For approval",
       "label": Strings.txtForApproval.tr,
     },
-   
   ];
   void showDateDialogUser(
     BuildContext context,
@@ -584,17 +583,17 @@ class _NotifitionsNewScreensState
                   TextSpan(
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: const Color(0xFF99A1BE),
-                        fontSize: SizeConfig.textMultiplier * 1.5),
+                        fontSize: SizeConfig.textMultiplier * 2),
                     text: Strings.txtRequests.tr,
                     children: [
                       TextSpan(
                         text: notiProvider.selectedIndex == 1
-                            ? '($totalLeaveDaysHR ${Strings.txtRequests.tr})'
-                            : '($totalLeaveDaysUser ${Strings.txtRequests.tr})',
+                            ? ' ($totalLeaveDaysHR ${Strings.txtRequests.tr})'
+                            : ' ($totalLeaveDaysUser ${Strings.txtRequests.tr})',
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             fontWeight: FontWeight.bold,
                             color: const Color(0xFF23A26D),
-                            fontSize: SizeConfig.textMultiplier * 1.5),
+                            fontSize: SizeConfig.textMultiplier * 2),
                       ),
                     ],
                   ),

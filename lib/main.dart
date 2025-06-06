@@ -198,7 +198,7 @@ void main() async {
   await Firebase.initializeApp();
   FirebaseAnalytics.instance.logAppOpen();
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-  await SharedPrefs().init();
+ 
   // final fcmToken = await FirebaseMessaging.instance.getToken();
   // logger.d('FCM Token: $fcmToken');
 

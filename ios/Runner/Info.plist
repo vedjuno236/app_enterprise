@@ -29,7 +29,7 @@
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app needs access to your location to verify employee clock-ins and clock-outs. Location data will only be used to record work entry and exit times.</string>
+	<string>This app requires access to your location to accurately record employee entry and exit from designated work areas and for real-time operational location verification.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Your camera is needed to capture photos.</string>
 	<key>NSLocationAlwaysUsageDescription</key>

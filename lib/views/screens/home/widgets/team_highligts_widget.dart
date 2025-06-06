@@ -50,6 +50,36 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
             }));
   }
 
+  bool _isValidImageUrl(String? url) {
+    if (url == null || url.isEmpty) return false;
+
+    try {
+      final uri = Uri.parse(url);
+      return uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https');
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Widget _buildAvatar(String? profileUrl, double radius) {
+    return CircleAvatar(
+      radius: radius,
+      backgroundColor: Theme.of(context).canvasColor,
+      child: CircleAvatar(
+        radius: radius - 0.5,
+        backgroundImage:
+            _isValidImageUrl(profileUrl) ? NetworkImage(profileUrl!) : null,
+        child: !_isValidImageUrl(profileUrl)
+            ? Icon(
+                Icons.person,
+                size: radius * 1.2,
+                color: Colors.grey[600],
+              )
+            : null,
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -63,7 +93,7 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
         nallleaveProvider.getTeamHighligtsModelLeaveModel?.data ?? [];
     return Container(
       width: double.infinity,
-      height: SizeConfig.heightMultiplier * 20,
+      height: SizeConfig.heightMultiplier * 19,
       decoration: BoxDecoration(
         color: Theme.of(context).canvasColor,
         boxShadow: [
@@ -124,76 +154,74 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
               thickness: 1.0,
               height: 20.0,
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        for (int i = 0;
-                            i <
-                                (nallleavedata.length > 3
-                                    ? 3
-                                    : nallleavedata.length);
-                            i++)
-                          Align(
-                            widthFactor: 0.6,
-                            child: CircleAvatar(
-                              radius: SizeConfig.heightMultiplier * 3,
-                              backgroundColor: Theme.of(context).canvasColor,
-                              child: CircleAvatar(
-                                radius: SizeConfig.heightMultiplier * 2.5,
-                                backgroundImage: NetworkImage(nallleavedata[i]
-                                    .profile
-                                    .toString()), // Access the correct property
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            for (int i = 0;
+                                i <
+                                    (nallleavedata.length > 3
+                                        ? 3
+                                        : nallleavedata.length);
+                                i++)
+                              Align(
+                                widthFactor: 0.6,
+                                child: _buildAvatar(
+                                  nallleavedata[i].profile?.toString(),
+                                  SizeConfig.heightMultiplier * 2.5,
+                                ),
                               ),
-                            ),
-                          ),
-                        if (nallleavedata.length > 3)
-                          Align(
-                            widthFactor: 0.6,
-                            child: CircleAvatar(
-                                radius: SizeConfig.heightMultiplier * 2,
-                                backgroundColor: kYellowColor,
-                                child: Text(
-                                  '+${(nallleavedata.length - 3).toString()}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge!
-                                      .copyWith(
-                                          fontSize:
-                                              SizeConfig.textMultiplier * 1.9,
-                                          color: kTextWhiteColor),
-                                )),
-                          ),
+                            if (nallleavedata.length > 3)
+                              Align(
+                                widthFactor: 0.6,
+                                child: CircleAvatar(
+                                    radius: SizeConfig.heightMultiplier * 2,
+                                    backgroundColor: kYellowColor,
+                                    child: Text(
+                                      '+${(nallleavedata.length - 3).toString()}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge!
+                                          .copyWith(
+                                              fontSize:
+                                                  SizeConfig.textMultiplier *
+                                                      1.9,
+                                              color: kTextWhiteColor),
+                                    )),
+                              ),
+                          ],
+                        ),
                       ],
                     ),
-                    TextButton(
-                        onPressed: () {
-                          context.push(PageName.onLeaveRoute);
-                        },
-                        child: Row(
-                          children: [
-                            Text(
-                              Strings.txtSeeAll.tr,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(
+                  ),
+                ),
+                TextButton(
+                    onPressed: () {
+                      context.push(PageName.onLeaveRoute);
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          Strings.txtSeeAll.tr,
+                          style:
+                              Theme.of(context).textTheme.titleMedium!.copyWith(
                                     fontSize: SizeConfig.textMultiplier * 2,
                                   ),
-                            ),
-                            const Icon(
-                              Icons.arrow_right,
-                            )
-                          ],
-                        ))
-                  ],
-                ),
-              ),
+                        ),
+                        const Icon(
+                          Icons.arrow_right,
+                        )
+                      ],
+                    ))
+              ],
             ),
           ],
         ),

@@ -1,6 +1,9 @@
+
+
 import 'dart:async';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/logger/logger.dart';
+import 'package:enterprise/components/poviders/check_boolean_in_out_provider/check_boolean_in_out_provider.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/poviders/location_provider/location_provider.dart';
 import 'package:enterprise/components/router/router.dart';
@@ -45,26 +48,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       LocalNotificationServiceUserApp();
   Future redirectScreen({screenToNavigate}) async {
     debugPrint("modalRoute : $screenToNavigate");
+
     switch (screenToNavigate) {
       case 'attendance':
-        Future.delayed(const Duration(milliseconds: 1), () {
+        Future.delayed(const Duration(milliseconds: 2), () {
           if (mounted) {
             Navigator.of(context).pushNamed(PageName.navigatorBarScreenRoute,
                 arguments: {"index": 0});
           }
         });
+
         break;
-      case 'Leave Notification':
-        Future.delayed(const Duration(milliseconds: 1), () {
+      case 'leave':
+        Future.delayed(const Duration(milliseconds: 2), () {
           if (mounted) {
             Navigator.of(context)
-                .pushNamed(PageName.notificationRoute);
+                .pushNamed(PageName.notificationRoute, arguments: {"index": 1});
           }
         });
 
         break;
       case 'SetAccountScreen':
-        Future.delayed(const Duration(milliseconds: 1), () {
+        Future.delayed(const Duration(milliseconds: 2), () {
           // if (mounted) {
           //   Navigator.pushNamed(context, AppRoutes.bankAccountRoute);
           // }
@@ -102,15 +107,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           LocalNotificationServiceUserApp.display(message);
         }
         logger.d("foreground : ${notification!.title}");
-            logger.d("message : ${message.data["screen"]}");
       },
     );
-
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       final int messageId = int.parse(message.data['messageId']);
-      logger.d("Message opened app: messageId=$messageId, ref=${message.data}, screen=${message.data}");
       logger.d(message.data["ref"]);
-      logger.d(" confirm : ${message.data["ref"] == ""}");
+      logger.d(" confirm : ${message.data["ref"] == "TOP_UP"}");
 
       redirectScreen(screenToNavigate: message.data["screen"]);
     });
@@ -141,21 +143,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             }));
   }
 
+  late int userID;
+  bool isLoading = false;
+  bool isClockIn = false; 
+
+
   Future<void> _callLocationApi() async {
     setState(() {
       isLoadinLocation = true;
     });
-    EnterpriseAPIService().callLocationAPI().then((value) {
+    try {
+      final value = await EnterpriseAPIService().callLocationAPI();
       ref.watch(stateLocationProvider).setLocationModels(value: value);
-    }).catchError((onError) {
-      // errorDialog(
-      //   context: context,
-      //   onError: onError,
-      // );
-    }).whenComplete(() => setState(() {
-          isLoadinLocation = false;
-        }));
+      final data = value['data'];
+      final officeLat = data['office_lat'];
+      final officeLong = data['office_long'];
+      final radius = data['radius'];
+      await sharedPrefs.setDoubleNow(KeyShared.keylat, officeLat.toDouble());
+      await sharedPrefs.setDoubleNow(KeyShared.keylong, officeLong.toDouble());
+      await sharedPrefs.setDoubleNow(KeyShared.keyradius, radius.toDouble());
+    } catch (onError) {
+      setState(() {
+        isLoadinLocation = false;
+      });
+    }
   }
+
+
 
   Future<void> checkExpiredToken() async {
     EnterpriseAPIService()
@@ -185,9 +199,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
+  
+
   @override
   void initState() {
     super.initState();
+
     _configureCallbacks();
     LocalNotificationServiceUserApp.initialize(context);
     SchedulerBinding.instance.addPostFrameCallback((_) {

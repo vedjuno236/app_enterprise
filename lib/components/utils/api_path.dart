@@ -22,6 +22,7 @@ enum ApiPath {
   notificationUser,
   updateProfile,
   allLeave,
+  checkbooleaninout,
 }
 
 class APIPathHelper {
@@ -73,6 +74,8 @@ class APIPathHelper {
         return "/api/get-department";
       case ApiPath.updateProfile:
         return "/web/update-profile";
+      case ApiPath.checkbooleaninout:
+        return "/api/check-last-attendance-today";
       default:
         return "";
     }

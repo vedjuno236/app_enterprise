@@ -19,7 +19,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:get/get.dart';
@@ -115,40 +114,40 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         opacity: .7,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: SizeConfig.heightMultiplier * 8),
+                  // SizedBox(height: SizeConfig.heightMultiplier * 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       const LanguageSwitcher()
-                          .animate()
-                          .fadeIn(duration: 900.ms, delay: 300.ms)
-                          .move(
-                              begin: const Offset(-16, 0),
-                              curve: Curves.easeOutQuad),
+                          // .animate()
+                          // .fadeIn(duration: 900.ms, delay: 300.ms)
+                          // .move(
+                          //     begin: const Offset(-16, 0),
+                          //     curve: Curves.easeOutQuad),
                     ],
                   ),
                   Image.asset(
                     ImagePath.imgIconCreateAcc,
-                  )
-                      .animate()
-                      .fadeIn(duration: 900.ms, delay: 300.ms)
-                      .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
+                  ),
+                      // .animate()
+                      // .fadeIn(duration: 900.ms, delay: 300.ms)
+                      // .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
                   Text(
                     Strings.txtWelcome.tr,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: SizeConfig.textMultiplier * 3.5),
+                        fontSize: SizeConfig.textMultiplier * 3),
                     textAlign: TextAlign.center,
-                  )
-                      .animate()
-                      .fadeIn(duration: 900.ms, delay: 300.ms)
-                      .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
+                  ),
+                      // .animate()
+                      // .fadeIn(duration: 900.ms, delay: 300.ms)
+                      // .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
                   const SizedBox(
                     height: 10,
                   ),
@@ -159,10 +158,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         .titleMedium
                         ?.copyWith(fontSize: SizeConfig.textMultiplier * 2.2),
                     textAlign: TextAlign.center,
-                  )
-                      .animate()
-                      .fadeIn(duration: 900.ms, delay: 300.ms)
-                      .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
+                  ),
+                      // .animate()
+                      // .fadeIn(duration: 900.ms, delay: 300.ms)
+                      // .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
                   SizedBox(height: SizeConfig.heightMultiplier * 2),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,9 +171,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         style: Theme.of(context)
                             .textTheme
                             .titleMedium
-                            ?.copyWith(fontSize: SizeConfig.textMultiplier * 2),
-                      ).animate().fadeIn(duration: 900.ms, delay: 300.ms).move(
-                          begin: Offset(-16, 0), curve: Curves.easeOutQuad),
+                            ?.copyWith(fontSize: SizeConfig.textMultiplier * 2),),
+                      // ).animate().fadeIn(duration: 900.ms, delay: 300.ms).move(
+                      //     begin: Offset(-16, 0), curve: Curves.easeOutQuad),
                       SizedBox(height: SizeConfig.heightMultiplier * 1),
                       TextFormField(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -271,8 +270,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                           return null;
                         },
-                      ).animate().fadeIn(duration: 900.ms, delay: 300.ms).move(
-                          begin: Offset(-16, 0), curve: Curves.easeOutQuad),
+                      ),
+                      // .animate().fadeIn(duration: 900.ms, delay: 300.ms).move(
+                      //     begin: Offset(-16, 0), curve: Curves.easeOutQuad),
                       ValidateAlert(
                         visible: validatePhone,
                         title: Strings.txtPleaseEnterTheCorrectPhone.tr,
@@ -282,10 +282,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Strings.txtPassword.tr,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
                               fontSize: SizeConfig.textMultiplier * 2,
-                            ),
-                      ).animate().fadeIn(duration: 900.ms, delay: 300.ms).move(
-                          begin: const Offset(-16, 0),
-                          curve: Curves.easeOutQuad),
+                            ),  ),
+                      // ).animate().fadeIn(duration: 900.ms, delay: 300.ms).move(
+                      //     begin: const Offset(-16, 0),
+                      //     curve: Curves.easeOutQuad),
                       SizedBox(height: SizeConfig.heightMultiplier * 1),
                       TextFormField(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -355,9 +355,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                           return null;
                         },
-                        obscureText: loginProvider.passwordVisibility,
-                      ).animate().fadeIn(duration: 900.ms, delay: 300.ms).move(
-                          begin: Offset(-16, 0), curve: Curves.easeOutQuad),
+                        obscureText: loginProvider.passwordVisibility,),
+                      // ).animate().fadeIn(duration: 900.ms, delay: 300.ms).move(
+                      //     begin: Offset(-16, 0), curve: Curves.easeOutQuad),
                     ],
                   ),
                 ],
@@ -366,6 +366,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
         ),
       ),
+      
+      
+      
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20.0),
         child: GestureDetector(
@@ -433,10 +436,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
             ),
           )
-              .animate()
-              .fadeIn(duration: 900.ms, delay: 300.ms)
-              .shimmer(blendMode: BlendMode.srcOver, color: kGary)
-              .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
+              // .animate()
+              // .fadeIn(duration: 900.ms, delay: 300.ms)
+              // .shimmer(blendMode: BlendMode.srcOver, color: kGary)
+              // .move(begin: Offset(-16, 0), curve: Curves.easeOutQuad),
         ),
       ),
     );

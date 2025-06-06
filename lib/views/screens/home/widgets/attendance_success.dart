@@ -4,6 +4,7 @@ import 'package:enterprise/components/constants/strings.dart';
 import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/poviders/bottom_bar_provider/bottom_bar_provider.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
+import 'package:enterprise/components/router/router.dart';
 import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/components/utils/date_format_utils.dart';
 import 'package:enterprise/views/screens/home/widgets/box_checkIn_widgets.dart';
@@ -14,7 +15,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
-class AttendanceSuccess extends ConsumerWidget {
+class AttendanceSuccess extends ConsumerStatefulWidget {
   final String clockInTime;
   final String typeClock;
   final bool isLate;
@@ -26,49 +27,42 @@ class AttendanceSuccess extends ConsumerWidget {
     required this.isLate,
   });
 
-  List<Color> get kPrimaryGradient => [
-        const Color(0x99FCE7BB),
-        Colors.white,
-        Colors.white,
-        const Color(0x99FCE7BB),
-      ];
+  static const List<Color> kPrimaryGradient = [
+    Color(0x99FCE7BB),
+    Colors.white,
+    Colors.white,
+    Color(0x99FCE7BB),
+  ];
+
+  static const List<Color> kDarkGradient = [
+    Colors.black12,
+    Colors.black26,
+    Colors.black,
+  ];
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AttendanceSuccess> createState() => _AttendanceSuccessState();
+}
+
+class _AttendanceSuccessState extends ConsumerState<AttendanceSuccess> {
+  @override
+  Widget build(BuildContext context) {
     final darkTheme = ref.watch(darkThemeProviderProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
+    
       body: Stack(
         clipBehavior: Clip.none,
         children: [
-          // Back button
-          // Positioned(
-          //   top: 65,
-          //   left: 16,
-          //   child: InkWell(
-          //     onTap: () {
-          //       logger.d('1234567');
-          //       if (Navigator.canPop(context)) context.pop();
-          //       if (Navigator.canPop(context)) context.pop();
-          //     },
-          //     child: const Center(
-          //       child: Icon(
-          //         Icons.arrow_back_ios_new_outlined,
-          //         color: kBack,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-
           // Gradient background
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: darkTheme.darkTheme
-                    ? [Colors.black12, Colors.black26, Colors.black]
-                    : kPrimaryGradient,
+                    ? AttendanceSuccess.kDarkGradient
+                    : AttendanceSuccess.kPrimaryGradient,
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
               ),
@@ -87,13 +81,13 @@ class AttendanceSuccess extends ConsumerWidget {
                         width: 80,
                         height: 80,
                         decoration: BoxDecoration(
-                          color: typeClock == 'IN'
+                          color: widget.typeClock == 'IN'
                               ? Colors.green.shade50
                               : Colors.yellow.shade50,
                           shape: BoxShape.circle,
                         ),
                         child: Lottie.asset(
-                          typeClock == 'IN'
+                          widget.typeClock == 'IN'
                               ? ImagePath.imgSuccessfully
                               : ImagePath.imgSuccessOutFully,
                           width: SizeConfig.widthMultiplier * 10,
@@ -103,7 +97,7 @@ class AttendanceSuccess extends ConsumerWidget {
                       const SizedBox(height: 24),
                       Center(
                         child: Text(
-                          "${Strings.txtYou.tr} ${typeClock == "IN" ? Strings.txtClockedIn.tr : Strings.txtClockedOut.tr} ${Strings.txtSuccessFully.tr}.",
+                          "${Strings.txtYou.tr} ${widget.typeClock == "IN" ? Strings.txtClockedIn.tr : Strings.txtClockedOut.tr} ${Strings.txtSuccessFully.tr}.",
                           style:
                               Theme.of(context).textTheme.titleLarge!.copyWith(
                                     fontSize: SizeConfig.textMultiplier * 2.5,
@@ -112,16 +106,18 @@ class AttendanceSuccess extends ConsumerWidget {
                       ),
                       const SizedBox(height: 30),
                       Text(
-                        DateFormatUtil.formats(DateTime.parse(clockInTime)),
+                        DateFormatUtil.formats(
+                            DateTime.parse(widget.clockInTime)),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: SizeConfig.textMultiplier * 3,
                               fontWeight: FontWeight.bold,
-                              color: isLate ? kRedColor : kBack,
+                              color: widget.isLate ? kRedColor : kBack,
                             ),
                       ),
                       SizedBox(height: SizeConfig.heightMultiplier * 1),
                       Text(
-                        DateFormatUtil.formatA(DateTime.parse(clockInTime)),
+                        DateFormatUtil.formatA(
+                            DateTime.parse(widget.clockInTime)),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: SizeConfig.textMultiplier * 2,
                               color: kBack,
@@ -129,7 +125,9 @@ class AttendanceSuccess extends ConsumerWidget {
                       ),
                       SizedBox(height: SizeConfig.heightMultiplier * 1),
                       Text(
-                        isLate ? Strings.txtTryclockingearliertomorrow.tr : '',
+                        widget.isLate
+                            ? Strings.txtTryclockingearliertomorrow.tr
+                            : '',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: SizeConfig.textMultiplier * 1.9,
                             ),
@@ -142,8 +140,11 @@ class AttendanceSuccess extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton(
                   onPressed: () {
-                    if (Navigator.canPop(context)) context.pop();
-                    if (Navigator.canPop(context)) context.pop();
+                    context.pop();
+                    context.pop();
+                    // ref
+                    //     .read(stateBottomBarProvider.notifier)
+                    //     .updateTabSelection(0, 'Home');
                   },
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
@@ -154,7 +155,7 @@ class AttendanceSuccess extends ConsumerWidget {
                     ),
                   ),
                   child: Text(
-                    isLate
+                    widget.isLate
                         ? Strings.txtHaveAgoodday.tr
                         : Strings.txtHaveaproductiveday.tr,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(

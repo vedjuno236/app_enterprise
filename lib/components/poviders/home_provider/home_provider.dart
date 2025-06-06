@@ -1,82 +1,61 @@
 import 'dart:async';
 
-import 'package:enterprise/components/helpers/shared_prefs.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
+
 
 import '../../models/function_model/funcation_model.dart';
 
-SharedPrefs prefs = SharedPrefs();
+
 final stateHomeProvider = ChangeNotifierProvider<HomeProvider>((ref) {
   return HomeProvider();
 });
 
 class HomeProvider with ChangeNotifier {
   HomeProvider() {
-    loadState();
-    _setupClockReset();
+
   }
-
-  /// bool checkin_checkout
   bool _isClockedIn = false;
-  Timer? _clockResetTimer;
-
   bool get isClockedIn => _isClockedIn;
+ void updateClockStatus(String typeClock) {
+    _isClockedIn = typeClock == 'OUT' || typeClock ==''; 
+    notifyListeners(); 
+  }
+  // /// bool checkin_checkout
+  // bool _isClockedIn = false;
+  // Timer? _clockResetTimer;
+
+  // bool get isClockedIn => _isClockedIn;
+
+
 
   // Future<void> loadState() async {
   //   _isClockedIn = prefs.getBoolNow('isClockedIn') ?? false;
-  //   // logger.d("Loaded clock-in state: $_isClockedIn");
   //   notifyListeners();
   // }
 
   // Future<void> saveState() async {
-  //   await prefs.setBoolNow('isClockedIn', _isClockedIn);
+  //   await prefs.setBoolNow('isClockedIn', _isClockedIn) ;
   // }
 
-  Future<void> loadState() async {
-    _isClockedIn = prefs.getBoolNow('isClockedIn') ?? false;
-    notifyListeners();
-  }
 
-  Future<void> saveState() async {
-    await prefs.setBoolNow('isClockedIn', _isClockedIn) ;
-  }
+  // void setClockInTrue() {
+  //   _isClockedIn = true;
+  //   saveState();
+  //   notifyListeners();
+  // }
 
-  void _setupClockReset() {
-    _clockResetTimer?.cancel();
-    final now = DateTime.now();
-    DateTime nextReset = DateTime(now.year, now.month, now.day, 23,59);
-    if (now.isAfter(nextReset)) {
-      nextReset = nextReset.add(const Duration(days: 1));
-    }
-    final timeUntilReset = nextReset.difference(now);
-    final formatter = DateFormat('yyyy-MM-dd HH:mm');
-  // print('Current time: ${formatter.format(now)}');
-  // print('Next reset: ${formatter.format(nextReset)}');
-    _clockResetTimer = Timer(timeUntilReset, () {
-      setClockInFalse();
-      _setupClockReset();
-    });
-  }
+  // void setClockInFalse() {
+  //   _isClockedIn = false;
+  //   saveState();
+  //   notifyListeners();
 
-  void setClockInTrue() {
-    _isClockedIn = true;
-    saveState();
-    notifyListeners();
-  }
-
-  void setClockInFalse() {
-    _isClockedIn = false;
-    saveState();
-    notifyListeners();
-
-    _setupClockReset();
-  }
+  
+  // }
 
   @override
   void dispose() {
-    _clockResetTimer?.cancel();
     super.dispose();
   }
 

@@ -7,13 +7,19 @@ class SharedPrefs {
   Future<void> init() async {
     _sharedPrefs ??= await SharedPreferences.getInstance();
   }
-
+  Future<void> double() async {
+    _sharedPrefs ??= await SharedPreferences.getInstance();
+  }
+ 
   setStringNow(String key, value) {
     return _sharedPrefs!.setString(key, value);
   }
 
   setIntNow(String key, value) {
     return _sharedPrefs!.setInt(key, value);
+  }
+   setDoubleNow(String key, value) {
+    return _sharedPrefs!.setDouble(key, value);
   }
 
   setBoolNow(String key, value) {
@@ -26,6 +32,9 @@ class SharedPrefs {
 
   getIntNow(String key) {
     return _sharedPrefs!.getInt(key);
+  }
+   getDoubleNow(String key) {
+    return _sharedPrefs!.getDouble(key);
   }
 
   getBoolNow(String key) {

@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:enterprise/components/constants/image_path.dart';
 import 'package:enterprise/components/helpers/shared_prefs.dart';
 import 'package:enterprise/components/poviders/attendance_provider/attendance_provider.dart';
+import 'package:enterprise/components/poviders/check_boolean_in_out_provider/check_boolean_in_out_provider.dart';
 import 'package:enterprise/components/router/router.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_login.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
@@ -197,11 +198,47 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
     });
   }
 
+  late int userID;
+  bool isClockIn = false;
+
+  Future fetchBooleanInOutApi() async {
+    sharedPrefs = SharedPrefs();
+    final userIdString = sharedPrefs.getStringNow(KeyShared.keyUserId);
+    userID = int.tryParse(userIdString ?? '0') ?? 0;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final value =
+          await EnterpriseAPIService().cllbooleancheckInOut(userid: userID);
+      ref
+          .read(stateCheckBooleanInOutModel)
+          .setCheckBooleanInOutModel(value: value);
+      logger.d(value);
+
+      final typeClock = value['data']?['type_clock'] as String? ?? '';
+
+      ref.read(stateHomeProvider.notifier).updateClockStatus(typeClock);
+    } catch (onError) {
+      errorDialog(
+        context: context,
+        onError: onError,
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     currentMapType = MapType.normal;
     _getCurrentLocation();
+    fetchBooleanInOutApi();
   }
 
   MapType? currentMapType;
@@ -236,7 +273,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
         String typeClock = data?['type_clock'] ?? '';
         bool isLate = data?['status_late'] ?? false;
 
-        context.pushReplacement(
+        context.push(
           PageName.attendanceSuccess,
           extra: {
             'clockInTime': clockInTime,
@@ -244,11 +281,11 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
             'isLate': isLate,
           },
         );
-        if (response['data']['type_clock'] == 'IN') {
-          ref.watch(stateHomeProvider.notifier).setClockInTrue();
-        } else {
-          ref.watch(stateHomeProvider.notifier).setClockInFalse();
-        }
+        // if (response['data']['type_clock'] == 'IN') {
+        //   ref.watch(stateHomeProvider.notifier).setClockInTrue();
+        // } else {
+        //   ref.watch(stateHomeProvider.notifier).setClockInFalse();
+        // }
       } else {
         logger.e("Clock-in failed: Response is null.");
       }
@@ -726,7 +763,9 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                                 return;
                               }
 
-                              await clockInOutService();
+                              await clockInOutService().whenComplete(() {
+                                fetchBooleanInOutApi();
+                              });
                             }
                           } finally {
                             attendanceProvider.isLoading = false;

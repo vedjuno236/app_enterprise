@@ -17,7 +17,7 @@ const Map<String, String> en = {
   "Team Highlights": "Team Highlights",
   "Click to add your photo or files": "Click to add your photo or files",
   "Sell All": "Sell all",
-  "Analytic": 'Analytic',
+  "Analytic": 'My Report',
   "News": 'News',
   "Profile": "Profile",
   "Camera": "Camera",
@@ -27,7 +27,8 @@ const Map<String, String> en = {
   "Status": "Status",
   "You areS": "You are",
   "By": "By",
-  "You do not have enough vacation days. Please contact HR": "You do not have enough vacation days. Please contact HR.",
+  "You do not have enough vacation days. Please contact HR":
+      "You do not have enough vacation days. Please contact HR.",
   "Your vacation is over": "Your vacation is over.",
   "People from your team are on vacation and leave":
       "People from your team are on vacation and leave",
@@ -48,7 +49,8 @@ const Map<String, String> en = {
       "Location permissions are permanently denied. Please enable them in app settings",
   "You are": "You are",
   "SuccessFully": "Successfully",
-  "Your form have submitted and your form will be reviewed soon!": "Your form have submitted and your form will be reviewed soon!",
+  "Your form have submitted and your form will be reviewed soon!":
+      "Your form have submitted and your form will be reviewed soon!",
   "You": "You 've",
   "NOT": " NOT ",
   "in the clock-in area": "in the clock-in area",
@@ -99,7 +101,7 @@ const Map<String, String> en = {
   "Date": "Date",
   "Select Date": "Select Date",
   "Time": "Time",
-  "Wear it or not": "Wear it or not",
+  "Wear it or not": "Optional",
   "Start time": "Start time",
   "End time": "End time",
   "Please give a reason": "Please give a reason",
@@ -120,7 +122,7 @@ const Map<String, String> en = {
   "Please enter the correct Phone": "Please enter the correct Phone",
 
   ///fun
-  "Applyeave": "Applyeave",
+  "Applyeave": "Apply Leave",
   "Policy": "Policy",
   "Payslips": "Payslips",
   "Calendar": "Calendar",

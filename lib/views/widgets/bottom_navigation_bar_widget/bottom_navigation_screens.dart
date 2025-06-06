@@ -16,6 +16,7 @@ import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
+import 'package:icons_plus/icons_plus.dart';
 
 class HomeScreenPage extends ConsumerWidget {
   const HomeScreenPage({super.key});
@@ -129,27 +130,19 @@ class HomeScreenPage extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: ClipOval(
-        child: imageUrl.isNotEmpty
-            ? CachedNetworkImage(
-                imageUrl: imageUrl,
-                height: SizeConfig.imageSizeMultiplier * 7,
-                width: SizeConfig.imageSizeMultiplier * 7,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => const LoadingPlatformV1(),
-                errorWidget: (context, url, error) => Image.asset(
-                  'assets/icons/profile.png', // Add this asset path
+          child: imageUrl.isNotEmpty
+              ? CachedNetworkImage(
+                  imageUrl: imageUrl,
                   height: SizeConfig.imageSizeMultiplier * 7,
                   width: SizeConfig.imageSizeMultiplier * 7,
                   fit: BoxFit.cover,
-                ),
-              )
-            : Image.asset(
-                'assets/icons/profile.png', // Add this asset path
-                height: SizeConfig.imageSizeMultiplier * 7,
-                width: SizeConfig.imageSizeMultiplier * 7,
-                fit: BoxFit.cover,
-              ),
-      ),
+                  placeholder: (context, url) => const LoadingPlatformV1(),
+                )
+              : const CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 15,
+                    child: Icon(Bootstrap.person_circle),
+                )),
     );
   }
 
@@ -160,27 +153,20 @@ class HomeScreenPage extends ConsumerWidget {
         radius: SizeConfig.imageSizeMultiplier * 4.5,
         backgroundColor: Colors.white,
         child: ClipOval(
-          child: imageUrl.isNotEmpty
-              ? CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  height: SizeConfig.imageSizeMultiplier * 6,
-                  width: SizeConfig.imageSizeMultiplier * 6,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => const LoadingPlatformV1(),
-                  errorWidget: (context, url, error) => Image.asset(
-                    'assets/icons/profile.png',
+            child: imageUrl.isNotEmpty
+                ? CachedNetworkImage(
+                    imageUrl: imageUrl,
                     height: SizeConfig.imageSizeMultiplier * 6,
                     width: SizeConfig.imageSizeMultiplier * 6,
                     fit: BoxFit.cover,
+                    placeholder: (context, url) => const LoadingPlatformV1(),
+                  )
+                : const CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 15,
+                    child: Icon(Bootstrap.person_circle),
                   ),
-                )
-              : Image.asset(
-                  'assets/icons/profile.png', // Add this asset path
-                  height: SizeConfig.imageSizeMultiplier * 6,
-                  width: SizeConfig.imageSizeMultiplier * 6,
-                  fit: BoxFit.cover,
-                ),
-        ),
+                  ),
       ),
     );
   }

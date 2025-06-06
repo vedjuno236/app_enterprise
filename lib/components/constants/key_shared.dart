@@ -17,6 +17,9 @@ class KeyShared {
   static const String keyRole = "Role";
 
   static const String keySharedTutorial = "keySharedTutorial";
-
-
+  static const String keylat = "office_lat";
+  static const String keylong = "office_long";
+  static const String keyradius = "radius";
 }
+
+

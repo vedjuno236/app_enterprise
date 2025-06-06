@@ -69,28 +69,30 @@ class _PieChartWidgetState extends ConsumerState<PieChartWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: leaveType.getLeaveTypeModel!.data!
-                    .asMap()
-                    .entries
-                    .map((entry) {
-                  final leave = entry.value;
-                  var dataColor = getItemColor(leave.keyWord.toString());
-                  Color color = dataColor['color'];
-                  String txt = dataColor['txt'];
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: leaveType.getLeaveTypeModel!.data!
+                      .asMap()
+                      .entries
+                      .map((entry) {
+                    final leave = entry.value;
+                    var dataColor = getItemColor(leave.keyWord.toString());
+                    Color color = dataColor['color'];
+                    String txt = dataColor['txt'];
 
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Indicator(
-                      text: txt ?? '',
-                      color: color,
-                      isSquare: true,
-                      size: 10,
-                    ),
-                  );
-                }).toList(),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Indicator(
+                        text: txt ?? '',
+                        color: color,
+                        isSquare: true,
+                        size: 10,
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
               Expanded(
                 child: AspectRatio(
@@ -98,7 +100,8 @@ class _PieChartWidgetState extends ConsumerState<PieChartWidget> {
                   child: PieChart(
                     PieChartData(
                       pieTouchData: PieTouchData(
-                        touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                        touchCallback:
+                            (FlTouchEvent event, pieTouchResponse) {
                           setState(() {
                             if (!event.isInterestedForInteractions ||
                                 pieTouchResponse == null ||
@@ -127,7 +130,7 @@ class _PieChartWidgetState extends ConsumerState<PieChartWidget> {
                             .getLeaveTypeModel!.data![index].keyWord
                             .toString());
                         Color color = dataColor['color'];
-
+                
                         return PieChartSectionData(
                           color: color,
                           // value: (used / total) * 100,

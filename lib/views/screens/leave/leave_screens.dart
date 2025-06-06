@@ -370,95 +370,6 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
     }
   }
 
-  // Future<void> submitForm(WidgetRef ref) async {
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //   final userProvider = ref.watch(stateUserProvider);
-  //   final leaveNotifier = ref.read(leaveNotifierProvider.notifier);
-  //   final leaveProvider = ref.watch(stateLeaveProvider);
-  //   if (leaveProvider.selectedLeaveType == null) {
-  //     return;
-  //   }
-
-  //   final selectedLeaveType = leaveProvider.getLeaveTypeModel!.data!
-  //       .firstWhereOrNull((e) => e.keyWord == leaveProvider.selectedLeaveType);
-
-  //   if (selectedLeaveType == null) {
-  //     return;
-  //   }
-
-  //   final String imagePath = _imageFile != null ? _imageFile!.path : "";
-  //   final DateFormat format = DateFormat('yyyy-MM-dd HH:mm:ss');
-
-  //   try {
-  //     final response = await EnterpriseAPIService().createLeave(
-  //       userID: userProvider.getUserModel!.data!.id ?? 0,
-  //       leaveTypeId: selectedLeaveType.id,
-  //       startDate: format.format(startDate!),
-  //       endDate: format.format(endDate!),
-  //       note: leaveNotifier.accordingController.text ?? '',
-  //       document: imagePath,
-  //     );
-
-  //    if (response['data'] == "Insufficient leave balance") {
-  //       setState(() {
-  //         isLoading = false;
-  //       });
-  //       return showDialog(
-  //           context: context,
-  //           builder: (context) {
-  //             return AlertSuccessDialog(
-  //               title: Container(
-  //                 padding: const EdgeInsets.all(10),
-  //                 decoration: BoxDecoration(
-  //                   color: Color(0xFFFF6563).withOpacity(.12),
-  //                   shape: BoxShape.circle,
-  //                 ),
-  //                 child: Icon(
-  //                   Bootstrap.exclamation_circle_fill,
-  //                   color: Color(0xFFFF6563),
-  //                   size: SizeConfig.imageSizeMultiplier * 13,
-  //                 ),
-  //               ),
-  //               content: Column(
-  //                 mainAxisSize: MainAxisSize.min,
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   Text(
-  //                     'ຂໍອະໄພ'.tr,
-  //                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-  //                           fontWeight: FontWeight.bold,
-  //                         ),
-  //                   ),
-  //                   const SizedBox(height: 20),
-  //                   Text(
-  //                     'ວັນລາພັກຂອງທ່ານໝົດແລ້ວ',
-  //                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
-  //                     textAlign: TextAlign.center,
-  //                   ),
-  //                 ],
-  //               ),
-  //               onTapOK: () {
-  //                 context.pop();
-  //               },
-  //             );
-  //           });
-  //     }
-  //     // ignore: use_build_context_synchronously
-  //     alertSuccessDialog(context);
-  //   } on DioException catch (e) {
-  //     final dioException = DioExceptions.fromDioError(e);
-  //     logger.e("Error during leave: ${dioException.toString()}");
-  //     // ignore: use_build_context_synchronously
-  //     errorDialog(context: context, onError: e);
-  //   } catch (e) {
-  //     logger.e("Error leave: $e");
-  //     // ignore: use_build_context_synchronously
-  //     errorDialog(context: context, onError: e);
-  //   }
-  // }
-
   Future<void> alertSuccessDialog(
     BuildContext context,
   ) {
@@ -1025,6 +936,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                     SizedBox(height: SizeConfig.heightMultiplier * 1),
                     GestureDetector(
                       onTap: () {
+                    
                         showCustomDateRangePicker(
                           context,
                           dismissible: true,
@@ -1039,6 +951,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                             setState(() {
                               endDate = end;
                               startDate = start;
+                               _validate = false;
                             });
                             logger.d('start =${startDate}');
                             logger.d('end = ${endDate}');
@@ -1685,7 +1598,7 @@ class _LeaveScreensState extends ConsumerState<LeaveScreens> {
                                                   Navigator.pop(context);
                                                 },
                                                 child: Text(
-                                                  Strings.txtConfirm,
+                                                 Strings.txtConfirm.tr,
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .titleMedium!

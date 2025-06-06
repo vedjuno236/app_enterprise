@@ -11,6 +11,7 @@ class BottomBarProvider with ChangeNotifier {
   String get currentTab => _currentTab;
 
   void updateTabSelection(int index, String buttonText) {
+     print('Updating tab: $index, $buttonText'); 
     _selectedIndex = index;
     _currentTab = buttonText;
     notifyListeners();
