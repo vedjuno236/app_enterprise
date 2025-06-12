@@ -6,6 +6,7 @@ import 'package:enterprise/components/poviders/bottom_bar_provider/bottom_bar_pr
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/router/router.dart';
 import 'package:enterprise/components/styles/size_config.dart';
+
 import 'package:enterprise/views/widgets/animation/animation_text_appBar.dart';
 import 'package:enterprise/views/widgets/appbar/appbar_widget.dart';
 import 'package:flutter/material.dart';
@@ -338,6 +339,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                   ),
                 ),
               ),
+    
             ],
           ),
         ),

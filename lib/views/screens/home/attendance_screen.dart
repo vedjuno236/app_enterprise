@@ -690,6 +690,9 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                                               curve: Curves.easeOutCubic)
                                           .fadeIn(),
                                     )
+                              
+                              
+                              
                                   ],
                                 ),
                               ),

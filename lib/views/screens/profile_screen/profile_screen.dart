@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/constants/colors.dart';
@@ -10,6 +11,7 @@ import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/components/utils/dio_exceptions.dart';
 import 'package:enterprise/views/screens/settings/setting_screen.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_login.dart';
+import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:enterprise/views/widgets/shimmer/app_placeholder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,11 +42,13 @@ enum AppState {
   picked,
   cropped,
 }
+
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
   @override
   ConsumerState createState() => _ProfileScreenState();
 }
+
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   SharedPrefs sharedPrefs = SharedPrefs();
   int userID = int.parse(SharedPrefs().getStringNow(KeyShared.keyUserId));
@@ -983,18 +987,33 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               : Stack(
                                   clipBehavior: Clip.none,
                                   children: [
-                                    CircleAvatar(
-                                      radius: 67,
-                                      foregroundImage:
-                                          CachedNetworkImageProvider(
-                                              userData!.profile.toString()),
-                                    ).animate().scaleXY(
-                                          begin: 0,
-                                          end: 1,
-                                          delay: 500.ms,
-                                          duration: 500.ms,
-                                          curve: Curves.easeInOutCubic,
-                                        ),
+                                    userData.profile!.isNotEmpty
+                                        ? CircleAvatar(
+                                                radius: 67,
+                                                foregroundImage:
+                                                    CachedNetworkImageProvider(
+                                                        userData!.profile
+                                                            .toString()))
+                                            .animate()
+                                            .scaleXY(
+                                              begin: 0,
+                                              end: 1,
+                                              delay: 500.ms,
+                                              duration: 500.ms,
+                                              curve: Curves.easeInOutCubic,
+                                            )
+                                        : const CircleAvatar(
+                                            backgroundColor: Colors.white,
+                                            radius: 67,
+                                            child:
+                                                Icon(Bootstrap.person_circle),
+                                          ).animate().scaleXY(
+                                              begin: 0,
+                                              end: 1,
+                                              delay: 500.ms,
+                                              duration: 500.ms,
+                                              curve: Curves.easeInOutCubic,
+                                            ),
                                     Positioned(
                                       bottom: 5,
                                       right: -22,

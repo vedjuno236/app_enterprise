@@ -110,10 +110,7 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
               Strings.txtLocationPermissions.tr,
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
             ),
-            content: Text(
-              Strings.txtLocationPermissionssettings.tr,
-              style: Theme.of(context).textTheme.bodySmall!.copyWith(),
-            ),
+            content: Strings.txtLocationPermissionssettings.tr,
             onTapOK: () {
               openAppSettings();
               Navigator.pop(context);
@@ -158,10 +155,7 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
               Strings.txtLocationPermissions.tr,
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
             ),
-            content: Text(
-              Strings.txtLocationPermissionssettings.tr,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
-            ),
+            content: Strings.txtLocationPermissionssettings.tr,
             onTapOK: () {
               openAppSettings();
               Navigator.pop(context);
@@ -215,6 +209,109 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
             showCupertinoDialog(
               context: context,
               builder: (context) => AlertIOSDialog(
+                title: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      Strings.txtLocationPermissions.tr,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+                    ),
+                  ],
+                ),
+                content: Text(
+                  Strings.txtLocationPermissionssettings.tr,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
+                ),
+                onPressed: () async {
+                  // await Geolocator.openLocationSettings().whenComplete(() {
+                  //   Navigator.pop(context);
+                  // });
+                  openAppSettings();
+                  Navigator.pop(context);
+                },
+              ),
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (context) => AlertCustomDialog(
+                title: Text(
+                  Strings.txtLocationPermissions.tr,
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+                ),
+                content: Strings.txtLocationPermissionssettings.tr,
+                onTapOK: () async {
+                  openAppSettings();
+                  Navigator.pop(context);
+                  //   await Geolocator.openLocationSettings().whenComplete(() {
+                  //   Navigator.pop(context);
+                  // });
+                },
+              ),
+            );
+          }
+        }
+        return;
+      }
+
+      // Check permissions
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          logger.e("Location permission denied");
+          if (mounted) {
+            if (Platform.isIOS) {
+              showCupertinoDialog(
+                context: context,
+                builder: (context) => AlertIOSDialog(
+                  title: Text(
+                    Strings.txtLocationPermissions.tr,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+                  ),
+                  content: Text(
+                    Strings.txtLocationPermissionssettings.tr,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
+                  ),
+                  onPressed: () async {
+                    // await Geolocator.openLocationSettings().whenComplete(() {
+                    //   Navigator.pop(context);
+                    // });
+                    openAppSettings();
+                    Navigator.pop(context);
+                  },
+                ),
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) => AlertCustomDialog(
+                  title: Text(
+                    Strings.txtLocationPermissions.tr,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+                  ),
+                  content: Strings.txtLocationPermissionssettings.tr,
+                  onTapOK: () async {
+                    openAppSettings();
+                    Navigator.pop(context);
+                    //   await Geolocator.openLocationSettings().whenComplete(() {
+                    //   Navigator.pop(context);
+                    // });
+                  },
+                ),
+              );
+            }
+          }
+          return;
+        }
+      }
+      if (permission == LocationPermission.deniedForever) {
+        logger.e("Location permission permanently denied");
+        if (mounted) {
+          if (Platform.isIOS) {
+            showCupertinoDialog(
+              context: context,
+              builder: (context) => AlertIOSDialog(
                 title: Text(
                   Strings.txtLocationPermissions.tr,
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
@@ -239,46 +336,16 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
                 title: Text(
                   Strings.txtLocationPermissions.tr,
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+                  textAlign: TextAlign.center,
                 ),
-                content: Text(
-                  Strings.txtLocationPermissionssettings.tr,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
-                ),
+                content: Strings.txtLocationPermissionssettings.tr,
                 onTapOK: () async {
                   openAppSettings();
                   Navigator.pop(context);
-                  //   await Geolocator.openLocationSettings().whenComplete(() {
-                  //   Navigator.pop(context);
-                  // });
                 },
               ),
             );
           }
-        }
-        return;
-      }
-
-      // Check permissions
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          logger.e("Location permission denied");
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Location permission is required.")),
-            );
-          }
-          return;
-        }
-      }
-      if (permission == LocationPermission.deniedForever) {
-        logger.e("Location permission permanently denied");
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text("Please enable location in app settings.")),
-          );
         }
         return;
       }
@@ -294,13 +361,7 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
       logger.i(
           "User location: ${locationPosition.latitude}, ${locationPosition.longitude}");
 
-      // final locationProvider =
-      //     ref.read(stateLocationProvider).getConditionSettingModel;
-      // if (locationProvider?.data == null) {
-      //   logger.e("Invalid location data from provider");
-      //   return;
-      // }
-      // final data = locationProvider!.data!;
+    
 
       final lat = await sharedPrefs.getDoubleNow(KeyShared.keylat);
       final long = await sharedPrefs.getDoubleNow(KeyShared.keylong);

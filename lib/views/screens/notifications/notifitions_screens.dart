@@ -159,7 +159,7 @@ class _NotifitionsNewScreensState
   Future<void> _onRefresh() async {
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
-
+      await fetchNotificationApi();
       _refreshController.refreshCompleted();
       _refreshController.refreshCompleted();
     } catch (e) {
@@ -171,7 +171,15 @@ class _NotifitionsNewScreensState
   Future<void> _onRefreshUser() async {
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
+      final startDate =
+          DateTime(selectedMonthUser.year, selectedMonthUser.month, 1);
+      final endDate =
+          DateTime(selectedMonthUser.year, selectedMonthUser.month + 1, 0);
 
+      await fetchNotificationApiUser(
+        startDate: DateFormat('yyyy-MM-dd').format(startDate),
+        endDate: DateFormat('yyyy-MM-dd').format(endDate),
+      );
       _refreshControllerUser.refreshCompleted();
       _refreshControllerUser.refreshCompleted();
     } catch (e) {
@@ -503,7 +511,7 @@ class _NotifitionsNewScreensState
           ],
         ),
         body: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(15.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

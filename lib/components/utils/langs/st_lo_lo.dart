@@ -38,7 +38,7 @@ const Map<String, String> lo = {
   "Apply Leave": "ຂໍລາພັກ",
   "Successfully": "ສົ່ງການຂໍລາພັກສໍາເລັດ!",
   "Your form have submitted and your form will be reviewed soon!":
-      "ແບບຟອມຂອງທ່ານໄດ້ສົ່ງສິ້າເລັດແລ້ວ ແລະ ຈະຖືກກວດສອບໃນໄວໆນີ້!",
+      "ແບບຟອມຂອງທ່ານໄດ້ສົ່ງສໍາເລັດແລ້ວ ແລະ ຈະຖືກກວດສອບໃນໄວໆນີ້!",
   "phone not found": "ເບີໂທຂອງທ່ານບໍ່ຖືກຕ້ອງ ກະລຸນາກວດສອບ ແລ້ວລອງອີກຄັ້ງ",
   "password wrong": "ລະຫັດຂອງທ່ານບໍ່ຖືກຕ້ອງ ກະລຸນາກວດສອບ ແລ້ວລອງອີກຄັ້ງ",
   "PhoneIsIncorrect": "ເບີຂອງທ່ານບໍຖືກຕ້ອງ",
@@ -139,11 +139,15 @@ const Map<String, String> lo = {
   "Oops something went wrong": "ຂໍອະໄພ, ມີບາງຢ່າງຜິດພາດເກີດຂຶ້ນ",
   "Edit Profile": "Edit Profile",
   "Please enter Password": "ກະລຸນາປ້ອນລະຫັດຜ່ານ",
-  "Please enter PhoneNumber": "ກະລານາປ້ອນເບີໂທ",
+  "Please enter PhoneNumber": "ກະລຸນາປ້ອນເບີໂທ",
   "Error occurred": "ເກີດຂໍ້ຜິດພາດ",
   "You do not have enough vacation days. Please contact HR":
       "ທ່ານຍັງບໍ່ທັນມີຈໍານວນວັນລາພັກ ກະລຸນາຕິດຕໍ່ຫາ HR",
   "Your vacation is over": "ວັນລາພັກຂອງທ່ານໝົດແລ້ວ",
+  "device token wrong":
+      "ເບີໂທ ແລະ ລະຫັດຜ່ານຖືກ login ແລ້ວ ທ່ານບໍ່ສາມາດເຂົ້າສູ່ລະບົບໄດ້",
+
+  ///
   "Leave Duration": "ໄລຍະເວລາການລາ",
   "Select date": "ເລືອກວັນທີ",
   "Assign temporary work to": "ມອບວຽກຊົ່ວຄາວໃຫ້",
@@ -166,7 +170,7 @@ const Map<String, String> lo = {
   "Image": "ຮູບພາບ",
   "Requests": "ຮ້ອງຂໍລາຍລະອຽດ",
   "Request": "ເອກະສານທີທ່ານສົ່ງໄປເພື່ອອະນຸມັດ",
-"For approval": "ເອກະສານທີ່ລໍຖ້າການອະນຸມັດຈາກທ່ານ ",
+  "For approval": "ເອກະສານທີ່ລໍຖ້າການອະນຸມັດຈາກທ່ານ ",
   "Loading": "ກໍາລັງສົ່ງ....",
   "Available": "ມື້ລາພັກທີຍັງເຫຼືອ",
   "Leave Used": "ມື້ທີໃຊ້ໄປແລ້ວ",

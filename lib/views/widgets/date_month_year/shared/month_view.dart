@@ -166,7 +166,10 @@ class MonthView extends StatelessWidget {
       }
 
       Widget monthWidget = Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        padding: const EdgeInsets.only(
+          right: 2,
+          left: 2,
+        ),
         child: Container(
           decoration: decoration,
           child: Center(

@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/logger/logger.dart';
@@ -59,7 +57,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         });
 
         break;
-      case 'leave':
+      case 'Leave':
         Future.delayed(const Duration(milliseconds: 2), () {
           if (mounted) {
             Navigator.of(context)
@@ -97,7 +95,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Future<void> _configureCallbacks() async {
     FirebaseMessaging.instance
         .getInitialMessage()
-        .then((RemoteMessage? message) {});
+        .then((RemoteMessage? message) {
+
+          // new 
+      if (message != null && message.data['screen']) {
+        logger.d("Initial message screen: ${message.data['screen']}");
+        redirectScreen(screenToNavigate: message.data['screen']);
+      }
+      // new
+    });
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
@@ -111,14 +117,53 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       final int messageId = int.parse(message.data['messageId']);
-      logger.d(message.data["ref"]);
-      logger.d(" confirm : ${message.data["ref"] == "TOP_UP"}");
 
       redirectScreen(screenToNavigate: message.data["screen"]);
+
+      logger.d(message.data["screen"]);
     });
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     FirebaseMessaging.instance.subscribeToTopic('attendance');
   }
+
+  // Future<void> _configureCallbacks() async {
+  // FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+  //   if (message != null && message.data['screen']) {
+  //     logger.d("Initial message screen: ${message.data['screen']}");
+  //     redirectScreen(screenToNavigate: message.data['screen']);
+  //   }
+  // });
+
+  // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //   RemoteNotification? notification = message.notification;
+  //   AndroidNotification? android = message.notification?.android;
+  //   if (notification != null && android != null && !kIsWeb) {
+  //     LocalNotificationServiceUserApp.display(message);
+  //   }
+  //   logger.d("Foreground notification - Title: ${notification?.title}, Screen: ${message.data['screen'] ?? 'No screen data'}");
+  // });
+
+//   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+//     if (message.data.containsKey('screen')) {
+//       final String screen = message.data['screen'];
+//       final int? messageId = int.tryParse(message.data['messageId'] ?? '');
+
+//       logger.d("Message opened app - Screen: $screen, Message ID: $messageId");
+//       if (messageId != null) {
+//         redirectScreen(screenToNavigate: screen);
+//       } else {
+//         logger.w("Invalid messageId in notification data: ${message.data['messageId']}");
+//       }
+//     } else {
+//       logger.w("No screen data found in notification: ${message.data}");
+//     }
+//   });
+
+//   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+//   await FirebaseMessaging.instance.subscribeToTopic('attendance');
+//   logger.d("Subscribed to topic: attendance");
+// }
 
   SharedPrefs sharedPrefs = SharedPrefs();
   bool isLoadinUser = false;
@@ -145,8 +190,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   late int userID;
   bool isLoading = false;
-  bool isClockIn = false; 
-
+  bool isClockIn = false;
 
   Future<void> _callLocationApi() async {
     setState(() {
@@ -168,8 +212,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       });
     }
   }
-
-
 
   Future<void> checkExpiredToken() async {
     EnterpriseAPIService()
@@ -198,8 +240,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }
     });
   }
-
-  
 
   @override
   void initState() {

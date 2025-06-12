@@ -29,7 +29,7 @@
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app requires access to your location to accurately record employee entry and exit from designated work areas and for real-time operational location verification.</string>
+	<string>We use your location to enable geofencing features and enhance team coordination within the enterprise.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Your camera is needed to capture photos.</string>
 	<key>NSLocationAlwaysUsageDescription</key>

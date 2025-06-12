@@ -2,6 +2,7 @@ import 'package:enterprise/components/constants/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:icons_plus/icons_plus.dart';
 
 import '../../../components/constants/strings.dart';
 import '../../../components/styles/size_config.dart';
@@ -19,18 +20,39 @@ class AlertCustomDialog extends StatelessWidget {
   final List<Widget>? actions;
   final Color color;
   final Widget title;
-  final Widget content;
+  final String content;
   final void Function()? onTapOK;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      actionsAlignment: MainAxisAlignment.center,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25.0),
+        borderRadius: BorderRadius.circular(15.0),
       ),
-      title: Center(child: title),
-      content: content,
+      icon: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(
+          color: kO,
+          shape: BoxShape.circle,
+        ),
+        child: Icon(
+          BoxIcons.bx_error_circle,
+          color: Color(0xFFFFA232),
+          size: SizeConfig.imageSizeMultiplier * 13,
+        ),
+      ),
+      title: title,
+      contentPadding: EdgeInsets.symmetric(
+          horizontal: SizeConfig.widthMultiplier * 5,
+          vertical: SizeConfig.widthMultiplier * 3),
+      content: Text(
+        content,
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              fontSize: SizeConfig.textMultiplier * 1.9,
+            ),
+        textAlign: TextAlign.center,
+      ),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 25),
       actions: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -41,9 +63,9 @@ class AlertCustomDialog extends StatelessWidget {
               },
               child: Expanded(
                 child: Container(
-                  margin: const EdgeInsets.only(bottom: 10),
+                  margin: const EdgeInsets.only(),
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
+                    horizontal: 40,
                     vertical: 10,
                   ),
                   decoration: BoxDecoration(
@@ -67,9 +89,9 @@ class AlertCustomDialog extends StatelessWidget {
               onTap: onTapOK,
               child: Expanded(
                 child: Container(
-                  margin: const EdgeInsets.only(bottom: 10),
+                  margin: const EdgeInsets.only(bottom: 0),
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
+                    horizontal: 40,
                     vertical: 10,
                   ),
                   decoration: BoxDecoration(

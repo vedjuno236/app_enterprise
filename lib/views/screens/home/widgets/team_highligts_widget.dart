@@ -93,7 +93,7 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
         nallleaveProvider.getTeamHighligtsModelLeaveModel?.data ?? [];
     return Container(
       width: double.infinity,
-      height: SizeConfig.heightMultiplier * 19,
+      height: SizeConfig.heightMultiplier * 20,
       decoration: BoxDecoration(
         color: Theme.of(context).canvasColor,
         boxShadow: [

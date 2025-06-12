@@ -149,4 +149,7 @@ const Map<String, String> en = {
 
   // check text input
   "Please enter text": "Please enter text",
+
+  // "Oops something went wrong": "Oops something went wrong",
+  "device token wrong": "Your phone number and password have been logged in. You cannot log in.",
 };

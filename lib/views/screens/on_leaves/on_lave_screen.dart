@@ -44,6 +44,32 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
     }
   }
 
+  Future<void> _onLoading() async {
+    final leaveHistoryNotifier = ref.watch(stateAllLeaveProvider);
+    final dataAPI = ref.watch(stateAllLeaveProvider);
+
+    try {
+      // Calculate startDate and endDate for the selected month
+      // final startDate = DateTime(selectedMonth.year, selectedMonth.month, 1);
+      // final endDate = DateTime(selectedMonth.year, selectedMonth.month + 1, 0);
+
+      // await fetchAllLeaveApi(
+      //   status: currentStatus,
+      //   startDate: DateFormat('yyyy-MM-dd').format(startDate),
+      //   endDate: DateFormat('yyyy-MM-dd').format(endDate),
+      // );
+
+      if (dataAPI.getAllLeaveModel?.data?.isEmpty ?? true) {
+        _refreshController.loadNoData();
+      } else {
+        _refreshController.loadComplete();
+      }
+    } catch (e) {
+      _refreshController.loadFailed();
+      errorDialog(context: context, onError: e); // Show error to user
+    }
+  }
+
   bool isLoading = false;
   SharedPrefs sharedPrefs = SharedPrefs();
 
@@ -382,40 +408,41 @@ class _OnLeaveScreenWidgetState extends ConsumerState<OnLeaveScreen> {
                       ? Expanded(child: Center(child: _buildShimmerItem()))
                       : dataAPI.getAllLeaveModel!.data!.isEmpty
                           ? Center(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 100),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/svgs/no_noti.svg',
-                                    width: 150,
-                                    height: 150,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    ' ຍັງບໍ່ມີຂໍ້ມູນ',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(
-                                            fontSize:
-                                                SizeConfig.textMultiplier *
-                                                    2.2),
-                                  )
-                                ],
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 100),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/svgs/no_data.svg',
+                                      width: 150,
+                                      height: 150,
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      ' ຍັງບໍ່ມີຂໍ້ມູນ',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                              fontSize:
+                                                  SizeConfig.textMultiplier *
+                                                      2.2),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          )
+                            )
                           : Expanded(
                               child: SmartRefresher(
                                   enablePullDown: true,
                                   enablePullUp: true,
                                   controller: _refreshController,
                                   onRefresh: _onRefresh,
+                                  onLoading: _onLoading,
                                   header: const WaterDropMaterialHeader(
                                     backgroundColor: kYellowFirstColor,
                                     color: kTextWhiteColor,

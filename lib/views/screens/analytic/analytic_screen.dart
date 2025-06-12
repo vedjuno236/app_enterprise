@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enterprise/components/logger/logger.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
@@ -7,7 +6,6 @@ import 'package:enterprise/components/styles/size_config.dart';
 import 'package:enterprise/views/widgets/loading_platform/loading_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,7 +13,6 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../../../components/constants/colors.dart';
 import '../../../components/constants/image_path.dart';
 import '../../../components/constants/key_shared.dart';
@@ -30,7 +27,6 @@ import '../../../components/utils/date_format_utils.dart';
 import '../../widgets/appbar/appbar_widget.dart';
 import '../../widgets/chart_widgte/chart_widget.dart';
 import '../../widgets/date_month_year/shared/month_picker.dart';
-
 class AnalyticScreen extends ConsumerStatefulWidget {
   const AnalyticScreen({super.key});
 
@@ -742,9 +738,9 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 2,
+                  mainAxisSpacing: 5,
+                  crossAxisSpacing: 5,
+                  childAspectRatio: 1.9,
                 ),
                 itemCount: leaveType.getLeaveTypeModel?.data?.length ?? 0,
                 itemBuilder: (context, index) {
@@ -770,6 +766,7 @@ class AnalyticScreenState extends ConsumerState<AnalyticScreen> {
                     );
                   }
                   return Card(
+                    // margin: EdgeInsets.only(bottom: 5, left: 5),
                     elevation: 0.0,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0)),

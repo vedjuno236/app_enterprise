@@ -41,7 +41,7 @@ Future<void> errorDialog({
       if (errorMessage == "Unauthorized") {
         sharedPrefs.remove(KeyShared.keyToken);
         context!.go(PageName.login);
-        return; // Don't show dialog
+        return;
       }
 
       switch (errorMessage) {
@@ -65,7 +65,7 @@ Future<void> errorDialog({
       );
     }
   } else {
-    // Unknown error fallback
+
     return customDialog(
       context: context,
       title: ErrorMsg.txtError.tr,

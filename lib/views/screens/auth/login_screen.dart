@@ -76,10 +76,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     } catch (error) {
       if (error is DioException) {
         final dioError = DioExceptions.fromDioError(error);
-        logger.e('Login Error: ${dioError.message}');
+      
         errorDialog(context: context, onError: error);
       } else {
-        logger.e('Unexpected Login Error: $error');
+  
         errorDialog(context: context, onError: error);
       }
     } finally {
@@ -121,7 +121,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // SizedBox(height: SizeConfig.heightMultiplier * 8),
-                  Row(
+                 const  Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       const LanguageSwitcher()

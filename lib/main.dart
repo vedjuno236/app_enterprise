@@ -78,9 +78,6 @@ void main() async {
     statusBarColor: Colors.transparent,
   ));
 
-
-
-
   // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // // Initialize local notifications with iOS settings
@@ -153,10 +150,10 @@ void main() async {
   //   }
   // }
   // );
- AndroidNotificationChannel? channel;
+  AndroidNotificationChannel? channel;
   if (kIsWeb) {
-
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
   } else {
     await Firebase.initializeApp();
 
@@ -179,12 +176,10 @@ void main() async {
 
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-   
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
-
 
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
@@ -194,11 +189,10 @@ void main() async {
     );
   }
 
-
   await Firebase.initializeApp();
   FirebaseAnalytics.instance.logAppOpen();
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
- 
+
   // final fcmToken = await FirebaseMessaging.instance.getToken();
   // logger.d('FCM Token: $fcmToken');
 

@@ -132,7 +132,15 @@ class LeaveHistoryScreenState extends ConsumerState<LeaveHistoryScreen> {
 
   Future<void> _onRefresh() async {
     try {
-   
+      final startDate = DateTime(selectedMonth.year, selectedMonth.month, 1);
+      final endDate = DateTime(selectedMonth.year, selectedMonth.month + 1, 0);
+
+      await fetchAllLeaveApi(
+        status: currentStatus,
+        startDate: DateFormat('yyyy-MM-dd').format(startDate),
+        endDate: DateFormat('yyyy-MM-dd').format(endDate),
+      );
+
       _refreshController.refreshCompleted();
     } catch (e) {
       _refreshController.refreshFailed();

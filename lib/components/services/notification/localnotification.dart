@@ -14,7 +14,8 @@ class LocalNotificationServiceUserApp {
   static const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // Unique channel ID
     'High Importance Notifications', // Channel name
-    description: 'This channel is used for important notifications.', // Channel description
+    description:
+        'This channel is used for important notifications.', // Channel description
     importance: Importance.max,
   );
 
@@ -29,7 +30,8 @@ class LocalNotificationServiceUserApp {
       requestAlertPermission: false,
     );
 
-    const InitializationSettings initializationSettings = InitializationSettings(
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
@@ -77,7 +79,7 @@ class LocalNotificationServiceUserApp {
         message.notification?.title,
         message.notification?.body,
         notificationDetails,
-        // payload: message.data['messageType'],
+        payload: message.data['screen'],
       );
     } catch (e) {
       debugPrint('Error displaying notification: $e');
