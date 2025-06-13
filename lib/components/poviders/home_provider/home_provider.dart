@@ -1,58 +1,23 @@
 import 'dart:async';
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import '../../models/function_model/funcation_model.dart';
-
 
 final stateHomeProvider = ChangeNotifierProvider<HomeProvider>((ref) {
   return HomeProvider();
 });
 
 class HomeProvider with ChangeNotifier {
-  HomeProvider() {
-
-  }
+  HomeProvider();
+  
   bool _isClockedIn = false;
   bool get isClockedIn => _isClockedIn;
- void updateClockStatus(String typeClock) {
-    _isClockedIn = typeClock == 'OUT' || typeClock ==''; 
-    notifyListeners(); 
+  void updateClockStatus(String typeClock) {
+    _isClockedIn = typeClock == 'OUT' || typeClock == '';
+    notifyListeners();
   }
-  // /// bool checkin_checkout
-  // bool _isClockedIn = false;
-  // Timer? _clockResetTimer;
-
-  // bool get isClockedIn => _isClockedIn;
-
-
-
-  // Future<void> loadState() async {
-  //   _isClockedIn = prefs.getBoolNow('isClockedIn') ?? false;
-  //   notifyListeners();
-  // }
-
-  // Future<void> saveState() async {
-  //   await prefs.setBoolNow('isClockedIn', _isClockedIn) ;
-  // }
-
-
-  // void setClockInTrue() {
-  //   _isClockedIn = true;
-  //   saveState();
-  //   notifyListeners();
-  // }
-
-  // void setClockInFalse() {
-  //   _isClockedIn = false;
-  //   saveState();
-  //   notifyListeners();
-
-  
-  // }
 
   @override
   void dispose() {

@@ -88,28 +88,6 @@ class _FunctionWidgetState extends ConsumerState<FunctionWidget> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        // child: menuProvider.getMenuModel == null
-        //     ? Shimmer.fromColors(
-        //         baseColor: kGreyColor1,
-        //         highlightColor: kGary,
-        //         child: Container(
-        //           height: containerHeight,
-        //           width: double.infinity,
-        //           padding: const EdgeInsets.only(bottom: 2),
-        //           decoration: const BoxDecoration(
-        //             color: kTextWhiteColor,
-        //             boxShadow: [
-        //               BoxShadow(
-        //                 color: kTextWhiteColor,
-        //                 blurRadius: 1.0,
-        //                 spreadRadius: 1.0,
-        //               ),
-        //             ],
-        //             borderRadius: BorderRadius.all(Radius.circular(20)),
-        //           ),
-        //         ),
-        //       )
-        //     : Column(
         child: Column(
           children: [
             Expanded(
@@ -195,28 +173,21 @@ class _FunctionWidgetState extends ConsumerState<FunctionWidget> {
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      CircleAvatar(
-                                        radius:
-                                            SizeConfig.imageSizeMultiplier * 8,
-                                        backgroundColor:
-                                            Theme.of(context).cardColor,
-                                        child: SizedBox(
-                                          width: SizeConfig.widthMultiplier * 7,
-                                          child: CachedNetworkImage(
-                                            imageUrl: item.icon!,
-                                            fit: BoxFit.contain,
-                                            placeholder: (context, url) =>
-                                                const LoadingPlatformV1(),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    const Icon(Icons.error),
-                                          ),
-                                        ),
+                                  CircleAvatar(
+                                    radius: SizeConfig.imageSizeMultiplier * 8,
+                                    backgroundColor:
+                                        Theme.of(context).cardColor,
+                                    child: SizedBox(
+                                      width: SizeConfig.widthMultiplier * 7,
+                                      child: CachedNetworkImage(
+                                        imageUrl: item.icon!,
+                                        fit: BoxFit.contain,
+                                        placeholder: (context, url) =>
+                                            const LoadingPlatformV1(),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.error),
                                       ),
-                                    ],
+                                    ),
                                   ),
                                   SizedBox(
                                       height: SizeConfig.heightMultiplier * 1),

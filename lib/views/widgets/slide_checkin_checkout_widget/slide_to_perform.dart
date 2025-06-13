@@ -165,11 +165,11 @@ class SlideCheck extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // ดึงค่าจาก stateHomeProvider
+
     final isClockedIn = ref.watch(stateHomeProvider).isClockedIn;
 
     return SlideAction(
-      rightToLeft: !isClockedIn, // ใช้ค่าจาก provider
+      rightToLeft: !isClockedIn,
       stretchThumb: true,
       trackBuilder: (context, state) {
         return Stack(
@@ -226,7 +226,7 @@ class SlideCheck extends ConsumerWidget {
       action: () async {
         if (callback != null) {
           await callback!();
-          // ไม่ต้องเรียก fetchBooleanInOutApi() ที่นี่อีก เพราะ callback น่าจะจัดการแล้ว
+         
         }
       },
     );

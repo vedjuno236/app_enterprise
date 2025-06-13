@@ -130,7 +130,7 @@ class _HeaderProfileState extends ConsumerState<HeaderProfile> {
                           : CircleAvatar(
                               backgroundColor: Colors.white,
                               radius: SizeConfig.imageSizeMultiplier * 8,
-                              child: Icon(Bootstrap.person_circle),
+                              child: const Icon(Bootstrap.person_circle),
                             ),
                     ).animate().scaleXY(
                         begin: 0,

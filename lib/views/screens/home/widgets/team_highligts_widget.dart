@@ -9,11 +9,13 @@ import 'package:enterprise/components/poviders/notifition_provider/notifition_pr
 import 'package:enterprise/components/router/router.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
 import 'package:enterprise/components/styles/size_config.dart';
+import 'package:enterprise/views/widgets/loading_platform/shimmers_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../components/constants/strings.dart';
 
@@ -91,141 +93,148 @@ class _ComingEventsWidgetState extends ConsumerState<TeamHighlightsWidget> {
     final nallleaveProvider = ref.watch(stateTeamHighligtsProvider);
     final nallleavedata =
         nallleaveProvider.getTeamHighligtsModelLeaveModel?.data ?? [];
-    return Container(
-      width: double.infinity,
-      height: SizeConfig.heightMultiplier * 20,
-      decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor,
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).cardColor,
-            blurRadius: 1.0,
-            spreadRadius: 1.0,
-          ),
-        ],
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                  decoration: const BoxDecoration(
-                    color: kYellowFirstColor,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          nallleavedata.length.toString(),
+    return nallleaveProvider.getTeamHighligtsModelLeaveModel!.data == null
+        ? containShimmer(ref)
+        : Container(
+            width: double.infinity,
+            height: SizeConfig.heightMultiplier * 20,
+            decoration: BoxDecoration(
+              color: Theme.of(context).canvasColor,
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).cardColor,
+                  blurRadius: 1.0,
+                  spreadRadius: 1.0,
+                ),
+              ],
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 15),
+                        decoration: const BoxDecoration(
+                          color: kYellowFirstColor,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                nallleavedata.length.toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(
+                                        fontSize:
+                                            SizeConfig.textMultiplier * 3),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: SizeConfig.widthMultiplier * 4),
+                      Expanded(
+                        child: Text(
+                          Strings.txtPeoplefrom.tr,
                           style: Theme.of(context)
                               .textTheme
-                              .titleLarge!
+                              .titleMedium!
                               .copyWith(
-                                  fontSize: SizeConfig.textMultiplier * 3),
+                                  fontSize: SizeConfig.textMultiplier * 1.9),
+                          softWrap: true,
+                          overflow: TextOverflow.visible,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(width: SizeConfig.widthMultiplier * 4),
-                Expanded(
-                  child: Text(
-                    Strings.txtPeoplefrom.tr,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(fontSize: SizeConfig.textMultiplier * 1.9),
-                    softWrap: true,
-                    overflow: TextOverflow.visible,
+                  const Divider(
+                    color: Color(0xFFF3F3F3),
+                    thickness: 1.0,
+                    height: 20.0,
                   ),
-                ),
-              ],
-            ),
-            const Divider(
-              color: Color(0xFFF3F3F3),
-              thickness: 1.0,
-              height: 20.0,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            for (int i = 0;
-                                i <
-                                    (nallleavedata.length > 3
-                                        ? 3
-                                        : nallleavedata.length);
-                                i++)
-                              Align(
-                                widthFactor: 0.6,
-                                child: _buildAvatar(
-                                  nallleavedata[i].profile?.toString(),
-                                  SizeConfig.heightMultiplier * 2.5,
-                                ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  for (int i = 0;
+                                      i <
+                                          (nallleavedata.length > 3
+                                              ? 3
+                                              : nallleavedata.length);
+                                      i++)
+                                    Align(
+                                      widthFactor: 0.6,
+                                      child: _buildAvatar(
+                                        nallleavedata[i].profile?.toString(),
+                                        SizeConfig.heightMultiplier * 2.5,
+                                      ),
+                                    ),
+                                  if (nallleavedata.length > 3)
+                                    Align(
+                                      widthFactor: 0.6,
+                                      child: CircleAvatar(
+                                          radius:
+                                              SizeConfig.heightMultiplier * 2,
+                                          backgroundColor: kYellowColor,
+                                          child: Text(
+                                            '+${(nallleavedata.length - 3).toString()}',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge!
+                                                .copyWith(
+                                                    fontSize: SizeConfig
+                                                            .textMultiplier *
+                                                        1.9,
+                                                    color: kTextWhiteColor),
+                                          )),
+                                    ),
+                                ],
                               ),
-                            if (nallleavedata.length > 3)
-                              Align(
-                                widthFactor: 0.6,
-                                child: CircleAvatar(
-                                    radius: SizeConfig.heightMultiplier * 2,
-                                    backgroundColor: kYellowColor,
-                                    child: Text(
-                                      '+${(nallleavedata.length - 3).toString()}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge!
-                                          .copyWith(
-                                              fontSize:
-                                                  SizeConfig.textMultiplier *
-                                                      1.9,
-                                              color: kTextWhiteColor),
-                                    )),
+                            ],
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            context.push(PageName.onLeaveRoute);
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                Strings.txtSeeAll.tr,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                      fontSize: SizeConfig.textMultiplier * 2,
+                                    ),
                               ),
-                          ],
-                        ),
-                      ],
-                    ),
+                              const Icon(
+                                Icons.arrow_right,
+                              )
+                            ],
+                          ))
+                    ],
                   ),
-                ),
-                TextButton(
-                    onPressed: () {
-                      context.push(PageName.onLeaveRoute);
-                    },
-                    child: Row(
-                      children: [
-                        Text(
-                          Strings.txtSeeAll.tr,
-                          style:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    fontSize: SizeConfig.textMultiplier * 2,
-                                  ),
-                        ),
-                        const Icon(
-                          Icons.arrow_right,
-                        )
-                      ],
-                    ))
-              ],
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }

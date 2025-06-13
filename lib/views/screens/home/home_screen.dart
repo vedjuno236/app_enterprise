@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:enterprise/components/constants/key_shared.dart';
 import 'package:enterprise/components/logger/logger.dart';
-import 'package:enterprise/components/poviders/check_boolean_in_out_provider/check_boolean_in_out_provider.dart';
 import 'package:enterprise/components/poviders/dark_mode_provider/dark_mode_provider.dart';
 import 'package:enterprise/components/poviders/location_provider/location_provider.dart';
 import 'package:enterprise/components/router/router.dart';
@@ -12,6 +11,7 @@ import 'package:enterprise/views/screens/home/widgets/box_checkIn_widgets.dart';
 import 'package:enterprise/views/screens/home/widgets/function_widget.dart';
 import 'package:enterprise/views/screens/home/widgets/headerProfile_widget.dart';
 import 'package:enterprise/views/screens/home/widgets/team_highligts_widget.dart';
+import 'package:enterprise/views/widgets/loading_platform/shimmers_loading.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
@@ -96,8 +96,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage? message) {
-
-          // new 
+      // new
       if (message != null && message.data['screen']) {
         logger.d("Initial message screen: ${message.data['screen']}");
         redirectScreen(screenToNavigate: message.data['screen']);
@@ -418,21 +417,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               },
                               child: userProvider.getUserModel == null ||
                                       userProvider.getUserModel!.data == null
-                                  ? Shimmer.fromColors(
-                                      baseColor: kGreyColor1,
-                                      highlightColor: kGary,
-                                      child: Container(
-                                        width: double.infinity,
-                                        height:
-                                            SizeConfig.heightMultiplier * 20,
-                                        padding: const EdgeInsets.all(8.0),
-                                        decoration: BoxDecoration(
-                                          color: kTextWhiteColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                      ),
-                                    )
+                                  ? containShimmer(ref)
                                   : BoxCheckWidgets(sharedPrefs: sharedPrefs))
                         else
                           const SizedBox.shrink(),
@@ -480,7 +465,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         SizedBox(
                           height: SizeConfig.widthMultiplier * 2,
                         ),
-                        const TeamHighlightsWidget(),
+                      const   Padding(
+                          padding:  EdgeInsets.only(bottom: 20),
+                          child:  TeamHighlightsWidget(),
+                        ),
                         // ] else
                         //   const SizedBox.shrink(),
                         // SizedBox(height: SizeConfig.heightMultiplier * 2),

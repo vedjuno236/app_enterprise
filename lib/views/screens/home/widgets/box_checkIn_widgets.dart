@@ -8,7 +8,6 @@ import 'package:enterprise/components/poviders/check_boolean_in_out_provider/che
 import 'package:enterprise/components/poviders/home_provider/home_provider.dart';
 import 'package:enterprise/components/services/api_service/enterprise_service.dart';
 import 'package:enterprise/components/utils/date_format_utils.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -19,7 +18,6 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rive/rive.dart';
-
 import '../../../../components/constants/image_path.dart';
 import '../../../../components/constants/strings.dart';
 import '../../../../components/helpers/shared_prefs.dart';
@@ -361,8 +359,6 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
       logger.i(
           "User location: ${locationPosition.latitude}, ${locationPosition.longitude}");
 
-    
-
       final lat = await sharedPrefs.getDoubleNow(KeyShared.keylat);
       final long = await sharedPrefs.getDoubleNow(KeyShared.keylong);
       final radius = await sharedPrefs.getDoubleNow(KeyShared.keyradius);
@@ -456,12 +452,10 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
       if (context.mounted) errorDialog(context: context, onError: e);
     }
   }
-
   late SharedPrefs sharedPrefs;
   late int userID;
   bool isLoading = false;
   bool isClockIn = false;
-
   Future fetchBooleanInOutApi() async {
     sharedPrefs = SharedPrefs();
     final userIdString = sharedPrefs.getStringNow(KeyShared.keyUserId);
@@ -470,17 +464,13 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
     setState(() {
       isLoading = true;
     });
-
     try {
       final value =
           await EnterpriseAPIService().cllbooleancheckInOut(userid: userID);
       ref
           .read(stateCheckBooleanInOutModel)
           .setCheckBooleanInOutModel(value: value);
-      logger.d(value);
-
       final typeClock = value['data']?['type_clock'] as String? ?? '';
-
       ref.read(stateHomeProvider.notifier).updateClockStatus(typeClock);
     } catch (onError) {
       errorDialog(
@@ -568,26 +558,7 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Expanded(
-              // child: SlideCheck(
-              //     clockIn: false,
-              //     callback: () async {
-              //       // final isValidLocation =
-              //       //     ref.watch(stateHomeProvider).isValidLocation;
-              //       final hasPermission =
-              //           await _requestLocationPermission(context);
-              //       if (hasPermission) {
-              //         if (isValidLocation) {
-              //           await clockInOutService();
-              //         } else {
-              //           context.push(PageName.attendanceScreens);
-              //         }
-              //       } else {
-              //         // ScaffoldMessenger.of(context).showSnackBar(
-              //         //   const SnackBar(
-              //         //       content: Text('Location permission is required.')),
-              //         // );
-              //       }
-              //     })).animate().scaleXY(
+  
               child: SlideCheck(
                 callback: () async {
                   final hasPermission =
@@ -617,7 +588,6 @@ class _BoxCheckWidgetsState extends ConsumerState<BoxCheckWidgets> {
   }
 }
 
-// Optimized TimeDisplay widget
 class TimeDisplay extends StatelessWidget {
   const TimeDisplay({super.key});
 
@@ -644,7 +614,6 @@ String _getImagePath() {
   final currentMinutes = now.hour * 60 + now.minute;
 
   /// 8:00 = 480 minutes, 17:00 = 1020 minutes
-
   if (currentMinutes >= 480 && currentMinutes < 1020) {
     return ImagePath.svgSunny;
   } else {
